@@ -1,6 +1,9 @@
 # 🛍️ Gikomba Thrift Shop
 
 Welcome to **Gikomba Thrift Shop**, your trusted destination for quality and affordable mitumba clothing in Kenya.
+<img width="480" height="1040" alt="IMG-20260617-WA0017" src="https://github.com/user-attachments/assets/c1a9d84d-5c4c-498f-96e4-56738a22834f" />
+<img width="480" height="1040" alt="IMG-20260617-WA0017 (1)" src="https://github.com/user-attachments/assets/5f5f4c70-3a1a-48b0-a235-fb1591f815ef" />
+
 
 ## 🌟 About Us
 
