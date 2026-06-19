@@ -27,7 +27,7 @@
     </section>
 
     <section class="products" id="products-container">
-        <!-- Products will be loaded by JavaScript -->
+        <!-- Products loaded by JS -->
     </section>
 
     <section class="contact">
@@ -43,47 +43,44 @@
     </footer>
 
     <script>
-        // ==================== YOUR BALES DATA ====================
         let products = [
             {
                 id: 1,
                 name: "Men's Shirt",
                 price: 500,
-                image: "https://images.unsplash.com/photo-1596755094514-f87e34085d8c?w=400",
+                image: "gikomba-view.jpg",
                 soldOut: false
             },
             {
                 id: 2,
-                name: "Denim Jeans",
-                price: 800,
-                image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400",
+                name: "Cargo Shorts Bale",
+                price: 4500,
+                image: "cargo-shorts.jpg",
                 soldOut: false
             },
             {
                 id: 3,
-                name: "Winter Jacket",
-                price: 1200,
-                image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400",
-                soldOut: true
+                name: "Mixed Bale",
+                price: 3800,
+                image: "bales-stack.jpg",
+                soldOut: false
             },
             {
                 id: 4,
-                name: "Casual Shoes",
+                name: "Assorted Clothes Bale",
+                price: 3200,
+                image: "open-bale.jpg",
+                soldOut: false
+            },
+            {
+                id: 5,
+                name: "Baby Clothes",
                 price: 1500,
-                image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",
+                image: "baby-catalogue.jpg",
                 soldOut: false
             }
-            // Add more bales here ↓
-            // {
-            //     id: 5,
-            //     name: "New Bale Name",
-            //     price: 950,
-            //     image: "https://your-image-link.com/photo.jpg",
-            //     soldOut: false
-            // }
         ];
 
-        // Render products
         function renderProducts() {
             const container = document.getElementById('products-container');
             container.innerHTML = '';
@@ -115,7 +112,7 @@
 
         function toggleAdmin() {
             adminMode = !adminMode;
-            alert(adminMode ? "🔓 Admin Mode ON - You can now toggle Sold Out status" : "🔒 Admin Mode OFF");
+            alert(adminMode ? "🔓 Admin Mode ON" : "🔒 Admin Mode OFF");
             renderProducts();
         }
 
@@ -134,7 +131,6 @@
             }
         }
 
-        // Load products when page opens
         window.onload = renderProducts;
     </script>
 </body>
