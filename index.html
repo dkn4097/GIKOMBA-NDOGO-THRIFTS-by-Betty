@@ -26,9 +26,7 @@
         <p>Browse our best mitumba collections from Gikomba Market</p>
     </section>
 
-    <section class="products" id="products-container">
-        <!-- Products loaded by JS -->
-    </section>
+    <section class="products" id="products-container"></section>
 
     <section class="contact">
         <h2>Contact Us</h2>
@@ -46,40 +44,42 @@
         let products = [
             {
                 id: 1,
-                name: "Men's Shirt",
-                price: 500,
-                image: "gikomba-view.jpg",
+                name: "Gikomba Market View",
+                price: 0,
+                image: "attachments/IMG-20260617-WA0016.jpg",
                 soldOut: false
             },
             {
                 id: 2,
-                name: "Cargo Shorts Bale",
+                name: "Bales Wall",
                 price: 4500,
-                image: "cargo-shorts.jpg",
+                image: "attachments/IMG-20260617-WA0017.jpg",
                 soldOut: false
             },
             {
                 id: 3,
-                name: "Mixed Bale",
-                price: 3800,
-                image: "bales-stack.jpg",
+                name: "Cargo Shorts Bale",
+                price: 6500,
+                image: "attachments/IMG-20260617-WA0008.jpg",
                 soldOut: false
             },
             {
                 id: 4,
-                name: "Assorted Clothes Bale",
-                price: 3200,
-                image: "open-bale.jpg",
+                name: "Open Mixed Bale",
+                price: 3800,
+                image: "attachments/IMG-20260617-WA0010.jpg",
                 soldOut: false
             },
             {
                 id: 5,
                 name: "Baby Clothes",
-                price: 1500,
-                image: "baby-catalogue.jpg",
+                price: 1800,
+                image: "attachments/IMG-20260617-WA0009.jpg",
                 soldOut: false
             }
         ];
+
+        let adminMode = false;
 
         function renderProducts() {
             const container = document.getElementById('products-container');
@@ -108,8 +108,6 @@
             });
         }
 
-        let adminMode = false;
-
         function toggleAdmin() {
             adminMode = !adminMode;
             alert(adminMode ? "🔓 Admin Mode ON" : "🔒 Admin Mode OFF");
@@ -118,17 +116,13 @@
 
         function toggleSoldOut(id) {
             const product = products.find(p => p.id === id);
-            if (product) {
-                product.soldOut = !product.soldOut;
-                renderProducts();
-            }
+            if (product) product.soldOut = !product.soldOut;
+            renderProducts();
         }
 
         function addToCart(id) {
             const product = products.find(p => p.id === id);
-            if (product) {
-                alert(`✅ ${product.name} added to cart! (KSh ${product.price})`);
-            }
+            if (product) alert(`✅ ${product.name} added! (KSh ${product.price})`);
         }
 
         window.onload = renderProducts;
