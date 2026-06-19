@@ -5,172 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gikomba Thrift Shop</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background: #f8f9fa;
             color: #333;
-            line-height: 1.6;
         }
-
         header {
             background: linear-gradient(135deg, #2c3e50, #3498db);
             color: white;
             text-align: center;
-            padding: 25px 15px;
+            padding: 30px 15px;
             position: relative;
         }
-
-        header h1 {
-            font-size: 2.4rem;
-        }
-
+        header h1 { font-size: 2.6rem; }
         .admin-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            font-size: 1.6rem;
-            cursor: pointer;
+            position: absolute; top: 20px; right: 20px;
+            font-size: 1.8rem; background: none; border: none; cursor: pointer;
         }
-
         nav {
             background: #34495e;
             padding: 15px;
             text-align: center;
         }
-
         nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 12px;
-            font-weight: 500;
+            color: white; margin: 0 15px; text-decoration: none; font-weight: 500;
         }
-
         .hero {
             background: #fff3e0;
-            padding: 50px 20px;
+            padding: 40px 20px;
             text-align: center;
         }
-
         .search-bar {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 12px;
-            border: 2px solid #3498db;
-            border-radius: 50px;
-            font-size: 1.1rem;
+            width: 90%; max-width: 500px; padding: 14px 20px;
+            border: 2px solid #3498db; border-radius: 50px;
+            font-size: 1.1rem; margin-top: 15px;
         }
-
         .products {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
             padding: 30px 20px;
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 0 auto;
         }
-
         .product {
             background: white;
-            border-radius: 15px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
-
         .product:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         }
-
         .image-container {
             position: relative;
-            height: 260px;
+            height: 280px;
         }
-
         .image-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.4s;
+            transition: transform 0.4s ease;
         }
-
-        .product:hover img {
-            transform: scale(1.08);
-        }
-
+        .product:hover img { transform: scale(1.1); }
         .sold-out {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(231, 76, 60, 0.95);
+            background: #e74c3c;
             color: white;
-            padding: 12px 30px;
+            padding: 12px 35px;
+            font-size: 1.3rem;
             font-weight: bold;
-            font-size: 1.2rem;
             border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
-
-        .product h3 {
-            padding: 15px 15px 5px;
-            font-size: 1.25rem;
-        }
-
+        .product h3 { padding: 15px 15px 8px; font-size: 1.3rem; }
         .price {
-            padding: 0 15px;
-            font-size: 1.4rem;
+            padding: 0 15px 10px;
+            font-size: 1.5rem;
             font-weight: bold;
             color: #27ae60;
         }
-
-        .product button {
+        button {
             width: 100%;
             padding: 14px;
-            background: #27ae60;
-            color: white;
-            border: none;
             font-size: 1.1rem;
+            border: none;
             cursor: pointer;
-            margin-top: 10px;
         }
-
-        .product button:hover {
-            background: #219150;
-        }
-
-        .toggle-sold {
-            background: #f39c12;
-            margin: 8px 15px;
-            padding: 8px;
-            border-radius: 6px;
-        }
-
+        .add-btn { background: #27ae60; color: white; }
+        .add-btn:hover { background: #219150; }
+        .toggle-sold { background: #f39c12; color: white; margin: 8px 15px; padding: 10px; border-radius: 8px; }
         .cart {
-            position: fixed;
-            top: 20px;
-            right: 80px;
-            background: #e74c3c;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
+            position: fixed; top: 20px; right: 20px;
+            background: #e74c3c; color: white;
+            padding: 12px 18px; border-radius: 50px;
+            font-weight: bold; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 100;
         }
-
         footer {
-            background: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 25px;
-            margin-top: 40px;
+            background: #2c3e50; color: white;
+            text-align: center; padding: 25px; margin-top: 50px;
         }
     </style>
 </head>
@@ -178,20 +118,22 @@
 
     <header>
         <h1>🛍️ Gikomba Thrift Shop</h1>
-        <p>Quality Mitumba • Fresh Bales Daily</p>
+        <p>Quality Mitumba • Best Prices in Nairobi</p>
         <button class="admin-btn" onclick="toggleAdmin()">🔐</button>
     </header>
 
     <nav>
         <a href="#">All Bales</a>
-        <a href="#">Clothes</a>
-        <a href="#">Shoes</a>
-        <a href="#">Baby Items</a>
+        <a href="#">Men</a>
+        <a href="#">Women</a>
+        <a href="#">Baby</a>
     </nav>
 
     <section class="hero">
-        <h2>Latest Bales from Gikomba Market 🔥</h2>
-        <input type="text" id="searchInput" class="search-bar" placeholder="Search bales... (e.g. shorts, baby)" onkeyup="filterProducts()">
+        <h2>Latest Arrivals from Gikomba 🔥</h2>
+        <input type="text" id="searchInput" class="search-bar" 
+               placeholder="Search by name (e.g. shorts, baby, bale)" 
+               onkeyup="filterProducts()">
     </section>
 
     <div class="cart" onclick="showCart()">
@@ -200,11 +142,12 @@
 
     <section class="products" id="products-container"></section>
 
-    <section class="contact">
+    <section class="contact" style="text-align:center; padding:40px; background:white;">
         <h2>Contact Us</h2>
-        <p>Phone: <strong>0104 064092</strong> | <strong>0116 460490</strong></p>
-        <a class="whatsapp" href="https://wa.me/254720399552" target="_blank" style="background:#25D366; color:white; padding:14px 30px; border-radius:50px; text-decoration:none; display:inline-block; margin:15px;">
-            📱 Order on WhatsApp
+        <p><strong>0104 064092</strong> | <strong>0116 460490</strong></p>
+        <a href="https://wa.me/254720399552" target="_blank" 
+           style="background:#25D366; color:white; padding:16px 35px; border-radius:50px; text-decoration:none; display:inline-block; margin:20px 0; font-size:1.2rem;">
+            📱 Order via WhatsApp
         </a>
     </section>
 
@@ -215,7 +158,7 @@
     <script>
         let products = [
             { id: 1, name: "Gikomba Market View", price: 0, image: "attachments/IMG-20260617-WA0016.jpg", soldOut: false },
-            { id: 2, name: "Bales Wall", price: 4500, image: "attachments/IMG-20260617-WA0017.jpg", soldOut: false },
+            { id: 2, name: "Wall of Bales", price: 4500, image: "attachments/IMG-20260617-WA0017.jpg", soldOut: false },
             { id: 3, name: "Cargo Shorts Bale (100lbs)", price: 6500, image: "attachments/IMG-20260617-WA0008.jpg", soldOut: false },
             { id: 4, name: "Open Mixed Bale", price: 3800, image: "attachments/IMG-20260617-WA0010.jpg", soldOut: false },
             { id: 5, name: "Baby Clothes Collection", price: 1800, image: "attachments/IMG-20260617-WA0009.jpg", soldOut: false }
@@ -224,70 +167,64 @@
         let cart = [];
         let adminMode = false;
 
-        function renderProducts(filteredProducts = products) {
+        function renderProducts(filtered = products) {
             const container = document.getElementById('products-container');
             container.innerHTML = '';
 
-            filteredProducts.forEach(product => {
+            filtered.forEach(p => {
                 const div = document.createElement('div');
                 div.className = 'product';
                 div.innerHTML = `
                     <div class="image-container">
-                        <img src="${product.image}" alt="${product.name}">
-                        ${product.soldOut ? '<div class="sold-out">SOLD OUT</div>' : ''}
+                        <img src="${p.image}" alt="${p.name}">
+                        ${p.soldOut ? '<div class="sold-out">SOLD OUT</div>' : ''}
                     </div>
-                    <h3>${product.name}</h3>
-                    <p class="price">KSh ${product.price}</p>
-                    <button onclick="addToCart(${product.id})" ${product.soldOut ? 'disabled' : ''}>
-                        ${product.soldOut ? 'Sold Out' : 'Add to Cart'}
+                    <h3>${p.name}</h3>
+                    <p class="price">KSh ${p.price}</p>
+                    <button class="add-btn" onclick="addToCart(${p.id})" ${p.soldOut ? 'disabled' : ''}>
+                        ${p.soldOut ? 'Sold Out' : 'Add to Cart'}
                     </button>
-                    ${adminMode ? `<button class="toggle-sold" onclick="toggleSoldOut(${product.id})"> ${product.soldOut ? '✅ Mark Available' : '❌ Mark Sold Out'} </button>` : ''}
+                    ${adminMode ? `<button class="toggle-sold" onclick="toggleSoldOut(${p.id})">${p.soldOut ? '✅ Mark Available' : '❌ Mark Sold Out'}</button>` : ''}
                 `;
                 container.appendChild(div);
             });
         }
 
         function filterProducts() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
             renderProducts(filtered);
         }
 
         function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            if (product && !product.soldOut) {
-                cart.push(product);
+            const item = products.find(p => p.id === id);
+            if (item && !item.soldOut) {
+                cart.push(item);
                 document.getElementById('cart-count').textContent = cart.length;
-                alert(`✅ ${product.name} added to cart!`);
+                alert(`✅ Added: ${item.name}`);
             }
         }
 
         function showCart() {
-            if (cart.length === 0) {
-                alert("Your cart is empty!");
-            } else {
-                let message = "🛒 Your Cart:\n\n";
-                cart.forEach(item => message += `• ${item.name} - KSh ${item.price}\n`);
-                message += `\nTotal Items: ${cart.length}`;
-                alert(message);
-            }
+            if (cart.length === 0) return alert("Cart is empty!");
+            let msg = "🛒 Your Cart:\n\n";
+            cart.forEach(i => msg += `• ${i.name} - KSh ${i.price}\n`);
+            msg += `\nTotal Items: ${cart.length}`;
+            alert(msg);
         }
 
         function toggleAdmin() {
             adminMode = !adminMode;
-            alert(adminMode ? "🔓 Admin Mode ON" : "🔒 Admin Mode OFF");
+            alert(adminMode ? "🔓 Admin Mode Activated" : "🔒 Admin Mode Deactivated");
             renderProducts();
         }
 
         function toggleSoldOut(id) {
-            const product = products.find(p => p.id === id);
-            if (product) {
-                product.soldOut = !product.soldOut;
-                renderProducts();
-            }
+            const p = products.find(x => x.id === id);
+            if (p) p.soldOut = !p.soldOut;
+            renderProducts();
         }
 
-        // Load everything
         window.onload = () => renderProducts();
     </script>
 </body>
