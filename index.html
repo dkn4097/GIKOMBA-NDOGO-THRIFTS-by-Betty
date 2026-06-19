@@ -4,34 +4,206 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gikomba Thrift Shop</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.4rem;
+        }
+
+        .admin-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            cursor: pointer;
+        }
+
+        nav {
+            background: #34495e;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 12px;
+            font-weight: 500;
+        }
+
+        .hero {
+            background: #fff3e0;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .search-bar {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 12px;
+            border: 2px solid #3498db;
+            border-radius: 50px;
+            font-size: 1.1rem;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 30px 20px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .product {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .product:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .image-container {
+            position: relative;
+            height: 260px;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s;
+        }
+
+        .product:hover img {
+            transform: scale(1.08);
+        }
+
+        .sold-out {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(231, 76, 60, 0.95);
+            color: white;
+            padding: 12px 30px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-radius: 8px;
+        }
+
+        .product h3 {
+            padding: 15px 15px 5px;
+            font-size: 1.25rem;
+        }
+
+        .price {
+            padding: 0 15px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .product button {
+            width: 100%;
+            padding: 14px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .product button:hover {
+            background: #219150;
+        }
+
+        .toggle-sold {
+            background: #f39c12;
+            margin: 8px 15px;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .cart {
+            position: fixed;
+            top: 20px;
+            right: 80px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
 
     <header>
         <h1>🛍️ Gikomba Thrift Shop</h1>
-        <p>Quality Mitumba at Affordable Prices</p>
-        <span onclick="toggleAdmin()" style="position:absolute; top:15px; right:15px; cursor:pointer; font-size:1.5rem;">🔐</span>
+        <p>Quality Mitumba • Fresh Bales Daily</p>
+        <button class="admin-btn" onclick="toggleAdmin()">🔐</button>
     </header>
 
     <nav>
-        <a href="#gikomba market view">Shirts</a>
-        <a href="#bales available">Jeans</a>
-        <a href="#cargo shorts bale">Jackets</a>
-        <a href="#open mixed bale">Shoes</a>
+        <a href="#">All Bales</a>
+        <a href="#">Clothes</a>
+        <a href="#">Shoes</a>
+        <a href="#">Baby Items</a>
     </nav>
 
     <section class="hero">
-        <h2>Latest Arrivals 🔥</h2>
-        <p>Browse our best mitumba collections from Gikomba Market</p>
+        <h2>Latest Bales from Gikomba Market 🔥</h2>
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search bales... (e.g. shorts, baby)" onkeyup="filterProducts()">
     </section>
+
+    <div class="cart" onclick="showCart()">
+        🛒 Cart (<span id="cart-count">0</span>)
+    </div>
 
     <section class="products" id="products-container"></section>
 
     <section class="contact">
         <h2>Contact Us</h2>
-        <p>Phone: <strong>0104 064092</strong></p>
-        <a class="whatsapp" href="https://wa.me/254720399552" target="_blank">
+        <p>Phone: <strong>0104 064092</strong> | <strong>0116 460490</strong></p>
+        <a class="whatsapp" href="https://wa.me/254720399552" target="_blank" style="background:#25D366; color:white; padding:14px 30px; border-radius:50px; text-decoration:none; display:inline-block; margin:15px;">
             📱 Order on WhatsApp
         </a>
     </section>
@@ -42,50 +214,21 @@
 
     <script>
         let products = [
-            {
-                id: 1,
-                name: "Gikomba Market View",
-                price: 0,
-                image: "attachments/IMG-20260617-WA0016.jpg",
-                soldOut: false
-            },
-            {
-                id: 2,
-                name: "Bales Wall",
-                price: o,
-                image: "attachments/IMG-20260617-WA0017.jpg",
-                soldOut: false
-            },
-            {
-                id: 3,
-                name: "Cargo Shorts Bale",
-                price: 6500,
-                image: "attachments/IMG-20260617-WA0008.jpg",
-                soldOut: false
-            },
-            {
-                id: 4,
-                name: "Open Mixed Bale",
-                price: 20000,
-                image: "attachments/IMG-20260617-WA0010.jpg",
-                soldOut: false
-            },
-            {
-                id: 5,
-                name: "Baby Clothes",
-                price: 20800,
-                image: "attachments/IMG-20260617-WA0009.jpg",
-                soldOut: false
-            }
+            { id: 1, name: "Gikomba Market View", price: 0, image: "attachments/IMG-20260617-WA0016.jpg", soldOut: false },
+            { id: 2, name: "Bales Wall", price: 4500, image: "attachments/IMG-20260617-WA0017.jpg", soldOut: false },
+            { id: 3, name: "Cargo Shorts Bale (100lbs)", price: 6500, image: "attachments/IMG-20260617-WA0008.jpg", soldOut: false },
+            { id: 4, name: "Open Mixed Bale", price: 3800, image: "attachments/IMG-20260617-WA0010.jpg", soldOut: false },
+            { id: 5, name: "Baby Clothes Collection", price: 1800, image: "attachments/IMG-20260617-WA0009.jpg", soldOut: false }
         ];
 
+        let cart = [];
         let adminMode = false;
 
-        function renderProducts() {
+        function renderProducts(filteredProducts = products) {
             const container = document.getElementById('products-container');
             container.innerHTML = '';
 
-            products.forEach(product => {
+            filteredProducts.forEach(product => {
                 const div = document.createElement('div');
                 div.className = 'product';
                 div.innerHTML = `
@@ -98,14 +241,36 @@
                     <button onclick="addToCart(${product.id})" ${product.soldOut ? 'disabled' : ''}>
                         ${product.soldOut ? 'Sold Out' : 'Add to Cart'}
                     </button>
-                    ${adminMode ? `
-                        <button class="toggle-sold" onclick="toggleSoldOut(${product.id})">
-                            ${product.soldOut ? '✅ Mark Available' : '❌ Mark Sold Out'}
-                        </button>
-                    ` : ''}
+                    ${adminMode ? `<button class="toggle-sold" onclick="toggleSoldOut(${product.id})"> ${product.soldOut ? '✅ Mark Available' : '❌ Mark Sold Out'} </button>` : ''}
                 `;
                 container.appendChild(div);
             });
+        }
+
+        function filterProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+            renderProducts(filtered);
+        }
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            if (product && !product.soldOut) {
+                cart.push(product);
+                document.getElementById('cart-count').textContent = cart.length;
+                alert(`✅ ${product.name} added to cart!`);
+            }
+        }
+
+        function showCart() {
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+            } else {
+                let message = "🛒 Your Cart:\n\n";
+                cart.forEach(item => message += `• ${item.name} - KSh ${item.price}\n`);
+                message += `\nTotal Items: ${cart.length}`;
+                alert(message);
+            }
         }
 
         function toggleAdmin() {
@@ -116,16 +281,14 @@
 
         function toggleSoldOut(id) {
             const product = products.find(p => p.id === id);
-            if (product) product.soldOut = !product.soldOut;
-            renderProducts();
+            if (product) {
+                product.soldOut = !product.soldOut;
+                renderProducts();
+            }
         }
 
-        function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            if (product) alert(`✅ ${product.name} added! (KSh ${product.price})`);
-        }
-
-        window.onload = renderProducts;
+        // Load everything
+        window.onload = () => renderProducts();
     </script>
 </body>
 </html>
