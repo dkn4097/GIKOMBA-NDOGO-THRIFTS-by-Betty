@@ -11,7 +11,7 @@
         header { background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 25px; text-align: center; position: relative; }
         header h1 { font-size: 2.5rem; }
         .admin-btn { position: absolute; top: 20px; right: 20px; font-size: 1.8rem; cursor: pointer; background: none; border: none; }
-
+        
         nav { background: #34495e; padding: 12px; text-align: center; }
         nav button { background: none; border: none; color: white; margin: 0 12px; cursor: pointer; font-size: 1.05rem; }
 
@@ -21,20 +21,19 @@
         .filters { padding: 15px 20px; background: white; text-align: center; }
         select, button { padding: 10px; margin: 5px; border-radius: 8px; }
 
-        .products { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 25px; 
-            padding: 30px 20px; 
-            max-width: 1400px; 
-            margin: 0 auto; 
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 30px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
         .product { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: 0.3s; }
         .product:hover { transform: translateY(-10px); }
         .image-container { position: relative; height: 260px; }
         .image-container img { width: 100%; height: 100%; object-fit: cover; }
         .sold-out { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: #e74c3c; color: white; padding: 10px 25px; border-radius: 8px; font-weight: bold; }
-
         .price { font-size: 1.5rem; font-weight: bold; color: #27ae60; padding: 10px 15px; }
         .actions { display: flex; }
         .actions button { flex: 1; padding: 12px; border: none; cursor: pointer; }
@@ -45,21 +44,20 @@
             position: fixed; top: 20px; right: 20px; background: #e74c3c; color: white;
             padding: 12px 18px; border-radius: 50px; z-index: 100; cursor: pointer;
         }
+        .whatsapp-float {
+            position: fixed; bottom: 20px; right: 20px; background: #25D366; color: white;
+            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 101; text-decoration: none;
+        }
 
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); z-index: 300; align-items: center; justify-content: center;
-        }
-        .modal-content {
-            background: white; padding: 20px; border-radius: 15px; max-width: 500px; width: 90%;
-        }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 300; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
 
         .toast {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             background: #27ae60; color: white; padding: 16px 25px; border-radius: 8px;
             z-index: 400; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
-
         footer { background: #2c3e50; color: white; text-align: center; padding: 30px; margin-top: 50px; }
     </style>
 </head>
@@ -91,17 +89,25 @@
         </select>
     </div>
 
-    <div class="cart-btn" onclick="showCart()">
+    <div class="cart-btn" onclick="showCartModal()">
         🛒 Cart (<span id="cart-count">0</span>)
     </div>
+
+    <a href="https://wa.me/254720399552" target="_blank" class="whatsapp-float">📱</a>
 
     <section class="products" id="products-container"></section>
 
     <button onclick="loadMore()" id="loadMoreBtn" style="display:block; margin:30px auto; padding:14px 40px; background:#3498db; color:white; border:none; border-radius:50px; font-size:1.1rem;">Load More Bales</button>
 
-    <!-- Product Modal -->
-    <div class="modal" id="productModal">
-        <div class="modal-content" id="modalContent"></div>
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <h2>Your Cart</h2>
+            <div id="cartItems"></div>
+            <h3 id="cartTotal">Total: KSh 0</h3>
+            <button onclick="clearCart()" style="background:#e74c3c; color:white; padding:12px; width:100%; margin:10px 0;">Clear Cart</button>
+            <button onclick="closeCartModal()" style="width:100%; padding:12px;">Close</button>
+        </div>
     </div>
 
     <!-- Toast -->
@@ -141,7 +147,7 @@
         let currentItems = 6;
         let currentFilter = 'all';
 
-        function renderProducts(filteredProducts) {
+        function renderProducts(filteredProducts = products) {
             const container = document.getElementById('products-container');
             container.innerHTML = '';
             const toShow = filteredProducts.slice(0, currentItems);
@@ -213,10 +219,8 @@
         function sortProducts() {
             const sortType = document.getElementById('sortSelect').value;
             let sorted = [...products];
-
             if (sortType === 'low') sorted.sort((a,b) => a.price - b.price);
             if (sortType === 'high') sorted.sort((a,b) => b.price - a.price);
-
             renderProducts(sorted);
         }
 
@@ -244,15 +248,45 @@
             setTimeout(() => toast.style.display = 'none', 3000);
         }
 
-        function showCart() {
+        function showCartModal() {
             if (cart.length === 0) return showToast("Your cart is empty!");
-            let total = cart.reduce((sum, item) => sum + item.price, 0);
-            let msg = "🛒 Your Cart:\n\n";
-            cart.forEach(i => msg += `• ${i.name} - KSh ${i.price}\n`);
-            msg += `\nTotal: KSh ${total.toLocaleString()}\n\nReply "Clear" to empty cart.`;
-            if (confirm(msg)) {
-                // Optional: clear cart
+
+            let html = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                total += item.price;
+                html += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0; padding:10px; background:#f9f9f9; border-radius:8px;">
+                        <div>
+                            <strong>${item.name}</strong><br>
+                            KSh ${item.price.toLocaleString()}
+                        </div>
+                        <button onclick="removeFromCart(${index}); event.stopImmediatePropagation()" style="background:#e74c3c; color:white; border:none; padding:6px 12px; border-radius:5px;">Remove</button>
+                    </div>`;
+            });
+
+            document.getElementById('cartItems').innerHTML = html;
+            document.getElementById('cartTotal').textContent = `Total: KSh ${total.toLocaleString()}`;
+            document.getElementById('cartModal').style.display = 'flex';
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            document.getElementById('cart-count').textContent = cart.length;
+            showCartModal();
+        }
+
+        function clearCart() {
+            if (confirm("Clear entire cart?")) {
+                cart = [];
+                document.getElementById('cart-count').textContent = 0;
+                showCartModal();
             }
+        }
+
+        function closeCartModal() {
+            document.getElementById('cartModal').style.display = 'none';
         }
 
         function toggleAdmin() {
