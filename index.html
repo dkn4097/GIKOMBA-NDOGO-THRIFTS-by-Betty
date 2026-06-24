@@ -3,152 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gikomba Thrift Shop</title>
+    <title>Gikomba Thrift Shop | Quality Mitumba Bales</title>
+    <meta name="description" content="Best Mitumba bales in Gikomba Market. Baby clothes, socks, towels, jackets & more at wholesale prices.">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #f8f9fa;
-            color: #333;
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; color: #333; }
+        header { background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 25px; text-align: center; position: relative; }
+        header h1 { font-size: 2.5rem; }
+        .admin-btn { position: absolute; top: 20px; right: 20px; font-size: 1.8rem; cursor: pointer; background: none; border: none; }
+
+        nav { background: #34495e; padding: 12px; text-align: center; }
+        nav button { background: none; border: none; color: white; margin: 0 12px; cursor: pointer; font-size: 1.05rem; }
+
+        .hero { background: #fff3e0; padding: 50px 20px; text-align: center; }
+        .search-bar { width: 90%; max-width: 500px; padding: 14px; border-radius: 50px; border: 2px solid #3498db; }
+
+        .filters { padding: 15px 20px; background: white; text-align: center; }
+        select, button { padding: 10px; margin: 5px; border-radius: 8px; }
+
+        .products { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 25px; 
+            padding: 30px 20px; 
+            max-width: 1400px; 
+            margin: 0 auto; 
         }
-        header {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
-            color: white;
-            text-align: center;
-            padding: 30px 15px;
-            position: relative;
-        }
-        header h1 { font-size: 2.6rem; }
-        .admin-btn {
-            position: absolute; top: 20px; right: 20px;
-            font-size: 1.8rem; background: none; border: none; cursor: pointer;
-        }
-        nav {
-            background: #34495e;
-            padding: 15px;
-            text-align: center;
-        }
-        nav a {
-            color: white; margin: 0 15px; text-decoration: none; font-weight: 500;
-        }
-        .hero {
-            background: #fff3e0;
-            padding: 40px 20px;
-            text-align: center;
-        }
-        .search-bar {
-            width: 90%; max-width: 500px; padding: 14px 20px;
-            border: 2px solid #3498db; border-radius: 50px;
-            font-size: 1.1rem; margin-top: 15px;
-        }
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            padding: 30px 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .product {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-        .product:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-        .image-container {
-            position: relative;
-            height: 280px;
-        }
-        .image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-        .product:hover img { transform: scale(1.1); }
-        .sold-out {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            background: #e74c3c;
-            color: white;
-            padding: 12px 35px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        }
-        .product h3 { padding: 15px 15px 8px; font-size: 1.3rem; }
-        .price {
-            padding: 0 15px 10px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #27ae60;
-        }
-        button {
-            width: 100%;
-            padding: 14px;
-            font-size: 1.1rem;
-            border: none;
-            cursor: pointer;
-        }
+        .product { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: 0.3s; }
+        .product:hover { transform: translateY(-10px); }
+        .image-container { position: relative; height: 260px; }
+        .image-container img { width: 100%; height: 100%; object-fit: cover; }
+        .sold-out { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: #e74c3c; color: white; padding: 10px 25px; border-radius: 8px; font-weight: bold; }
+
+        .price { font-size: 1.5rem; font-weight: bold; color: #27ae60; padding: 10px 15px; }
+        .actions { display: flex; }
+        .actions button { flex: 1; padding: 12px; border: none; cursor: pointer; }
         .add-btn { background: #27ae60; color: white; }
-        .add-btn:hover { background: #219150; }
-        .toggle-sold { background: #f39c12; color: white; margin: 8px 15px; padding: 10px; border-radius: 8px; }
-        .cart {
-            position: fixed; top: 20px; right: 20px;
-            background: #e74c3c; color: white;
-            padding: 12px 18px; border-radius: 50px;
-            font-weight: bold; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 100;
+        .buy-btn { background: #e67e22; color: white; }
+
+        .cart-btn {
+            position: fixed; top: 20px; right: 20px; background: #e74c3c; color: white;
+            padding: 12px 18px; border-radius: 50px; z-index: 100; cursor: pointer;
         }
-        footer {
-            background: #2c3e50; color: white;
-            text-align: center; padding: 25px; margin-top: 50px;
+
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 300; align-items: center; justify-content: center;
         }
+        .modal-content {
+            background: white; padding: 20px; border-radius: 15px; max-width: 500px; width: 90%;
+        }
+
+        .toast {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: #27ae60; color: white; padding: 16px 25px; border-radius: 8px;
+            z-index: 400; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        footer { background: #2c3e50; color: white; text-align: center; padding: 30px; margin-top: 50px; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>🛍️ Gikomba Thrift Shop</h1>
-        <p>Quality Mitumba • Best Prices in Nairobi</p>
+        <p>Quality Mitumba Bales • Wholesale Prices</p>
         <button class="admin-btn" onclick="toggleAdmin()">🔐</button>
     </header>
 
     <nav>
-        <a href="#">All Bales</a>
-        <a href="#">Men</a>
-        <a href="#">Women</a>
-        <a href="#">Baby</a>
+        <button onclick="filterCategory('all')">All</button>
+        <button onclick="filterCategory('baby')">Baby</button>
+        <button onclick="filterCategory('kids')">Kids</button>
+        <button onclick="filterCategory('adult')">Adult</button>
     </nav>
 
     <section class="hero">
-        <h2>Latest Arrivals from Gikomba 🔥</h2>
-        <input type="text" id="searchInput" class="search-bar" 
-               placeholder="Search by name (e.g. shorts, baby, bale)" 
-               onkeyup="filterProducts()">
+        <h2>Latest Bales from Gikomba Market 🔥</h2>
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search bales..." onkeyup="filterProducts()">
     </section>
 
-    <div class="cart" onclick="showCart()">
+    <div class="filters">
+        <select id="sortSelect" onchange="sortProducts()">
+            <option value="default">Sort by Default</option>
+            <option value="low">Price: Low to High</option>
+            <option value="high">Price: High to Low</option>
+        </select>
+    </div>
+
+    <div class="cart-btn" onclick="showCart()">
         🛒 Cart (<span id="cart-count">0</span>)
     </div>
 
     <section class="products" id="products-container"></section>
 
-    <section class="contact" style="text-align:center; padding:40px; background:white;">
+    <button onclick="loadMore()" id="loadMoreBtn" style="display:block; margin:30px auto; padding:14px 40px; background:#3498db; color:white; border:none; border-radius:50px; font-size:1.1rem;">Load More Bales</button>
+
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <section class="contact" style="text-align:center; padding:50px 20px; background:white;">
         <h2>Contact Us</h2>
         <p><strong>0104 064092</strong> | <strong>0116 460490</strong></p>
-        <a href="https://wa.me/254720399552" target="_blank" 
-           style="background:#25D366; color:white; padding:16px 35px; border-radius:50px; text-decoration:none; display:inline-block; margin:20px 0; font-size:1.2rem;">
-            📱 Order via WhatsApp
-        </a>
+        <a href="https://wa.me/254720399552" target="_blank" style="background:#25D366; color:white; padding:16px 35px; border-radius:50px; text-decoration:none; display:inline-block; margin:20px 0; font-size:1.2rem;">📱 Order via WhatsApp</a>
     </section>
 
     <footer>
@@ -157,54 +119,105 @@
 
     <script>
         let products = [
-            { id: 1, name: "baby sleeper bale", price: 22000, image: "IMG-20260621-WA0062.jpg", soldOut: false },
-            { id: 2, name: "paired socks bale", price: 15000, image: "IMG-20260621-WA0060.jpg", soldOut: false },
-            { id: 3, name: "Cargo Shorts Bale (100lbs)", price: 25000, image: "IMG-20260617-WA0008.jpg", soldOut: false },
-            { id: 4, name: "towel bale", price: 12800, image: "IMG-20260621-WA0055.jpg", soldOut: false },
-            { id: 5, name: "socks bale", price: 18000, image: "IMG-20260621-WA0059.jpg", soldOut: false },
-            { id: 6, name: "ladies underwear bale",price:12000,image:"IMG-20260621-WA0058.jpg",soldOut: false },
-            { id: 7, name: "kids sneakers bale",price:18000,image:"IMG-20260621-WA0057.jpg",soldOut:false},
-            { id: 8, name: "baby blanket bale", price:20000,image:"IMG-20260621-WA0056.jpg",soldOut:false},
-            { id: 9, name: "kids jogging pant", price:15000,image:"IMG-20260621-WA0054.jpg",soldOut:false},
-            { id 10, name: "adult sneakers bale",price:20000,image:"IMG-20260621-WA0051.jpg",soldOut:false},
-            { id 11, name: " curtain bale",price:17000,image:"IMG-20260621-WA0050.jpg",soldOut:false},
-            { id 12, name: " ex-uk children zipper bale",price:27000,image:"IMG-20260621-WA0047.jpg",soldOut:false,
-            { id 13, name: "sandals bale",price:14000,"IMG-20260621-WA0045.jpg",soldOut:false,
-            { id 14, name: "children jacket bale",price:22000,"IMG-20260621-WA0044.jpg",soldOut:false,
-            { id 15, name: "adult raincoatsbale",price:16000,"IMG-20260621-WA0042.jpg",soldOut:false,
-        
+            { id: 1, name: "Baby Sleeper Bale", price: 22000, image: "IMG-20260621-WA0062.jpg", category: "baby", soldOut: false },
+            { id: 2, name: "Paired Socks Bale", price: 15000, image: "IMG-20260621-WA0060.jpg", category: "adult", soldOut: false },
+            { id: 3, name: "Cargo Shorts Bale", price: 25000, image: "IMG-20260617-WA0008.jpg", category: "adult", soldOut: false },
+            { id: 4, name: "Towel Bale", price: 12800, image: "IMG-20260621-WA0055.jpg", category: "adult", soldOut: false },
+            { id: 5, name: "Socks Bale", price: 18000, image: "IMG-20260621-WA0059.jpg", category: "adult", soldOut: false },
+            { id: 6, name: "Ladies Underwear Bale", price: 12000, image: "IMG-20260621-WA0058.jpg", category: "adult", soldOut: false },
+            { id: 7, name: "Kids Sneakers Bale", price: 18000, image: "IMG-20260621-WA0057.jpg", category: "kids", soldOut: false },
+            { id: 8, name: "Baby Blanket Bale", price: 20000, image: "IMG-20260621-WA0056.jpg", category: "baby", soldOut: false },
+            { id: 9, name: "Kids Jogging Pant Bale", price: 15000, image: "IMG-20260621-WA0054.jpg", category: "kids", soldOut: false },
+            { id: 10, name: "Adult Sneakers Bale", price: 20000, image: "IMG-20260621-WA0051.jpg", category: "adult", soldOut: false },
+            { id: 11, name: "Curtain Bale", price: 17000, image: "IMG-20260621-WA0050.jpg", category: "adult", soldOut: false },
+            { id: 12, name: "Ex-UK Children Zipper Bale", price: 27000, image: "IMG-20260621-WA0047.jpg", category: "kids", soldOut: false },
+            { id: 13, name: "Sandals Bale", price: 14000, image: "IMG-20260621-WA0045.jpg", category: "kids", soldOut: false },
+            { id: 14, name: "Children Jacket Bale", price: 22000, image: "IMG-20260621-WA0044.jpg", category: "kids", soldOut: false },
+            { id: 15, name: "Adult Raincoats Bale", price: 16000, image: "IMG-20260621-WA0042.jpg", category: "adult", soldOut: false }
         ];
 
         let cart = [];
         let adminMode = false;
+        let currentItems = 6;
+        let currentFilter = 'all';
 
-        function renderProducts(filtered = products) {
+        function renderProducts(filteredProducts) {
             const container = document.getElementById('products-container');
             container.innerHTML = '';
+            const toShow = filteredProducts.slice(0, currentItems);
 
-            filtered.forEach(p => {
+            toShow.forEach(p => {
                 const div = document.createElement('div');
                 div.className = 'product';
                 div.innerHTML = `
-                    <div class="image-container">
+                    <div class="image-container" onclick="showProduct(${p.id})">
                         <img src="${p.image}" alt="${p.name}">
                         ${p.soldOut ? '<div class="sold-out">SOLD OUT</div>' : ''}
                     </div>
                     <h3>${p.name}</h3>
-                    <p class="price">KSh ${p.price}</p>
-                    <button class="add-btn" onclick="addToCart(${p.id})" ${p.soldOut ? 'disabled' : ''}>
-                        ${p.soldOut ? 'Sold Out' : 'Add to Cart'}
-                    </button>
-                    ${adminMode ? `<button class="toggle-sold" onclick="toggleSoldOut(${p.id})">${p.soldOut ? '✅ Mark Available' : '❌ Mark Sold Out'}</button>` : ''}
+                    <p class="price">KSh ${p.price.toLocaleString()}</p>
+                    <div class="actions">
+                        <button class="add-btn" onclick="addToCart(${p.id}); event.stopImmediatePropagation()">Add to Cart</button>
+                        <button class="buy-btn" onclick="buyNow(${p.id}); event.stopImmediatePropagation()">Buy Now</button>
+                    </div>
                 `;
                 container.appendChild(div);
             });
+
+            document.getElementById('loadMoreBtn').style.display = currentItems < filteredProducts.length ? 'block' : 'none';
+        }
+
+        function loadMore() {
+            currentItems += 6;
+            filterProducts();
+        }
+
+        function showProduct(id) {
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            document.getElementById('modalContent').innerHTML = `
+                <h2>${p.name}</h2>
+                <img src="${p.image}" style="width:100%; border-radius:12px; margin:15px 0;">
+                <p><strong>Price:</strong> KSh ${p.price.toLocaleString()}</p>
+                <button onclick="addToCart(${p.id}); closeModal()" style="width:100%; padding:15px; background:#27ae60; color:white; border:none; margin:10px 0;">Add to Cart</button>
+                <button onclick="buyNow(${p.id}); closeModal()" style="width:100%; padding:15px; background:#e67e22; color:white; border:none;">Buy on WhatsApp</button>
+                <button onclick="closeModal()" style="width:100%; padding:12px;">Close</button>
+            `;
+            document.getElementById('productModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        function filterCategory(cat) {
+            currentFilter = cat;
+            filterProducts();
         }
 
         function filterProducts() {
+            let filtered = products;
             const term = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(p => p.category === currentFilter);
+            }
+            if (term) {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(term));
+            }
+
+            currentItems = 6;
             renderProducts(filtered);
+        }
+
+        function sortProducts() {
+            const sortType = document.getElementById('sortSelect').value;
+            let sorted = [...products];
+
+            if (sortType === 'low') sorted.sort((a,b) => a.price - b.price);
+            if (sortType === 'high') sorted.sort((a,b) => b.price - a.price);
+
+            renderProducts(sorted);
         }
 
         function addToCart(id) {
@@ -212,31 +225,43 @@
             if (item && !item.soldOut) {
                 cart.push(item);
                 document.getElementById('cart-count').textContent = cart.length;
-                alert(`✅ Added: ${item.name}`);
+                showToast(`✅ ${item.name} added to cart`);
             }
         }
 
+        function buyNow(id) {
+            const item = products.find(p => p.id === id);
+            if (item) {
+                const message = `Hello, I want to buy: ${item.name} - KSh ${item.price}`;
+                window.open(`https://wa.me/254720399552?text=${encodeURIComponent(message)}`, '_blank');
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
+        }
+
         function showCart() {
-            if (cart.length === 0) return alert("Cart is empty!");
+            if (cart.length === 0) return showToast("Your cart is empty!");
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
             let msg = "🛒 Your Cart:\n\n";
             cart.forEach(i => msg += `• ${i.name} - KSh ${i.price}\n`);
-            msg += `\nTotal Items: ${cart.length}`;
-            alert(msg);
+            msg += `\nTotal: KSh ${total.toLocaleString()}\n\nReply "Clear" to empty cart.`;
+            if (confirm(msg)) {
+                // Optional: clear cart
+            }
         }
 
         function toggleAdmin() {
             adminMode = !adminMode;
-            alert(adminMode ? "🔓 Admin Mode Activated" : "🔒 Admin Mode Deactivated");
-            renderProducts();
+            alert(adminMode ? "🔓 Admin Mode ON" : "🔒 Admin Mode OFF");
+            filterProducts();
         }
 
-        function toggleSoldOut(id) {
-            const p = products.find(x => x.id === id);
-            if (p) p.soldOut = !p.soldOut;
-            renderProducts();
-        }
-
-        window.onload = () => renderProducts();
+        window.onload = () => renderProducts(products);
     </script>
 </body>
 </html>
