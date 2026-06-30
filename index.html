@@ -7,12 +7,12 @@
     <meta name="description" content="Best Mitumba bales in Gikomba Market. Baby clothes, socks, towels, jackets & more at wholesale prices.">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; color: #333; transition: background 0.3s; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; color: #333; transition: 0.3s; }
         body.dark { background: #121212; color: #eee; }
         header { background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 25px; text-align: center; position: relative; }
         header h1 { font-size: 2.5rem; }
         .admin-btn, .dark-mode-btn { position: absolute; top: 20px; font-size: 1.8rem; cursor: pointer; background: none; border: none; }
-        .dark-mode-btn { right: 60px; }
+        .dark-mode-btn { right: 70px; }
 
         nav { background: #34495e; padding: 12px; text-align: center; }
         nav button { background: none; border: none; color: white; margin: 0 12px; cursor: pointer; font-size: 1.05rem; }
@@ -44,11 +44,7 @@
         .add-btn { background: #27ae60; color: white; }
         .buy-btn { background: #e67e22; color: white; }
 
-        .cart-btn, .wishlist-btn {
-            position: fixed; top: 20px; right: 20px; background: #e74c3c; color: white;
-            padding: 12px 18px; border-radius: 50px; z-index: 100; cursor: pointer;
-        }
-        .wishlist-btn { right: 80px; background: #ff4081; }
+        .cart-btn { position: fixed; top: 20px; right: 20px; background: #e74c3c; color: white; padding: 12px 18px; border-radius: 50px; z-index: 100; cursor: pointer; }
         .whatsapp-float { position: fixed; bottom: 20px; right: 20px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 101; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 300; align-items: center; justify-content: center; }
@@ -128,7 +124,7 @@
     </footer>
 
     <script>
-        let products = [ /* your full list */ 
+        let products = [
             { id: 1, name: "Baby Sleeper Bale", price: 22000, image: "IMG-20260621-WA0062.jpg", category: "baby", soldOut: false },
             { id: 2, name: "Paired Socks Bale", price: 15000, image: "IMG-20260621-WA0060.jpg", category: "adult", soldOut: false },
             { id: 3, name: "Cargo Shorts Bale", price: 25000, image: "IMG-20260617-WA0008.jpg", category: "adult", soldOut: false },
@@ -147,7 +143,6 @@
         ];
 
         let cart = [];
-        let wishlist = [];
         let recentlyViewed = [];
         let adminMode = false;
         let currentItems = 6;
@@ -187,8 +182,11 @@
         function showProduct(id) {
             const p = products.find(x => x.id === id);
             if (!p) return;
+
+            // Add to recently viewed
+            recentlyViewed = recentlyViewed.filter(item => item.id !== p.id);
             recentlyViewed.unshift(p);
-            if (recentlyViewed.length > 4) recentlyViewed.pop();
+            if (recentlyViewed.length > 6) recentlyViewed.pop();
             renderRecentlyViewed();
 
             document.getElementById('modalContent').innerHTML = `
@@ -313,9 +311,7 @@
             filterProducts();
         }
 
-        window.onload = () => {
-            renderProducts(products);
-        };
+        window.onload = () => renderProducts(products);
     </script>
 </body>
 </html>
