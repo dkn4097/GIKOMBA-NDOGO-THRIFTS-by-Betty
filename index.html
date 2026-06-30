@@ -15,18 +15,13 @@
         nav { background: #34495e; padding: 12px; text-align: center; }
         nav button { background: none; border: none; color: white; margin: 0 12px; cursor: pointer; font-size: 1.05rem; }
 
-        .hero {
-            position: relative; height: 400px; overflow: hidden;
-        }
-        .hero-slide {
-            position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 1s;
-        }
-        .hero-slide.active { opacity: 1; }
-        .hero-slide img { width: 100%; height: 100%; object-fit: cover; }
+        .hero { background: #fff3e0; padding: 50px 20px; text-align: center; }
+        .search-bar { width: 90%; max-width: 500px; padding: 14px; border-radius: 50px; border: 2px solid #3498db; }
 
-        .search-bar { width: 90%; max-width: 500px; padding: 14px; border-radius: 50px; border: 2px solid #3498db; margin: 20px auto; display: block; }
+        .filters { padding: 15px 20px; background: white; text-align: center; }
+        select, button { padding: 10px; margin: 5px; border-radius: 8px; }
 
-        .products, .featured {
+        .products {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
@@ -38,18 +33,22 @@
         .product:hover { transform: translateY(-10px); }
         .image-container { position: relative; height: 260px; }
         .image-container img { width: 100%; height: 100%; object-fit: cover; }
+        .sold-out { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: #e74c3c; color: white; padding: 10px 25px; border-radius: 8px; font-weight: bold; }
         .price { font-size: 1.5rem; font-weight: bold; color: #27ae60; padding: 10px 15px; }
         .actions { display: flex; }
         .actions button { flex: 1; padding: 12px; border: none; cursor: pointer; }
         .add-btn { background: #27ae60; color: white; }
         .buy-btn { background: #e67e22; color: white; }
 
-        .cart-btn, .whatsapp-float {
-            position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 100;
+        .cart-btn {
+            position: fixed; top: 20px; right: 20px; background: #e74c3c; color: white;
+            padding: 12px 18px; border-radius: 50px; z-index: 100; cursor: pointer;
         }
-        .cart-btn { background: #e74c3c; color: white; top: 20px; }
-        .whatsapp-float { background: #25D366; color: white; bottom: 90px; }
+        .whatsapp-float {
+            position: fixed; bottom: 20px; right: 20px; background: #25D366; color: white;
+            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 101; text-decoration: none;
+        }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 300; align-items: center; justify-content: center; }
         .modal-content { background: white; padding: 20px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
@@ -78,13 +77,7 @@
     </nav>
 
     <section class="hero">
-        <div class="hero-slide active"><img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200" alt="Mitumba"></div>
-        <div class="hero-slide"><img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c83137?w=1200" alt="Bales"></div>
-        <div class="hero-slide"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200" alt="Shoes"></div>
-        <h2 style="position:absolute; bottom:30px; left:50%; transform:translateX(-50%); color:white; text-shadow:0 2px 10px rgba(0,0,0,0.7);">Latest Bales from Gikomba 🔥</h2>
-    </section>
-
-    <section class="hero">
+        <h2>Latest Bales from Gikomba Market 🔥</h2>
         <input type="text" id="searchInput" class="search-bar" placeholder="Search bales..." onkeyup="filterProducts()">
     </section>
 
@@ -96,7 +89,10 @@
         </select>
     </div>
 
-    <div class="cart-btn" onclick="showCartModal()">🛒 <span id="cart-count">0</span></div>
+    <div class="cart-btn" onclick="showCartModal()">
+        🛒 Cart (<span id="cart-count">0</span>)
+    </div>
+
     <a href="https://wa.me/254720399552" target="_blank" class="whatsapp-float">📱</a>
 
     <section class="products" id="products-container"></section>
@@ -150,8 +146,142 @@
         let currentItems = 6;
         let currentFilter = 'all';
 
-        // Your existing functions (renderProducts, loadMore, filterProducts, etc.) remain the same
-        // ... (I kept them short for brevity, but they are fully functional in the code)
+        function renderProducts(filteredProducts = products) {
+            const container = document.getElementById('products-container');
+            container.innerHTML = '';
+            const toShow = filteredProducts.slice(0, currentItems);
+
+            toShow.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'product';
+                div.innerHTML = `
+                    <div class="image-container" onclick="showProduct(${p.id})">
+                        <img src="${p.image}" alt="${p.name}" 
+                             onerror="this.src='https://via.placeholder.com/300x260?text=Image+Not+Found'; this.onerror=null;">
+                        ${p.soldOut ? '<div class="sold-out">SOLD OUT</div>' : ''}
+                    </div>
+                    <h3>${p.name}</h3>
+                    <p class="price">KSh ${p.price.toLocaleString()}</p>
+                    <div class="actions">
+                        <button class="add-btn" onclick="addToCart(${p.id}); event.stopImmediatePropagation()">Add to Cart</button>
+                        <button class="buy-btn" onclick="buyNow(${p.id}); event.stopImmediatePropagation()">Buy Now</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            document.getElementById('loadMoreBtn').style.display = currentItems < filteredProducts.length ? 'block' : 'none';
+        }
+
+        function loadMore() {
+            currentItems += 6;
+            filterProducts();
+        }
+
+        function showProduct(id) {
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            document.getElementById('modalContent').innerHTML = `
+                <h2>${p.name}</h2>
+                <img src="${p.image}" style="width:100%; border-radius:12px; margin:15px 0;" 
+                     onerror="this.src='https://via.placeholder.com/400x300?text=Image+Not+Found';">
+                <p><strong>Price:</strong> KSh ${p.price.toLocaleString()}</p>
+                <button onclick="addToCart(${p.id}); closeModal()" style="width:100%; padding:15px; background:#27ae60; color:white; border:none; margin:10px 0;">Add to Cart</button>
+                <button onclick="buyNow(${p.id}); closeModal()" style="width:100%; padding:15px; background:#e67e22; color:white; border:none;">Buy on WhatsApp</button>
+                <button onclick="closeModal()" style="width:100%; padding:12px;">Close</button>
+            `;
+            document.getElementById('productModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        function filterCategory(cat) {
+            currentFilter = cat;
+            filterProducts();
+        }
+
+        function filterProducts() {
+            let filtered = products;
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            if (currentFilter !== 'all') filtered = filtered.filter(p => p.category === currentFilter);
+            if (term) filtered = filtered.filter(p => p.name.toLowerCase().includes(term));
+            currentItems = 6;
+            renderProducts(filtered);
+        }
+
+        function sortProducts() {
+            const sortType = document.getElementById('sortSelect').value;
+            let sorted = [...products];
+            if (sortType === 'low') sorted.sort((a,b) => a.price - b.price);
+            if (sortType === 'high') sorted.sort((a,b) => b.price - a.price);
+            renderProducts(sorted);
+        }
+
+        function addToCart(id) {
+            const item = products.find(p => p.id === id);
+            if (item && !item.soldOut) {
+                cart.push(item);
+                document.getElementById('cart-count').textContent = cart.length;
+                showToast(`✅ ${item.name} added to cart`);
+            }
+        }
+
+        function buyNow(id) {
+            const item = products.find(p => p.id === id);
+            if (item) {
+                const message = `Hello, I want to buy: ${item.name} - KSh ${item.price}`;
+                window.open(`https://wa.me/254720399552?text=${encodeURIComponent(message)}`, '_blank');
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
+        }
+
+        function showCartModal() {
+            if (cart.length === 0) return showToast("Your cart is empty!");
+            let html = '';
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.price;
+                html += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0; padding:10px; background:#f9f9f9; border-radius:8px;">
+                        <div><strong>${item.name}</strong><br>KSh ${item.price.toLocaleString()}</div>
+                        <button onclick="removeFromCart(${index})" style="background:#e74c3c; color:white; border:none; padding:6px 12px; border-radius:5px;">Remove</button>
+                    </div>`;
+            });
+            document.getElementById('cartItems').innerHTML = html;
+            document.getElementById('cartTotal').textContent = `Total: KSh ${total.toLocaleString()}`;
+            document.getElementById('cartModal').style.display = 'flex';
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            document.getElementById('cart-count').textContent = cart.length;
+            showCartModal();
+        }
+
+        function clearCart() {
+            if (confirm("Clear entire cart?")) {
+                cart = [];
+                document.getElementById('cart-count').textContent = 0;
+                showCartModal();
+            }
+        }
+
+        function closeCartModal() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        function toggleAdmin() {
+            adminMode = !adminMode;
+            alert(adminMode ? "🔓 Admin Mode ON" : "🔒 Admin Mode OFF");
+            filterProducts();
+        }
 
         window.onload = () => renderProducts(products);
     </script>
