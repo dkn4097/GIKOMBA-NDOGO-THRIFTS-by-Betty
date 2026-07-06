@@ -3,8 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gikomba Thrift Shop | Quality Mitumba Bales</title>
-    <meta name="description" content="Best Mitumba bales in Gikomba Market. Baby clothes, socks, towels, jackets & more at wholesale prices.">
+    <title>Gikomba Thrift Shop | Mitumba Bales Nairobi - Baby Clothes, Socks, Towels Wholesale</title>
+    <meta name="description" content="Quality second-hand mitumba bales at wholesale prices in Gikomba Market Nairobi. Baby clothes, socks, towels, jackets, shoes & more. Fast delivery.">
+    <meta name="keywords" content="mitumba bales, gikomba thrift shop, second hand clothes wholesale nairobi, baby clothes bales, socks bales kenya">
+    
+    <!-- SEO -->
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yourusername.github.io/your-repo-name/">
+    
+    <!-- Open Graph for Social Media -->
+    <meta property="og:title" content="Gikomba Thrift Shop - Best Mitumba Bales in Nairobi">
+    <meta property="og:description" content="Wholesale mitumba bales at affordable prices. Baby clothes, socks, towels & more.">
+    <meta property="og:image" content="https://yourdomain.com/hero-image.jpg">
+    <meta property="og:url" content="https://yourusername.github.io/your-repo-name/">
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; color: #333; transition: 0.3s; }
@@ -183,7 +195,6 @@
             const p = products.find(x => x.id === id);
             if (!p) return;
 
-            // Add to recently viewed
             recentlyViewed = recentlyViewed.filter(item => item.id !== p.id);
             recentlyViewed.unshift(p);
             if (recentlyViewed.length > 6) recentlyViewed.pop();
