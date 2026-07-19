@@ -4,12 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gikomba Thrift Shop | Mitumba Bales Nairobi</title>
-    <meta name="description" content="Quality second-hand mitumba bales at wholesale prices in Gikomba Market Nairobi. Baby clothes, socks, towels, jackets, shoes & more.">
+    <meta name="description" content="Quality second-hand mitumba bales at wholesale prices in Gikomba Market Nairobi.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
+        
+        /* Custom Animations */
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .product-card {
+            animation: slideUp 0.6s ease forwards;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .zoom-hover:hover img {
+            transform: scale(1.12) rotate(2deg);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .bounce {
+            animation: bounce 0.6s ease;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -22,7 +52,6 @@
                 <h1 class="text-2xl font-bold text-gray-800">Gikomba Thrift</h1>
             </div>
 
-            <!-- Desktop Menu -->
             <div class="hidden md:flex items-center gap-8 text-gray-700 font-medium">
                 <a href="#" class="hover:text-red-600">Home</a>
                 <a href="#products" class="hover:text-red-600">All Bales</a>
@@ -58,7 +87,7 @@
     <!-- Hero -->
     <section class="bg-gradient-to-br from-blue-900 to-red-700 text-white py-24 text-center">
         <div class="max-w-4xl mx-auto px-6">
-            <h1 class="text-5xl md:text-6xl font-bold mb-6">Quality Mitumba Bales</h1>
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 fade-in">Quality Mitumba Bales</h1>
             <p class="text-xl md:text-2xl mb-8">Fresh from Gikomba Market • Wholesale Prices</p>
             <input type="text" id="searchInput" 
                    class="w-full max-w-lg mx-auto px-6 py-4 rounded-full text-gray-900 text-lg focus:outline-none"
@@ -79,9 +108,7 @@
                 <h2 class="text-3xl font-bold">Your Cart</h2>
                 <button onclick="hideCart()" class="text-3xl text-gray-500 hover:text-black">✕</button>
             </div>
-            
             <div id="cart-items" class="p-6 overflow-auto max-h-[55vh]"></div>
-
             <div class="p-6 border-t bg-gray-50">
                 <div class="flex justify-between text-2xl font-bold mb-6">
                     <span>Total</span>
@@ -106,7 +133,7 @@
     </footer>
 
     <script>
-        let products = [ /* Your original products */ 
+        let products = [
             { id: 1, name: "Baby Sleeper Bale", price: 22000, image: "IMG-20260621-WA0062.jpg", category: "baby" },
             { id: 2, name: "Paired Socks Bale", price: 15000, image: "IMG-20260621-WA0060.jpg", category: "adult" },
             { id: 3, name: "Cargo Shorts Bale", price: 25000, image: "IMG-20260617-WA0008.jpg", category: "adult" },
@@ -125,22 +152,22 @@
         ];
 
         let cart = [];
-        let currentFilter = 'all';
 
         function renderProducts(filtered = products) {
             const container = document.getElementById('products-grid');
             container.innerHTML = '';
 
-            filtered.forEach(p => {
+            filtered.forEach((p, index) => {
                 const div = document.createElement('div');
-                div.className = "bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all";
+                div.className = `bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all product-card zoom-hover`;
+                div.style.animationDelay = `${index * 100}ms`;
                 div.innerHTML = `
-                    <img src="${p.image}" class="w-full h-64 object-cover">
+                    <img src="${p.image}" class="w-full h-64 object-cover transition-transform duration-500">
                     <div class="p-6">
                         <h3 class="font-semibold text-lg mb-2">${p.name}</h3>
                         <p class="text-3xl font-bold text-green-600 mb-5">KSh ${p.price}</p>
-                        <button onclick="addToCart(${p.id})" 
-                                class="w-full bg-red-600 hover:bg-red-700 text-white py-4 rounded-2xl font-semibold">
+                        <button onclick="addToCart(${p.id}); this.classList.add('bounce')" 
+                                class="w-full bg-red-600 hover:bg-red-700 text-white py-4 rounded-2xl font-semibold transition">
                             Add to Cart
                         </button>
                     </div>
@@ -213,7 +240,6 @@
             renderProducts(filtered);
         }
 
-        // Initialize
         window.onload = () => renderProducts(products);
     </script>
 </body>
