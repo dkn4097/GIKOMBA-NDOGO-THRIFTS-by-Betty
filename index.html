@@ -10,18 +10,23 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
-       
+        
         .product-card {
-            animation: slideUp 0.6s ease forwards;
+            animation: fadeInUp 0.6s ease forwards;
         }
-        @keyframes slideUp {
+        @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
-       
+        
         .zoom-hover:hover img {
-            transform: scale(1.08);
-            transition: all 0.5s ease;
+            transform: scale(1.1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .category-btn.active {
+            background-color: #dc2626;
+            color: white;
         }
     </style>
 </head>
@@ -32,13 +37,6 @@
             <div class="flex items-center gap-3">
                 <span class="text-3xl">🛍️</span>
                 <h1 class="text-2xl font-bold text-gray-800">Gikomba Thrift</h1>
-            </div>
-            <div class="hidden md:flex items-center gap-8 text-gray-700 font-medium">
-                <a href="#" class="hover:text-red-600">Home</a>
-                <a href="#products" class="hover:text-red-600">All Bales</a>
-                <a href="#" class="hover:text-red-600">Baby</a>
-                <a href="#" class="hover:text-red-600">Kids</a>
-                <a href="#" class="hover:text-red-600">Adult</a>
             </div>
             <div class="flex items-center gap-6">
                 <button onclick="showCart()" class="flex items-center gap-2 text-xl hover:text-red-600">
@@ -54,14 +52,23 @@
         <div class="max-w-4xl mx-auto px-6">
             <h1 class="text-5xl md:text-6xl font-bold mb-6">Quality Mitumba Bales</h1>
             <p class="text-xl md:text-2xl mb-8">Fresh from Gikomba Market • Wholesale Prices</p>
-            <input type="text" id="searchInput"
+            <input type="text" id="searchInput" 
                    class="w-full max-w-lg mx-auto px-6 py-4 rounded-full text-gray-900 text-lg focus:outline-none"
-                   placeholder="Search bales... (baby, socks, towels)" onkeyup="filterProducts()">
+                   placeholder="Search bales..." onkeyup="filterProducts()">
         </div>
     </section>
 
+    <!-- Category Filters -->
+    <div class="max-w-7xl mx-auto px-6 py-6 flex flex-wrap gap-3 justify-center" id="category-filters">
+        <button onclick="filterByCategory('all')" class="category-btn active px-6 py-3 rounded-full font-medium transition">All Bales</button>
+        <button onclick="filterByCategory('baby')" class="category-btn px-6 py-3 rounded-full font-medium transition">Baby</button>
+        <button onclick="filterByCategory('kids')" class="category-btn px-6 py-3 rounded-full font-medium transition">Kids</button>
+        <button onclick="filterByCategory('adult')" class="category-btn px-6 py-3 rounded-full font-medium transition">Adult</button>
+        <button onclick="filterByCategory('ladies')" class="category-btn px-6 py-3 rounded-full font-medium transition">Ladies</button>
+    </div>
+
     <!-- Products -->
-    <section id="products" class="max-w-7xl mx-auto px-6 py-16">
+    <section id="products" class="max-w-7xl mx-auto px-6 py-8">
         <h2 class="text-4xl font-bold text-center mb-12">Our Latest Bales</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="products-grid"></div>
     </section>
@@ -102,7 +109,7 @@
             { id: 3, name: "Cargo Shorts", price: 25000, image: "cargo shorts.jpg", category: "adult" },
             { id: 4, name: "Towel Bale", price: 12800, image: "IMG-20260621-WA0055.jpg", category: "adult" },
             { id: 5, name: "Socks Bale", price: 18000, image: "IMG-20260621-WA0059.jpg", category: "adult" },
-            { id: 6, name: "Ladies Underwear Bale", price: 12000, image: "IMG-20260621-WA0058.jpg", category: "adult" },
+            { id: 6, name: "Ladies Underwear Bale", price: 12000, image: "IMG-20260621-WA0058.jpg", category: "ladies" },
             { id: 7, name: "Kids Sneakers Bale", price: 18000, image: "IMG-20260621-WA0057.jpg", category: "kids" },
             { id: 8, name: "Baby Blanket Bale", price: 20000, image: "IMG-20260621-WA0056.jpg", category: "baby" },
             { id: 9, name: "Kids Jogging Pant Bale", price: 15000, image: "IMG-20260621-WA0054.jpg", category: "kids" },
@@ -113,7 +120,7 @@
             { id: 14, name: "Children Jacket Bale", price: 22000, image: "IMG-20260621-WA0044.jpg", category: "kids" },
             { id: 15, name: "Adult Raincoats Bale", price: 16000, image: "IMG-20260621-WA0042.jpg", category: "adult" },
             { id: 16, name: "Adult Bathrobes", price: 27000, image: "Adult-Bathrobe.webp", category: "adult" },
-            { id: 17, name: "Heavy Baby Rompers", price: 32000, image: "heavy-Baby-Rompers-Blue-915x1024.webp", category: "kids" },
+            { id: 17, name: "Heavy Baby Rompers", price: 32000, image: "heavy-Baby-Rompers-Blue-915x1024.webp", category: "baby" },
             { id: 18, name: "Ladies Heavy Tight", price: 27000, image: "Heavy-Tight-Pants-for-Ladies-Floral-768x1024.webp", category: "ladies" },
             { id: 19, name: "Ladies Rugged Jeans", price: 25000, image: "Rugged-Jeans-for-Ladies.webp", category: "ladies" },
             { id: 20, name: "Adult Hoods", price: 18000, image: "adult hoods.jpg", category: "adult" },
@@ -123,6 +130,7 @@
         ];
 
         let cart = [];
+        let currentCategory = 'all';
 
         function renderProducts(filtered = products) {
             const container = document.getElementById('products-grid');
@@ -133,18 +141,30 @@
                 div.style.animationDelay = `${index * 80}ms`;
                 div.innerHTML = `
                     <img src="${p.image}" class="w-full h-64 object-cover transition-transform duration-500" 
-                         onerror="this.src='https://via.placeholder.com/400x300?text=Image+Not+Found'">
+                         onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
                     <div class="p-6">
                         <h3 class="font-semibold text-lg mb-2">${p.name}</h3>
                         <p class="text-3xl font-bold text-green-600 mb-5">KSh ${p.price}</p>
-                        <button onclick="addToCart(${p.id}); this.classList.add('bounce')"
-                                class="w-full bg-red-600 hover:bg-red-700 text-white py-4 rounded-2xl font-semibold transition">
+                        <button onclick="addToCart(${p.id})" class="w-full bg-red-600 hover:bg-red-700 text-white py-4 rounded-2xl font-semibold">
                             Add to Cart
                         </button>
                     </div>
                 `;
                 container.appendChild(div);
             });
+        }
+
+        function filterByCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase().includes(category) || (category === 'all' && btn.textContent === 'All Bales'));
+            });
+            
+            let filtered = products;
+            if (category !== 'all') {
+                filtered = products.filter(p => p.category === category);
+            }
+            renderProducts(filtered);
         }
 
         function addToCart(id) {
@@ -200,11 +220,16 @@
 
         function filterProducts() {
             const term = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+            let filtered = products.filter(p => p.name.toLowerCase().includes(term));
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(p => p.category === currentCategory);
+            }
             renderProducts(filtered);
         }
 
-        window.onload = () => renderProducts();
+        window.onload = () => {
+            renderProducts();
+        };
     </script>
 </body>
 </html>
