@@ -10,16 +10,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        
-        /* Custom Animations */
-        .fade-in {
-            animation: fadeIn 0.8s ease forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
+       
         .product-card {
             animation: slideUp 0.6s ease forwards;
         }
@@ -27,23 +18,14 @@
             from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+       
         .zoom-hover:hover img {
-            transform: scale(1.12) rotate(2deg);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .bounce {
-            animation: bounce 0.6s ease;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            transform: scale(1.08);
+            transition: all 0.5s ease;
         }
     </style>
 </head>
 <body class="bg-gray-50">
-
     <!-- Navbar -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
@@ -51,7 +33,6 @@
                 <span class="text-3xl">🛍️</span>
                 <h1 class="text-2xl font-bold text-gray-800">Gikomba Thrift</h1>
             </div>
-
             <div class="hidden md:flex items-center gap-8 text-gray-700 font-medium">
                 <a href="#" class="hover:text-red-600">Home</a>
                 <a href="#products" class="hover:text-red-600">All Bales</a>
@@ -59,27 +40,11 @@
                 <a href="#" class="hover:text-red-600">Kids</a>
                 <a href="#" class="hover:text-red-600">Adult</a>
             </div>
-
             <div class="flex items-center gap-6">
-                <button onclick="toggleDarkMode()" class="text-2xl">🌙</button>
                 <button onclick="showCart()" class="flex items-center gap-2 text-xl hover:text-red-600">
                     <i class="fas fa-shopping-cart"></i>
                     <span id="cart-count" class="font-bold">0</span>
                 </button>
-                <button onclick="toggleMobileMenu()" class="md:hidden text-3xl">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-t py-6">
-            <div class="flex flex-col gap-6 text-center text-lg font-medium">
-                <a href="#" class="hover:text-red-600">Home</a>
-                <a href="#products" class="hover:text-red-600">All Bales</a>
-                <a href="#" class="hover:text-red-600">Baby</a>
-                <a href="#" class="hover:text-red-600">Kids</a>
-                <a href="#" class="hover:text-red-600">Adult</a>
             </div>
         </div>
     </nav>
@@ -87,9 +52,9 @@
     <!-- Hero -->
     <section class="bg-gradient-to-br from-blue-900 to-red-700 text-white py-24 text-center">
         <div class="max-w-4xl mx-auto px-6">
-            <h1 class="text-5xl md:text-6xl font-bold mb-6 fade-in">Quality Mitumba Bales</h1>
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">Quality Mitumba Bales</h1>
             <p class="text-xl md:text-2xl mb-8">Fresh from Gikomba Market • Wholesale Prices</p>
-            <input type="text" id="searchInput" 
+            <input type="text" id="searchInput"
                    class="w-full max-w-lg mx-auto px-6 py-4 rounded-full text-gray-900 text-lg focus:outline-none"
                    placeholder="Search bales... (baby, socks, towels)" onkeyup="filterProducts()">
         </div>
@@ -114,8 +79,7 @@
                     <span>Total</span>
                     <span id="cart-total">KSh 0</span>
                 </div>
-                <button onclick="checkout()" 
-                        class="w-full bg-green-600 hover:bg-green-700 text-white py-5 rounded-2xl text-xl font-semibold">
+                <button onclick="checkout()" class="w-full bg-green-600 hover:bg-green-700 text-white py-5 rounded-2xl text-xl font-semibold">
                     Order via WhatsApp
                 </button>
             </div>
@@ -125,8 +89,7 @@
     <footer class="bg-gray-900 text-white py-12 text-center">
         <p class="text-xl mb-3">Gikomba Thrift Shop</p>
         <p class="mb-6">0104 064092 | 0116 460490</p>
-        <a href="https://wa.me/254720399552" target="_blank" 
-           class="inline-block bg-green-500 hover:bg-green-600 px-10 py-4 rounded-full text-lg font-semibold">
+        <a href="https://wa.me/254720399552" target="_blank" class="inline-block bg-green-500 hover:bg-green-600 px-10 py-4 rounded-full text-lg font-semibold">
             📱 WhatsApp Us
         </a>
         <p class="mt-8 text-gray-400">&copy; 2026 Gikomba Thrift Shop • Nairobi, Kenya</p>
@@ -149,19 +112,14 @@
             { id: 13, name: "Sandals Bale", price: 14000, image: "IMG-20260621-WA0045.jpg", category: "kids" },
             { id: 14, name: "Children Jacket Bale", price: 22000, image: "IMG-20260621-WA0044.jpg", category: "kids" },
             { id: 15, name: "Adult Raincoats Bale", price: 16000, image: "IMG-20260621-WA0042.jpg", category: "adult" },
-            { id: 16, name: "adult bathrobes", price: 27000, image: "Adult-Bathrobe.webp", category: "adult" },
-            { id: 17, name: "heavy baby rompers", price: 32000, image: "heavy-Baby-Rompers-Blue-915x1024.webp",category: "kids" },
-            { id: 18, name: "ladies heavy tight", price: 27000, image: "Heavy-Tight-Pants-for-Ladies-Floral-768x1024.webp",category:"ladies"},
-            { id: 19, name: "ladies rugged jeans", price: 25000,image: "Rugged-Jeans-for-Ladies.webp", category:"ladies"},
-            { id: 20, name: "adult hoods", price: 18000, image: "adult hoods.jpg", category:"adult"},
-            { id: 21, name: "baby jackets", price: 17500, image: "baby jackets.webp", category:"kids"},
-            { id: 22, name: "body suits", price: 26000, image: "body suits bale.jpg", category:" ladies"},
-            { id: 23, name: "children bathrobes", price: 22000, image: "children bathrobes.webp", category:"kids"},
-           
-            }
-            
-            
-            
+            { id: 16, name: "Adult Bathrobes", price: 27000, image: "Adult-Bathrobe.webp", category: "adult" },
+            { id: 17, name: "Heavy Baby Rompers", price: 32000, image: "heavy-Baby-Rompers-Blue-915x1024.webp", category: "kids" },
+            { id: 18, name: "Ladies Heavy Tight", price: 27000, image: "Heavy-Tight-Pants-for-Ladies-Floral-768x1024.webp", category: "ladies" },
+            { id: 19, name: "Ladies Rugged Jeans", price: 25000, image: "Rugged-Jeans-for-Ladies.webp", category: "ladies" },
+            { id: 20, name: "Adult Hoods", price: 18000, image: "adult hoods.jpg", category: "adult" },
+            { id: 21, name: "Baby Jackets", price: 17500, image: "baby jackets.webp", category: "kids" },
+            { id: 22, name: "Body Suits Bale", price: 26000, image: "body suits bale.jpg", category: "ladies" },
+            { id: 23, name: "Children Bathrobes", price: 22000, image: "children bathrobes.webp", category: "kids" }
         ];
 
         let cart = [];
@@ -169,17 +127,17 @@
         function renderProducts(filtered = products) {
             const container = document.getElementById('products-grid');
             container.innerHTML = '';
-
             filtered.forEach((p, index) => {
                 const div = document.createElement('div');
                 div.className = `bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all product-card zoom-hover`;
-                div.style.animationDelay = `${index * 100}ms`;
+                div.style.animationDelay = `${index * 80}ms`;
                 div.innerHTML = `
-                    <img src="${p.image}" class="w-full h-64 object-cover transition-transform duration-500">
+                    <img src="${p.image}" class="w-full h-64 object-cover transition-transform duration-500" 
+                         onerror="this.src='https://via.placeholder.com/400x300?text=Image+Not+Found'">
                     <div class="p-6">
                         <h3 class="font-semibold text-lg mb-2">${p.name}</h3>
                         <p class="text-3xl font-bold text-green-600 mb-5">KSh ${p.price}</p>
-                        <button onclick="addToCart(${p.id}); this.classList.add('bounce')" 
+                        <button onclick="addToCart(${p.id}); this.classList.add('bounce')"
                                 class="w-full bg-red-600 hover:bg-red-700 text-white py-4 rounded-2xl font-semibold transition">
                             Add to Cart
                         </button>
@@ -191,16 +149,17 @@
 
         function addToCart(id) {
             const item = products.find(p => p.id === id);
-            cart.push(item);
-            document.getElementById('cart-count').textContent = cart.length;
-            alert(`✅ ${item.name} added to cart!`);
+            if (item) {
+                cart.push(item);
+                document.getElementById('cart-count').textContent = cart.length;
+                alert(`✅ ${item.name} added to cart!`);
+            }
         }
 
         function showCart() {
             const modal = document.getElementById('cartModal');
             const container = document.getElementById('cart-items');
             let total = 0;
-
             container.innerHTML = '';
             if (cart.length === 0) {
                 container.innerHTML = `<p class="text-center py-12 text-gray-500">Your cart is empty.</p>`;
@@ -239,21 +198,13 @@
             window.open(`https://wa.me/254720399552?text=Hello! I want to order:%0A${msg}%0A%0ATotal: KSh ${total}`, '_blank');
         }
 
-        function toggleMobileMenu() {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
-        }
-
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-        }
-
         function filterProducts() {
             const term = document.getElementById('searchInput').value.toLowerCase();
             const filtered = products.filter(p => p.name.toLowerCase().includes(term));
             renderProducts(filtered);
         }
 
-        window.onload = () => renderProducts(products);
+        window.onload = () => renderProducts();
     </script>
 </body>
 </html>
