@@ -9,6 +9,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
+       
         .slider { position: relative; height: 520px; overflow: hidden; }
         .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.5s ease-in-out; }
         .slide.active { opacity: 1; }
@@ -42,14 +43,23 @@
                onkeyup="filterProducts()">
     </div>
 
+    <!-- Category Filters -->
+    <div class="max-w-7xl mx-auto px-6 pb-4 flex gap-3 overflow-x-auto">
+        <button onclick="filterByCategory('all')" class="category-btn active px-6 py-3 bg-red-600 text-white rounded-full text-sm whitespace-nowrap">All Bales</button>
+        <button onclick="filterByCategory('baby')" class="category-btn px-6 py-3 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Baby</button>
+        <button onclick="filterByCategory('kids')" class="category-btn px-6 py-3 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Kids</button>
+        <button onclick="filterByCategory('ladies')" class="category-btn px-6 py-3 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Ladies</button>
+        <button onclick="filterByCategory('men')" class="category-btn px-6 py-3 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Men</button>
+    </div>
+
     <!-- Auto Image Slider -->
     <section class="slider">
-        <div class="slide active"><img src="IMG-20260621-WA0062.jpg" class="w-full h-full object-cover" alt="Baby Bale" onerror="this.src='https://via.placeholder.com/800x500/FF0000/FFFFFF?text=Image+1+Missing'"></div>
-        <div class="slide"><img src="IMG-20260621-WA0060.jpg" class="w-full h-full object-cover" alt="Socks Bale" onerror="this.src='https://via.placeholder.com/800x500/FF0000/FFFFFF?text=Image+2+Missing'"></div>
-        <div class="slide"><img src="IMG-20260621-WA0055.jpg" class="w-full h-full object-cover" alt="Towel Bale" onerror="this.src='https://via.placeholder.com/800x500/FF0000/FFFFFF?text=Image+3+Missing'"></div>
-        <div class="slide"><img src="IMG-20260621-WA0057.jpg" class="w-full h-full object-cover" alt="Kids Sneakers" onerror="this.src='https://via.placeholder.com/800x500/FF0000/FFFFFF?text=Image+4+Missing'"></div>
-        <div class="slide"><img src="IMG-20260621-WA0044.jpg" class="w-full h-full object-cover" alt="Jacket Bale" onerror="this.src='https://via.placeholder.com/800x500/FF0000/FFFFFF?text=Image+5+Missing'"></div>
-        <div class="slide"><img src="IMG-20260621-WA0058.jpg" class="w-full h-full object-cover" alt="Underwear Bale" onerror="this.src='https://via.placeholder.com/800x500/FF0000/FFFFFF?text=Image+6+Missing'"></div>
+        <div class="slide active"><img src="IMG-20260621-WA0062.jpg" class="w-full h-full object-cover" alt="Baby Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
+        <div class="slide"><img src="IMG-20260621-WA0060.jpg" class="w-full h-full object-cover" alt="Socks Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
+        <div class="slide"><img src="IMG-20260621-WA0055.jpg" class="w-full h-full object-cover" alt="Towel Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
+        <div class="slide"><img src="IMG-20260621-WA0057.jpg" class="w-full h-full object-cover" alt="Kids Sneakers" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
+        <div class="slide"><img src="IMG-20260621-WA0044.jpg" class="w-full h-full object-cover" alt="Jacket Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
+        <div class="slide"><img src="IMG-20260621-WA0058.jpg" class="w-full h-full object-cover" alt="Underwear Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-center justify-center z-10">
             <div class="text-center text-white px-6">
                 <h1 class="text-5xl md:text-7xl font-bold mb-4">Fresh Mitumba Bales</h1>
@@ -59,20 +69,26 @@
     </section>
 
     <!-- Products -->
-    <section class="max-w-7xl mx-auto px-6 py-16">
+    <section class="max-w-7xl mx-auto px-6 py-12">
         <h2 class="text-4xl font-bold text-center mb-12">Our Latest Bales</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="products-grid"></div>
+        
+        <!-- Pagination -->
+        <div class="flex justify-center gap-4 mt-12">
+            <button onclick="prevPage()" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-2xl">Previous</button>
+            <button onclick="nextPage()" class="px-6 py-3 bg-red-600 text-white rounded-2xl">Next Page</button>
+        </div>
     </section>
 
     <!-- ADMIN PANEL -->
     <div id="adminPanel" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-        <div class="bg-white rounded-3xl p-8 max-w-lg w-full mx-4">
-            <h2 class="text-2xl font-bold mb-6">Add New Bale</h2>
+        <div class="bg-white rounded-3xl p-8 max-w-lg w-full mx-4 max-h-[90vh] overflow-auto">
+            <h2 class="text-2xl font-bold mb-6">Admin - Manage Bales</h2>
             <input type="text" id="adminName" placeholder="Bale Name" class="w-full p-4 border rounded-2xl mb-4">
             <input type="number" id="adminPrice" placeholder="Price (KSh)" class="w-full p-4 border rounded-2xl mb-4">
-            <input type="text" id="adminImage" placeholder="Image filename (e.g. IMG-20260621-WA0062.jpg)" class="w-full p-4 border rounded-2xl mb-4">
-            <button onclick="addNewBale()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold">Add Bale</button>
-            <button onclick="toggleAdmin()" class="w-full mt-3 bg-gray-500 text-white py-4 rounded-2xl">Close</button>
+            <input type="text" id="adminImage" placeholder="Image filename or URL" class="w-full p-4 border rounded-2xl mb-4">
+            <button onclick="addNewBale()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold mb-3">Add New Bale</button>
+            <button onclick="toggleAdmin()" class="w-full bg-gray-500 text-white py-4 rounded-2xl">Close Panel</button>
         </div>
     </div>
 
@@ -104,61 +120,68 @@
     </footer>
 
     <script>
+        // ==================== YOUR ORIGINAL PRODUCTS (KEPT ALL) ====================
         let products = [
-            { id: 1, name: "Baby Sleeper Bale", price: 22000, image: "IMG-20260621-WA0062.jpg" },
-            { id: 2, name: "Paired Socks Bale", price: 15000, image: "IMG-20260621-WA0060.jpg" },
-            { id: 3, name: "Cargo Shorts", price: 25000, image: "cargo shorts.jpg" },
-            { id: 4, name: "Towel Bale", price: 12800, image: "IMG-20260621-WA0055.jpg" },
-            { id: 5, name: "Socks Bale", price: 18000, image: "IMG-20260621-WA0059.jpg" },
-            { id: 6, name: "Ladies Underwear Bale", price: 12000, image: "IMG-20260621-WA0058.jpg" },
-            { id: 7, name: "Kids Sneakers Bale", price: 18000, image: "IMG-20260621-WA0057.jpg" },
-            { id: 8, name: "Baby Blanket Bale", price: 20000, image: "IMG-20260621-WA0056.jpg" },
-            { id: 9, name: "Kids Jogging Pant Bale", price: 15000, image: "IMG-20260621-WA0054.jpg" },
-            { id: 10, name: "Adult Sneakers Bale", price: 20000, image: "IMG-20260621-WA0051.jpg" },
-            { id: 11, name: "Curtain Bale", price: 17000, image: "IMG-20260621-WA0050.jpg" },
-            { id: 12, name: "Ex-UK Children Zipper Bale", price: 27000, image: "IMG-20260621-WA0047.jpg" },
-            { id: 13, name: "Sandals Bale", price: 14000, image: "IMG-20260621-WA0045.jpg" },
-            { id: 14, name: "Children Jacket Bale", price: 22000, image: "IMG-20260621-WA0044.jpg" },
-            { id: 15, name: "Adult Raincoats Bale", price: 16000, image: "IMG-20260621-WA0042.jpg" },
-            { id: 16, name: "Adult Bathrobes", price: 27000, image: "Adult-Bathrobe.webp" },
-            { id: 17, name: "Heavy Baby Rompers", price: 32000, image: "heavy-Baby-Rompers-Blue-915x1024.webp" },
-            { id: 18, name: "Ladies Heavy Tight", price: 27000, image: "Heavy-Tight-Pants-for-Ladies-Floral-768x1024.webp" },
-            { id: 19, name: "Ladies Rugged Jeans", price: 25000, image: "Rugged-Jeans-for-Ladies.webp" },
-            { id: 20, name: "Adult Hoods", price: 18000, image: "adult hoods.jpg" },
-            { id: 21, name: "Baby Jackets", price: 17500, image: "baby jackets.webp" },
-            { id: 22, name: "Body Suits Bale", price: 26000, image: "body suits bale.jpg" },
-            { id: 23, name: "Children Bathrobes", price: 22000, image: "children bathrobes.webp" },
-            { id: 24, name: "children denim jeans", price: 25000, image: "children denim jeans.jpg"},
-            { id: 25, name: "children polo t shirts", price: 31500, image: "children polo shirts.jpg"},
-            { id: 26, name: "children trank pants", price: 17000, image: "children trank pants.jpg"},
-            { id: 27, name: "creme carpet", price: 29000, image: "creame carpet bales.webp"},
-            { id: 28, name: "creme handbags", price: 34000, image: "creme handbags.jpg"},
-            { id: 29, name: "football boots", price: 45000, image: "football boots.jpg"},
-            { id: 30, name: "grade 1 rompers", price: 32000, image: "grade 1 rompers.jpg"},
-            { id: 31, name: "ladies gym tights", price: 34200, image: "ladies gym tights.webp"},
-            { id: 32, name: "ladies jeans", price: 22000, image: "ladies jeans.jpg"},
-            { id: 33, name: "ladies official pants", price: 30000, image: "ladies pants official.webp"},
-            { id: 34, name: "leather jackets", price: 23400, image:"leather jacket.jpg"},
-            { id: 35, name: "long sweaters", price: 26000, image:"long sweaters bale.jpg"},
-            { id: 36, name: "cargo shorts", price: 25000, image:"men cargo shorts.jpg"},
-            { id: 37, name: "men tank tops", price: 22000, image:"men tank tops bale.jpg"},
-            { id: 38, name: "mini dress", price: 24000, image:"mini dress.jpg"},
-            { id: 39, name: "polo tshirt", price: 30000, image:"polo tshirts bale.jpg"},
-            { id: 40, name: "sneakers", price: 18000, image:"sneakers bale.jpg"},
-            { id: 41, name: "swimming costume", price: 40000, image: "swiming costumes.jpg"},
-            { id: 42, name: "trenchcoats", price: 17600, image: "trenchcoats.jpg"}
+            { id: 1, name: "Baby Sleeper Bale", price: 22000, image: "IMG-20260621-WA0062.jpg", category: "baby" },
+            { id: 2, name: "Paired Socks Bale", price: 15000, image: "IMG-20260621-WA0060.jpg", category: "kids" },
+            { id: 3, name: "Cargo Shorts", price: 25000, image: "cargo shorts.jpg", category: "men" },
+            { id: 4, name: "Towel Bale", price: 12800, image: "IMG-20260621-WA0055.jpg", category: "all" },
+            { id: 5, name: "Socks Bale", price: 18000, image: "IMG-20260621-WA0059.jpg", category: "kids" },
+            { id: 6, name: "Ladies Underwear Bale", price: 12000, image: "IMG-20260621-WA0058.jpg", category: "ladies" },
+            { id: 7, name: "Kids Sneakers Bale", price: 18000, image: "IMG-20260621-WA0057.jpg", category: "kids" },
+            { id: 8, name: "Baby Blanket Bale", price: 20000, image: "IMG-20260621-WA0056.jpg", category: "baby" },
+            { id: 9, name: "Kids Jogging Pant Bale", price: 15000, image: "IMG-20260621-WA0054.jpg", category: "kids" },
+            { id: 10, name: "Adult Sneakers Bale", price: 20000, image: "IMG-20260621-WA0051.jpg", category: "men" },
+            { id: 11, name: "Curtain Bale", price: 17000, image: "IMG-20260621-WA0050.jpg", category: "all" },
+            { id: 12, name: "Ex-UK Children Zipper Bale", price: 27000, image: "IMG-20260621-WA0047.jpg", category: "kids" },
+            { id: 13, name: "Sandals Bale", price: 14000, image: "IMG-20260621-WA0045.jpg", category: "all" },
+            { id: 14, name: "Children Jacket Bale", price: 22000, image: "IMG-20260621-WA0044.jpg", category: "kids" },
+            { id: 15, name: "Adult Raincoats Bale", price: 16000, image: "IMG-20260621-WA0042.jpg", category: "men" },
+            { id: 16, name: "Adult Bathrobes", price: 27000, image: "Adult-Bathrobe.webp", category: "ladies" },
+            { id: 17, name: "Heavy Baby Rompers", price: 32000, image: "heavy-Baby-Rompers-Blue-915x1024.webp", category: "baby" },
+            { id: 18, name: "Ladies Heavy Tight", price: 27000, image: "Heavy-Tight-Pants-for-Ladies-Floral-768x1024.webp", category: "ladies" },
+            { id: 19, name: "Ladies Rugged Jeans", price: 25000, image: "Rugged-Jeans-for-Ladies.webp", category: "ladies" },
+            { id: 20, name: "Adult Hoods", price: 18000, image: "adult hoods.jpg", category: "men" },
+            { id: 21, name: "Baby Jackets", price: 17500, image: "baby jackets.webp", category: "baby" },
+            { id: 22, name: "Body Suits Bale", price: 26000, image: "body suits bale.jpg", category: "baby" },
+            { id: 23, name: "Children Bathrobes", price: 22000, image: "children bathrobes.webp", category: "kids" },
+            { id: 24, name: "children denim jeans", price: 25000, image: "children denim jeans.jpg", category: "kids" },
+            { id: 25, name: "children polo t shirts", price: 31500, image: "children polo shirts.jpg", category: "kids" },
+            { id: 26, name: "children trank pants", price: 17000, image: "children trank pants.jpg", category: "kids" },
+            { id: 27, name: "creme carpet", price: 29000, image: "creame carpet bales.webp", category: "all" },
+            { id: 28, name: "creme handbags", price: 34000, image: "creme handbags.jpg", category: "ladies" },
+            { id: 29, name: "football boots", price: 45000, image: "football boots.jpg", category: "kids" },
+            { id: 30, name: "grade 1 rompers", price: 32000, image: "grade 1 rompers.jpg", category: "baby" },
+            { id: 31, name: "ladies gym tights", price: 34200, image: "ladies gym tights.webp", category: "ladies" },
+            { id: 32, name: "ladies jeans", price: 22000, image: "ladies jeans.jpg", category: "ladies" },
+            { id: 33, name: "ladies official pants", price: 30000, image: "ladies pants official.webp", category: "ladies" },
+            { id: 34, name: "leather jackets", price: 23400, image:"leather jacket.jpg", category: "men" },
+            { id: 35, name: "long sweaters", price: 26000, image:"long sweaters bale.jpg", category: "ladies" },
+            { id: 36, name: "cargo shorts", price: 25000, image:"men cargo shorts.jpg", category: "men" },
+            { id: 37, name: "men tank tops", price: 22000, image:"men tank tops bale.jpg", category: "men" },
+            { id: 38, name: "mini dress", price: 24000, image:"mini dress.jpg", category: "ladies" },
+            { id: 39, name: "polo tshirt", price: 30000, image:"polo tshirts bale.jpg", category: "men" },
+            { id: 40, name: "sneakers", price: 18000, image:"sneakers bale.jpg", category: "men" },
+            { id: 41, name: "swimming costume", price: 40000, image: "swiming costumes.jpg", category: "ladies" },
+            { id: 42, name: "trenchcoats", price: 17600, image: "trenchcoats.jpg", category: "ladies" }
         ];
 
         let cart = [];
+        let currentPage = 1;
+        const itemsPerPage = 8;
 
         function renderProducts(filtered = products) {
             const container = document.getElementById('products-grid');
             container.innerHTML = '';
-            filtered.forEach(p => {
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageItems = filtered.slice(start, end);
+
+            pageItems.forEach(p => {
                 const div = document.createElement('div');
                 div.className = "bg-white rounded-3xl overflow-hidden shadow-lg product-card";
                 div.innerHTML = `
-                    <img src="${p.image}" class="w-full h-64 object-cover" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
+                    <img src="${p.image}" class="w-full h-48 sm:h-64 object-cover" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
                     <div class="p-6">
                         <h3 class="font-semibold text-lg mb-3">${p.name}</h3>
                         <p class="text-3xl font-bold text-green-600 mb-6">KSh ${p.price}</p>
@@ -232,7 +255,7 @@
             const price = parseInt(document.getElementById('adminPrice').value);
             const image = document.getElementById('adminImage').value || "https://via.placeholder.com/400x300?text=New+Bale";
             if (name && price) {
-                products.unshift({ id: Date.now(), name: name, price: price, image: image });
+                products.unshift({ id: Date.now(), name: name, price: price, image: image, category: "all" });
                 renderProducts();
                 toggleAdmin();
                 alert("✅ New bale added successfully!");
@@ -245,6 +268,23 @@
             renderProducts(filtered);
         }
 
+        function filterByCategory(cat) {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active', 'bg-red-600', 'text-white'));
+            event.target.classList.add('active', 'bg-red-600', 'text-white');
+            let filtered = cat === 'all' ? products : products.filter(p => p.category === cat);
+            renderProducts(filtered);
+        }
+
+        function nextPage() {
+            currentPage++;
+            renderProducts(products);
+        }
+
+        function prevPage() {
+            if (currentPage > 1) currentPage--;
+            renderProducts(products);
+        }
+
         // Image Slider
         let current = 0;
         const slides = document.querySelectorAll('.slide');
@@ -255,7 +295,7 @@
         }
         setInterval(nextSlide, 4500);
 
-        window.onload = renderProducts;
+        window.onload = () => renderProducts();
     </script>
 </body>
 </html>
