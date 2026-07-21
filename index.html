@@ -9,7 +9,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
-       
         .slider { position: relative; height: 520px; overflow: hidden; }
         .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.5s ease-in-out; }
         .slide.active { opacity: 1; }
@@ -38,83 +37,19 @@
 
     <!-- Search -->
     <div class="max-w-7xl mx-auto px-6 py-4">
-        <input type="text" id="searchInput" placeholder="Search bales (baby, socks, jeans...)" 
+        <input type="text" id="searchInput" placeholder="Search bales (baby, socks, jeans...)"
                class="w-full p-4 border-2 border-gray-300 rounded-3xl focus:outline-none focus:border-red-500 text-lg"
                onkeyup="filterProducts()">
     </div>
 
     <!-- Auto Image Slider -->
     <section class="slider">
-        <div class="slide active"><img src="IMG-20260621-WA0062.jpg" class="w-full h-full object-cover" alt="Baby Bale"></div>
-        <div class="slide"><img src="IMG-20260621-WA0060.jpg" class="w-full h-full object-cover" alt="Socks Bale"></div>
-        <div class="slide"><img src="IMG-20260621-WA0055.jpg" class="w-full h-full object-cover" alt="Towel Bale"></div>
-        <div class="slide"><img src="IMG-20260621-WA0057.jpg" class="w-full h-full object-cover" alt="Kids Sneakers"></div>
-        <div class="slide"><img src="IMG-20260621-WA0044.jpg" class="w-full h-full object-cover" alt="Jacket Bale"></div>
-        <div class="slide"><img src="IMG-202606**✅ HERE IS YOUR FULL UPDATED CODE** (I kept **everything** from your original code + added new features)
-
-### New Features Added:
-- **Real Cart Page** with quantity, subtotal & total calculation
-- **Buy Button** (sends full order to WhatsApp)
-- **Admin Panel** to add new bales (with image URL)
-- Search + Category filters
-- Favorites (❤️)
-
----
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gikomba Thrift Shop | Mitumba Bales Nairobi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-       
-        .slider { position: relative; height: 520px; overflow: hidden; }
-        .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.5s ease-in-out; }
-        .slide.active { opacity: 1; }
-        .product-card { transition: all 0.4s ease; }
-        .product-card:hover { transform: translateY(-12px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
-    </style>
-</head>
-<body class="bg-gray-50">
-
-    <!-- Navbar -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <span class="text-3xl">🛍️</span>
-                <h1 class="text-2xl font-bold text-gray-800">Gikomba Thrift</h1>
-            </div>
-            <div class="flex items-center gap-6">
-                <button onclick="toggleAdmin()" class="text-xl hover:text-red-600"><i class="fas fa-cog"></i></button>
-                <button onclick="showCart()" class="flex items-center gap-2 text-xl hover:text-red-600">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span id="cart-count" class="font-bold">0</span>
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Search -->
-    <div class="max-w-7xl mx-auto px-6 py-4">
-        <input type="text" id="searchInput" placeholder="Search bales (baby, socks, jeans...)" 
-               class="w-full p-4 border-2 border-gray-300 rounded-3xl focus:outline-none focus:border-red-500 text-lg"
-               onkeyup="filterProducts()">
-    </div>
-
-    <!-- Auto Image Slider -->
-    <section class="slider">
-        <div class="slide active"><img src="IMG-20260621-WA0062.jpg" class="w-full h-full object-cover" alt="Baby Bale"></div>
-        <div class="slide"><img src="IMG-20260621-WA0060.jpg" class="w-full h-full object-cover" alt="Socks Bale"></div>
-        <div class="slide"><img src="IMG-20260621-WA0055.jpg" class="w-full h-full object-cover" alt="Towel Bale"></div>
-        <div class="slide"><img src="IMG-20260621-WA0057.jpg" class="w-full h-full object-cover" alt="Kids Sneakers"></div>
-        <div class="slide"><img src="IMG-20260621-WA0044.jpg" class="w-full h-full object-cover" alt="Jacket Bale"></div>
-        <div class="slide"><img src="IMG-20260621-WA0058.jpg" class="w-full h-full object-cover" alt="Underwear Bale"></div>
+        <div class="slide active"><img src="IMG-20260621-WA0062.jpg" class="w-full h-full object-cover" alt="Baby Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
+        <div class="slide"><img src="IMG-20260621-WA0060.jpg" class="w-full h-full object-cover" alt="Socks Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
+        <div class="slide"><img src="IMG-20260621-WA0055.jpg" class="w-full h-full object-cover" alt="Towel Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
+        <div class="slide"><img src="IMG-20260621-WA0057.jpg" class="w-full h-full object-cover" alt="Kids Sneakers" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
+        <div class="slide"><img src="IMG-20260621-WA0044.jpg" class="w-full h-full object-cover" alt="Jacket Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
+        <div class="slide"><img src="IMG-20260621-WA0058.jpg" class="w-full h-full object-cover" alt="Underwear Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-center justify-center z-10">
             <div class="text-center text-white px-6">
                 <h1 class="text-5xl md:text-7xl font-bold mb-4">Fresh Mitumba Bales</h1>
@@ -135,7 +70,7 @@
             <h2 class="text-2xl font-bold mb-6">Add New Bale</h2>
             <input type="text" id="adminName" placeholder="Bale Name" class="w-full p-4 border rounded-2xl mb-4">
             <input type="number" id="adminPrice" placeholder="Price (KSh)" class="w-full p-4 border rounded-2xl mb-4">
-            <input type="text" id="adminImage" placeholder="Image filename or URL" class="w-full p-4 border rounded-2xl mb-4">
+            <input type="text" id="adminImage" placeholder="Image filename (e.g. IMG-20260621-WA0062.jpg)" class="w-full p-4 border rounded-2xl mb-4">
             <button onclick="addNewBale()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold">Add Bale</button>
             <button onclick="toggleAdmin()" class="w-full mt-3 bg-gray-500 text-white py-4 rounded-2xl">Close</button>
         </div>
@@ -169,7 +104,6 @@
     </footer>
 
     <script>
-        // ==================== YOUR ORIGINAL PRODUCTS (KEPT ALL) ====================
         let products = [
             { id: 1, name: "Baby Sleeper Bale", price: 22000, image: "IMG-20260621-WA0062.jpg" },
             { id: 2, name: "Paired Socks Bale", price: 15000, image: "IMG-20260621-WA0060.jpg" },
@@ -249,7 +183,6 @@
             const container = document.getElementById('cartItems');
             let total = 0;
             container.innerHTML = '';
-
             cart.forEach((item, index) => {
                 total += item.price;
                 container.innerHTML += `
@@ -261,7 +194,6 @@
                         <button onclick="removeFromCart(${index})" class="text-red-500 text-xl">×</button>
                     </div>`;
             });
-
             document.getElementById('cartTotal').textContent = `KSh ${total}`;
             modal.classList.remove('hidden');
         }
@@ -298,15 +230,9 @@
         function addNewBale() {
             const name = document.getElementById('adminName').value;
             const price = parseInt(document.getElementById('adminPrice').value);
-            const image = document.getElementById('adminImage').value;
-
+            const image = document.getElementById('adminImage').value || "https://via.placeholder.com/400x300?text=New+Bale";
             if (name && price) {
-                products.unshift({
-                    id: Date.now(),
-                    name: name,
-                    price: price,
-                    image: image || "https://via.placeholder.com/400x300?text=New+Bale"
-                });
+                products.unshift({ id: Date.now(), name: name, price: price, image: image });
                 renderProducts();
                 toggleAdmin();
                 alert("✅ New bale added successfully!");
