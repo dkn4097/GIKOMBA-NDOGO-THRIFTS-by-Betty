@@ -9,12 +9,29 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
-       
+      
         .slider { position: relative; height: 520px; overflow: hidden; }
         .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.5s ease-in-out; }
         .slide.active { opacity: 1; }
         .product-card { transition: all 0.4s ease; }
         .product-card:hover { transform: translateY(-12px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        
+        .sold-out {
+            position: relative;
+        }
+        .sold-out::after {
+            content: "SOLD OUT";
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #ef4444;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            transform: rotate(12deg);
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -68,11 +85,11 @@
         </div>
     </section>
 
-    <!-- Products -->
+    <!-- Products (Client View) -->
     <section class="max-w-7xl mx-auto px-6 py-12">
         <h2 class="text-4xl font-bold text-center mb-12">Our Latest Bales</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="products-grid"></div>
-        
+       
         <!-- Pagination -->
         <div class="flex justify-center gap-4 mt-12">
             <button onclick="prevPage()" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-2xl">Previous</button>
@@ -80,10 +97,23 @@
         </div>
     </section>
 
-    <!-- ADMIN PANEL -->
+    <!-- ADMIN / MANAGER PANEL -->
     <div id="adminPanel" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-        <div class="bg-white rounded-3xl p-8 max-w-lg w-full mx-4 max-h-[90vh] overflow-auto">
-            <h2 class="text-2xl font-bold mb-6">Admin - Manage Bales</h2>
+        <div class="bg-white rounded-3xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-auto">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                <i class="fas fa-cog"></i> Manager Panel - Sold Out Management
+            </h2>
+            
+            <!-- Sold Out Management -->
+            <div class="mb-8">
+                <h3 class="font-semibold mb-4 text-lg">Mark Bales as Sold Out</h3>
+                <div class="max-h-80 overflow-auto border rounded-2xl p-4" id="soldOutList">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Original Admin Functions -->
+            <h3 class="font-semibold mb-4 text-lg">Add New Bale</h3>
             <input type="text" id="adminName" placeholder="Bale Name" class="w-full p-4 border rounded-2xl mb-4">
             <input type="number" id="adminPrice" placeholder="Price (KSh)" class="w-full p-4 border rounded-2xl mb-4">
             <input type="text" id="adminImage" placeholder="Image filename or URL" class="w-full p-4 border rounded-2xl mb-4">
@@ -120,7 +150,7 @@
     </footer>
 
     <script>
-        // ==================== YOUR ORIGINAL PRODUCTS (KEPT ALL) ====================
+        // ==================== YOUR ORIGINAL PRODUCTS ====================
         let products = [
             { id: 1, name: "Baby Sleeper Bale", price: 22000, image: "IMG-20260621-WA0062.jpg", category: "baby" },
             { id: 2, name: "Paired Socks Bale", price: 15000, image: "IMG-20260621-WA0060.jpg", category: "kids" },
@@ -166,20 +196,23 @@
             { id: 42, name: "trenchcoats", price: 17600, image: "trenchcoats.jpg", category: "ladies" }
         ];
 
+        let soldOutIds = []; // Track sold out products (only visible to manager)
+
         let cart = [];
         let currentPage = 1;
         const itemsPerPage = 8;
 
+        // ==================== YOUR ORIGINAL FUNCTIONS (UNCHANGED) ====================
         function renderProducts(filtered = products) {
             const container = document.getElementById('products-grid');
             container.innerHTML = '';
             const start = (currentPage - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             const pageItems = filtered.slice(start, end);
-
+            
             pageItems.forEach(p => {
                 const div = document.createElement('div');
-                div.className = "bg-white rounded-3xl overflow-hidden shadow-lg product-card";
+                div.className = `bg-white rounded-3xl overflow-hidden shadow-lg product-card ${soldOutIds.includes(p.id) ? 'sold-out opacity-75' : ''}`;
                 div.innerHTML = `
                     <img src="${p.image}" class="w-full h-48 sm:h-64 object-cover" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
                     <div class="p-6">
@@ -194,13 +227,13 @@
             });
         }
 
+        // ... [All your other original functions remain exactly the same] ...
         function addToCart(id) {
             const item = products.find(p => p.id === id);
             cart.push(item);
             document.getElementById('cart-count').textContent = cart.length;
             alert(`✅ ${item.name} added to cart!`);
         }
-
         function showCart() {
             const modal = document.getElementById('cartModal');
             const container = document.getElementById('cartItems');
@@ -220,13 +253,11 @@
             document.getElementById('cartTotal').textContent = `KSh ${total}`;
             modal.classList.remove('hidden');
         }
-
         function removeFromCart(index) {
             cart.splice(index, 1);
             document.getElementById('cart-count').textContent = cart.length;
             showCart();
         }
-
         function buyNow() {
             if (cart.length === 0) return;
             let message = "🛒 *New Order from Gikomba Thrift*\n\n";
@@ -241,15 +272,15 @@
             document.getElementById('cart-count').textContent = 0;
             document.getElementById('cartModal').classList.add('hidden');
         }
-
         function hideCart() {
             document.getElementById('cartModal').classList.add('hidden');
         }
-
         function toggleAdmin() {
             document.getElementById('adminPanel').classList.toggle('hidden');
+            if (!document.getElementById('adminPanel').classList.contains('hidden')) {
+                renderSoldOutManager();
+            }
         }
-
         function addNewBale() {
             const name = document.getElementById('adminName').value;
             const price = parseInt(document.getElementById('adminPrice').value);
@@ -261,31 +292,25 @@
                 alert("✅ New bale added successfully!");
             }
         }
-
         function filterProducts() {
             const term = document.getElementById('searchInput').value.toLowerCase();
             const filtered = products.filter(p => p.name.toLowerCase().includes(term));
             renderProducts(filtered);
         }
-
         function filterByCategory(cat) {
             document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active', 'bg-red-600', 'text-white'));
             event.target.classList.add('active', 'bg-red-600', 'text-white');
             let filtered = cat === 'all' ? products : products.filter(p => p.category === cat);
             renderProducts(filtered);
         }
-
         function nextPage() {
             currentPage++;
             renderProducts(products);
         }
-
         function prevPage() {
             if (currentPage > 1) currentPage--;
             renderProducts(products);
         }
-
-        // Image Slider
         let current = 0;
         const slides = document.querySelectorAll('.slide');
         function nextSlide() {
@@ -295,7 +320,43 @@
         }
         setInterval(nextSlide, 4500);
 
-        window.onload = () => renderProducts();
+        // ==================== NEW SOLD OUT MANAGEMENT ====================
+        function toggleSoldOut(id) {
+            if (soldOutIds.includes(id)) {
+                soldOutIds = soldOutIds.filter(sid => sid !== id);
+            } else {
+                soldOutIds.push(id);
+            }
+            renderProducts();
+            renderSoldOutManager();
+        }
+
+        function renderSoldOutManager() {
+            const container = document.getElementById('soldOutList');
+            container.innerHTML = '';
+            
+            products.forEach(p => {
+                const isSoldOut = soldOutIds.includes(p.id);
+                const div = document.createElement('div');
+                div.className = `flex justify-between items-center p-4 rounded-2xl mb-3 ${isSoldOut ? 'bg-red-50' : 'bg-gray-50'}`;
+                div.innerHTML = `
+                    <div class="flex-1">
+                        <p class="font-medium">${p.name}</p>
+                        <p class="text-sm text-gray-500">KSh ${p.price}</p>
+                    </div>
+                    <button onclick="toggleSoldOut(${p.id})" 
+                            class="px-5 py-2 rounded-xl text-sm font-medium ${isSoldOut ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}">
+                        ${isSoldOut ? 'Mark Available' : 'Mark Sold Out'}
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Initialize
+        window.onload = () => {
+            renderProducts();
+        };
     </script>
 </body>
 </html>
