@@ -11,36 +11,29 @@
         body { font-family: 'Inter', sans-serif; }
         .hero-title { font-family: 'Playfair Display', serif; }
        
-        .slider { position: relative; height: 680px; overflow: hidden; }
-        .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 2.8s ease-in-out; background-size: cover; background-position: center; }
+        .slider { position: relative; height: 420px; overflow: hidden; }
+        .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 2s ease-in-out; background-size: cover; background-position: center; }
         .slide.active { opacity: 1; }
        
         .product-card { transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .product-card:hover { transform: translateY(-20px) scale(1.04); box-shadow: 0 30px 60px -15px rgb(0 0 0 / 0.3); }
+        .product-card:hover { transform: translateY(-15px); box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); }
        
         .sold-out::after {
             content: "SOLD OUT";
             position: absolute;
-            top: 20px; right: 20px;
+            top: 15px; right: 15px;
             background: #ef4444;
             color: white;
-            font-size: 14px;
-            font-weight: 800;
-            padding: 8px 20px;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 6px 16px;
             border-radius: 9999px;
-            transform: rotate(18deg);
-        }
-       
-        .welcome-text {
-            animation: welcomePop 4s ease infinite;
-        }
-        @keyframes welcomePop {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
+            transform: rotate(12deg);
         }
     </style>
 </head>
 <body class="bg-gray-50">
+
     <!-- Navbar -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
@@ -59,6 +52,7 @@
             </div>
         </div>
     </nav>
+
     <!-- Login Modal -->
     <div id="loginModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[300]">
         <div class="bg-white rounded-3xl p-12 w-full max-w-md mx-4">
@@ -69,15 +63,27 @@
             <button onclick="hideLogin()" class="w-full mt-6 text-gray-500">Cancel</button>
         </div>
     </div>
-    <!-- Welcome Banner -->
-    <div class="bg-gradient-to-r from-red-600 to-pink-600 text-white py-12 text-center">
-        <h1 class="welcome-text text-5xl md:text-6xl font-bold">Welcome to Gikomba Ndogo Thrift Shop by Betty</h1>
+
+    <!-- Welcome Banner (smaller) -->
+    <div class="bg-gradient-to-r from-red-600 to-pink-600 text-white py-8 text-center">
+        <h1 class="text-4xl font-bold">Gikomba Ndogo Thrift Shop by Betty</h1>
     </div>
+
     <!-- Search -->
     <div class="max-w-7xl mx-auto px-6 py-8">
         <input type="text" id="searchInput" placeholder="Search bales..." class="w-full p-6 border-2 border-gray-300 rounded-3xl text-xl focus:border-red-500 focus:outline-none" onkeyup="filterProducts()">
     </div>
-    <!-- Slider -->
+
+    <!-- Category Filters -->
+    <div class="max-w-7xl mx-auto px-6 pb-6 flex gap-3 overflow-x-auto">
+        <button onclick="filterByCategory('all')" class="category-btn active px-8 py-4 bg-red-600 text-white rounded-full text-sm whitespace-nowrap">All</button>
+        <button onclick="filterByCategory('baby')" class="category-btn px-8 py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Baby</button>
+        <button onclick="filterByCategory('kids')" class="category-btn px-8 py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Kids</button>
+        <button onclick="filterByCategory('ladies')" class="category-btn px-8 py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Ladies</button>
+        <button onclick="filterByCategory('men')" class="category-btn px-8 py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Men</button>
+    </div>
+
+    <!-- Slider (smaller) -->
     <section class="slider">
         <div class="slide active" style="background-image: url('IMG-20260621-WA0062.jpg')"></div>
         <div class="slide" style="background-image: url('IMG-20260621-WA0060.jpg')"></div>
@@ -85,6 +91,7 @@
         <div class="slide" style="background-image: url('IMG-20260621-WA0057.jpg')"></div>
         <div class="slide" style="background-image: url('IMG-20260621-WA0044.jpg')"></div>
     </section>
+
     <!-- Products -->
     <section class="max-w-7xl mx-auto px-6 py-16">
         <h2 class="text-5xl font-bold text-center mb-4">Our Latest Bales</h2>
@@ -97,40 +104,45 @@
             <button onclick="nextPage()" class="px-10 py-5 bg-red-600 text-white rounded-3xl text-xl">Next</button>
         </div>
     </section>
-    <!-- Manager Panel -->
-    <div id="adminPanel" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[300]">
-        <div class="bg-white rounded-3xl p-12 max-w-4xl w-full mx-4 max-h-[92vh] overflow-auto">
-            <div class="flex justify-between mb-10">
-                <h2 class="text-4xl font-bold">Manager Dashboard</h2>
-                <button onclick="logout()" class="text-red-600 text-3xl">Logout</button>
+
+    <!-- Manager Panel (Full Page) -->
+    <div id="adminPanel" class="hidden fixed inset-0 bg-white z-[300] overflow-auto">
+        <div class="max-w-6xl mx-auto p-12">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-5xl font-bold">Manager Dashboard - Betty</h2>
+                <button onclick="logout()" class="text-red-600 text-4xl">Logout</button>
             </div>
             <div class="flex border-b mb-10">
-                <button onclick="switchTab(0)" class="tab-btn active flex-1 py-5 text-xl">Add Bale</button>
-                <button onclick="switchTab(1)" class="tab-btn flex-1 py-5 text-xl">Mark Sold Out</button>
-                <button onclick="switchTab(2)" class="tab-btn flex-1 py-5 text-xl">Customer Support</button>
+                <button onclick="switchTab(0)" class="tab-btn active flex-1 py-6 text-2xl">Add Bale</button>
+                <button onclick="switchTab(1)" class="tab-btn flex-1 py-6 text-2xl">Mark Sold Out</button>
+                <button onclick="switchTab(2)" class="tab-btn flex-1 py-6 text-2xl">Customer Support</button>
             </div>
            
+            <!-- Add Bale -->
             <div id="tab0" class="tab-content">
-                <input type="text" id="adminName" placeholder="Bale Name" class="w-full p-6 border-2 rounded-3xl mb-6 text-xl">
-                <input type="number" id="adminPrice" placeholder="Price (KSh)" class="w-full p-6 border-2 rounded-3xl mb-6 text-xl">
-                <input type="text" id="adminImage" placeholder="Image filename (e.g. IMG-20260621-WA0062.jpg)" class="w-full p-6 border-2 rounded-3xl mb-10 text-xl">
-                <button onclick="addNewBale()" class="w-full bg-green-600 text-white py-7 rounded-3xl text-2xl font-bold">Add New Bale to Website</button>
+                <input type="text" id="adminName" placeholder="Bale Name" class="w-full p-8 border-2 rounded-3xl mb-8 text-2xl">
+                <input type="number" id="adminPrice" placeholder="Price (KSh)" class="w-full p-8 border-2 rounded-3xl mb-8 text-2xl">
+                <input type="text" id="adminImage" placeholder="Image filename (copy from files)" class="w-full p-8 border-2 rounded-3xl mb-12 text-2xl">
+                <button onclick="addNewBale()" class="w-full bg-green-600 text-white py-8 rounded-3xl text-3xl font-bold">Add New Bale to Website</button>
             </div>
            
+            <!-- Sold Out -->
             <div id="tab1" class="tab-content hidden">
-                <div id="soldOutList" class="space-y-4"></div>
+                <div id="soldOutList" class="space-y-6"></div>
             </div>
            
+            <!-- Customer Support -->
             <div id="tab2" class="tab-content hidden">
-                <h3 class="font-bold text-2xl mb-6">Customer Support Inbox</h3>
-                <div id="supportMessages" class="space-y-6 max-h-80 overflow-auto"></div>
-                <div class="mt-8">
-                    <input type="text" id="replyMessage" placeholder="Type reply to customer..." class="w-full p-6 border-2 rounded-3xl">
-                    <button onclick="sendReply()" class="mt-4 w-full bg-blue-600 text-white py-7 rounded-3xl text-xl font-bold">Send Reply via WhatsApp</button>
+                <h3 class="font-bold text-3xl mb-8">Customer Support Inbox</h3>
+                <div id="supportMessages" class="space-y-8"></div>
+                <div class="mt-12">
+                    <input type="text" id="replyMessage" placeholder="Type reply to customer..." class="w-full p-8 border-2 rounded-3xl text-xl">
+                    <button onclick="sendReply()" class="mt-6 w-full bg-blue-600 text-white py-8 rounded-3xl text-2xl font-bold">Send Reply via WhatsApp</button>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Full Cart Modal -->
     <div id="cartModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[300]">
         <div class="bg-white w-full max-w-lg rounded-3xl max-h-[90vh] overflow-hidden">
@@ -148,12 +160,14 @@
             </div>
         </div>
     </div>
+
     <footer class="bg-gray-900 text-white py-20 text-center">
         <p class="text-4xl mb-6">Gikomba Thrift Shop</p>
         <p class="text-2xl mb-10">0104 064092 • 0116 460490</p>
         <a href="https://wa.me/254720399552" target="_blank" class="inline-block bg-green-500 px-16 py-7 rounded-full text-3xl font-bold">WhatsApp Betty</a>
         <p class="mt-16 text-gray-400">&copy; 2026 Gikomba Thrift Shop by Betty • Nairobi</p>
     </footer>
+
     <script>
         // ==================== ALL 42 PRODUCTS ====================
         let products = [
@@ -207,7 +221,7 @@
         let currentPage = 1;
         const itemsPerPage = 8;
 
-        // ==================== LOGIN ====================
+        // Login
         function showLogin() {
             document.getElementById('loginModal').classList.remove('hidden');
         }
@@ -220,7 +234,7 @@
             if (user === "betty2024" && pass === "0720") {
                 isLoggedIn = true;
                 hideLogin();
-                alert("✅ Welcome Betty! Manager mode activated.");
+                alert("✅ Welcome Betty! Full Manager Dashboard opened.");
                 toggleAdmin();
             } else {
                 alert("❌ Incorrect username or password!");
@@ -239,7 +253,7 @@
             document.getElementById('adminPanel').classList.toggle('hidden');
         }
 
-        // ==================== PRODUCTS RENDER + PAGINATION ====================
+        // Render Products
         function renderProducts() {
             const container = document.getElementById('products-grid');
             container.innerHTML = '';
@@ -293,7 +307,7 @@
             cart.forEach((item, index) => {
                 total += item.price;
                 container.innerHTML += `
-                    <div class="flex justify-between items-center py-6 border-b">
+                    <div class="flex justify-between py-6 border-b">
                         <div>
                             <p class="font-medium">${item.name}</p>
                             <p class="text-green-600">KSh ${item.price}</p>
@@ -359,6 +373,12 @@
             renderProducts();
         }
 
+        function filterByCategory(cat) {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active', 'bg-red-600', 'text-white'));
+            event.target.classList.add('active', 'bg-red-600', 'text-white');
+            renderProducts();
+        }
+
         function switchTab(n) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById('tab' + n).classList.remove('hidden');
@@ -367,7 +387,7 @@
         // Initialize
         window.onload = () => {
             renderProducts();
-            // Auto slider
+            // Slider
             const slides = document.querySelectorAll('.slide');
             let i = 0;
             setInterval(() => {
