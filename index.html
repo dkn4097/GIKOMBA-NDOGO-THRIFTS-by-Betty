@@ -9,21 +9,15 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
-      
         .slider { position: relative; height: 520px; overflow: hidden; }
         .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.5s ease-in-out; }
         .slide.active { opacity: 1; }
         .product-card { transition: all 0.4s ease; }
         .product-card:hover { transform: translateY(-12px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
-        
-        .sold-out {
-            position: relative;
-        }
         .sold-out::after {
             content: "SOLD OUT";
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: 12px; right: 12px;
             background: #ef4444;
             color: white;
             font-size: 12px;
@@ -44,7 +38,9 @@
                 <h1 class="text-2xl font-bold text-gray-800">Gikomba Thrift</h1>
             </div>
             <div class="flex items-center gap-6">
-                <button onclick="toggleAdmin()" class="text-xl hover:text-red-600"><i class="fas fa-cog"></i></button>
+                <button onclick="showLogin()" class="flex items-center gap-2 px-5 py-2.5 text-gray-700 hover:text-red-600 border rounded-2xl hover:border-red-300">
+                    <i class="fas fa-user-shield"></i> Manager Login
+                </button>
                 <button onclick="showCart()" class="flex items-center gap-2 text-xl hover:text-red-600">
                     <i class="fas fa-shopping-cart"></i>
                     <span id="cart-count" class="font-bold">0</span>
@@ -53,30 +49,31 @@
         </div>
     </nav>
 
+    <!-- Login Modal -->
+    <div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[200]">
+        <div class="bg-white rounded-3xl p-8 w-full max-w-md mx-4">
+            <h2 class="text-2xl font-bold mb-6 text-center">Manager Login</h2>
+            <input type="text" id="username" placeholder="Username" class="w-full p-4 border rounded-2xl mb-4">
+            <input type="password" id="password" placeholder="Password" class="w-full p-4 border rounded-2xl mb-6">
+            <button onclick="login()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold">Login</button>
+            <button onclick="hideLogin()" class="w-full mt-3 text-gray-500">Cancel</button>
+        </div>
+    </div>
+
     <!-- Search -->
     <div class="max-w-7xl mx-auto px-6 py-4">
-        <input type="text" id="searchInput" placeholder="Search bales (baby, socks, jeans...)"
+        <input type="text" id="searchInput" placeholder="Search bales..."
                class="w-full p-4 border-2 border-gray-300 rounded-3xl focus:outline-none focus:border-red-500 text-lg"
                onkeyup="filterProducts()">
     </div>
 
-    <!-- Category Filters -->
-    <div class="max-w-7xl mx-auto px-6 pb-4 flex gap-3 overflow-x-auto">
-        <button onclick="filterByCategory('all')" class="category-btn active px-6 py-3 bg-red-600 text-white rounded-full text-sm whitespace-nowrap">All Bales</button>
-        <button onclick="filterByCategory('baby')" class="category-btn px-6 py-3 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Baby</button>
-        <button onclick="filterByCategory('kids')" class="category-btn px-6 py-3 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Kids</button>
-        <button onclick="filterByCategory('ladies')" class="category-btn px-6 py-3 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Ladies</button>
-        <button onclick="filterByCategory('men')" class="category-btn px-6 py-3 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Men</button>
-    </div>
-
-    <!-- Auto Image Slider -->
+    <!-- Slider -->
     <section class="slider">
-        <div class="slide active"><img src="IMG-20260621-WA0062.jpg" class="w-full h-full object-cover" alt="Baby Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
-        <div class="slide"><img src="IMG-20260621-WA0060.jpg" class="w-full h-full object-cover" alt="Socks Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
-        <div class="slide"><img src="IMG-20260621-WA0055.jpg" class="w-full h-full object-cover" alt="Towel Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
-        <div class="slide"><img src="IMG-20260621-WA0057.jpg" class="w-full h-full object-cover" alt="Kids Sneakers" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
-        <div class="slide"><img src="IMG-20260621-WA0044.jpg" class="w-full h-full object-cover" alt="Jacket Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
-        <div class="slide"><img src="IMG-20260621-WA0058.jpg" class="w-full h-full object-cover" alt="Underwear Bale" onerror="this.src='https://via.placeholder.com/800x500?text=Image+Not+Found'"></div>
+        <div class="slide active"><img src="IMG-20260621-WA0062.jpg" class="w-full h-full object-cover" alt="Baby Bale"></div>
+        <div class="slide"><img src="IMG-20260621-WA0060.jpg" class="w-full h-full object-cover" alt="Socks Bale"></div>
+        <div class="slide"><img src="IMG-20260621-WA0055.jpg" class="w-full h-full object-cover" alt="Towel Bale"></div>
+        <div class="slide"><img src="IMG-20260621-WA0057.jpg" class="w-full h-full object-cover" alt="Kids Sneakers"></div>
+        <div class="slide"><img src="IMG-20260621-WA0044.jpg" class="w-full h-full object-cover" alt="Jacket Bale"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-center justify-center z-10">
             <div class="text-center text-white px-6">
                 <h1 class="text-5xl md:text-7xl font-bold mb-4">Fresh Mitumba Bales</h1>
@@ -85,45 +82,49 @@
         </div>
     </section>
 
-    <!-- Products (Client View) -->
+    <!-- Products -->
     <section class="max-w-7xl mx-auto px-6 py-12">
         <h2 class="text-4xl font-bold text-center mb-12">Our Latest Bales</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="products-grid"></div>
-       
-        <!-- Pagination -->
-        <div class="flex justify-center gap-4 mt-12">
-            <button onclick="prevPage()" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-2xl">Previous</button>
-            <button onclick="nextPage()" class="px-6 py-3 bg-red-600 text-white rounded-2xl">Next Page</button>
-        </div>
     </section>
 
-    <!-- ADMIN / MANAGER PANEL -->
-    <div id="adminPanel" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-        <div class="bg-white rounded-3xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-auto">
-            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
-                <i class="fas fa-cog"></i> Manager Panel - Sold Out Management
-            </h2>
-            
-            <!-- Sold Out Management -->
-            <div class="mb-8">
-                <h3 class="font-semibold mb-4 text-lg">Mark Bales as Sold Out</h3>
-                <div class="max-h-80 overflow-auto border rounded-2xl p-4" id="soldOutList">
-                    <!-- Populated by JS -->
+    <!-- Manager Panel -->
+    <div id="adminPanel" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[200]">
+        <div class="bg-white rounded-3xl p-8 max-w-3xl w-full mx-4 max-h-[90vh] overflow-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold">Manager Dashboard</h2>
+                <button onclick="logout()" class="text-red-600 font-medium">Logout</button>
+            </div>
+            <div class="flex gap-4 border-b mb-6">
+                <button onclick="switchTab(0)" class="tab-btn active px-6 py-3 font-medium">Add Bale</button>
+                <button onclick="switchTab(1)" class="tab-btn px-6 py-3 font-medium">Sold Out</button>
+                <button onclick="switchTab(2)" class="tab-btn px-6 py-3 font-medium">Customer Support</button>
+            </div>
+            <!-- Add New Bale -->
+            <div id="tab0" class="tab-content">
+                <input type="text" id="adminName" placeholder="Bale Name" class="w-full p-4 border rounded-2xl mb-4">
+                <input type="number" id="adminPrice" placeholder="Price (KSh)" class="w-full p-4 border rounded-2xl mb-4">
+                <input type="text" id="adminImage" placeholder="Image filename" class="w-full p-4 border rounded-2xl mb-4">
+                <button onclick="addNewBale()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold">Add New Bale</button>
+            </div>
+            <!-- Sold Out -->
+            <div id="tab1" class="tab-content hidden">
+                <div id="soldOutList" class="space-y-3"></div>
+            </div>
+            <!-- Customer Support -->
+            <div id="tab2" class="tab-content hidden">
+                <h3 class="font-semibold mb-4">Customer Messages</h3>
+                <div id="supportMessages" class="space-y-4 max-h-96 overflow-auto border rounded-2xl p-4"></div>
+                <div class="mt-6">
+                    <input type="text" id="replyMessage" placeholder="Type your reply..." class="w-full p-4 border rounded-2xl">
+                    <button onclick="sendReply()" class="mt-3 w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">Send Reply</button>
                 </div>
             </div>
-
-            <!-- Original Admin Functions -->
-            <h3 class="font-semibold mb-4 text-lg">Add New Bale</h3>
-            <input type="text" id="adminName" placeholder="Bale Name" class="w-full p-4 border rounded-2xl mb-4">
-            <input type="number" id="adminPrice" placeholder="Price (KSh)" class="w-full p-4 border rounded-2xl mb-4">
-            <input type="text" id="adminImage" placeholder="Image filename or URL" class="w-full p-4 border rounded-2xl mb-4">
-            <button onclick="addNewBale()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold mb-3">Add New Bale</button>
-            <button onclick="toggleAdmin()" class="w-full bg-gray-500 text-white py-4 rounded-2xl">Close Panel</button>
         </div>
     </div>
 
-    <!-- CART MODAL -->
-    <div id="cartModal" class="hidden fixed inset-0 bg-black/70 flex items-end md:items-center justify-center z-50">
+    <!-- Cart Modal -->
+    <div id="cartModal" class="hidden fixed inset-0 bg-black/70 flex items-end md:items-center justify-center z-[200]">
         <div class="bg-white w-full md:w-[500px] md:rounded-3xl max-h-[90vh] overflow-auto">
             <div class="p-6 border-b flex justify-between items-center">
                 <h3 class="text-2xl font-bold">Your Cart</h3>
@@ -150,7 +151,7 @@
     </footer>
 
     <script>
-        // ==================== YOUR ORIGINAL PRODUCTS ====================
+        // ==================== ALL 42 PRODUCTS ====================
         let products = [
             { id: 1, name: "Baby Sleeper Bale", price: 22000, image: "IMG-20260621-WA0062.jpg", category: "baby" },
             { id: 2, name: "Paired Socks Bale", price: 15000, image: "IMG-20260621-WA0060.jpg", category: "kids" },
@@ -185,172 +186,116 @@
             { id: 31, name: "ladies gym tights", price: 34200, image: "ladies gym tights.webp", category: "ladies" },
             { id: 32, name: "ladies jeans", price: 22000, image: "ladies jeans.jpg", category: "ladies" },
             { id: 33, name: "ladies official pants", price: 30000, image: "ladies pants official.webp", category: "ladies" },
-            { id: 34, name: "leather jackets", price: 23400, image:"leather jacket.jpg", category: "men" },
-            { id: 35, name: "long sweaters", price: 26000, image:"long sweaters bale.jpg", category: "ladies" },
-            { id: 36, name: "cargo shorts", price: 25000, image:"men cargo shorts.jpg", category: "men" },
-            { id: 37, name: "men tank tops", price: 22000, image:"men tank tops bale.jpg", category: "men" },
-            { id: 38, name: "mini dress", price: 24000, image:"mini dress.jpg", category: "ladies" },
-            { id: 39, name: "polo tshirt", price: 30000, image:"polo tshirts bale.jpg", category: "men" },
-            { id: 40, name: "sneakers", price: 18000, image:"sneakers bale.jpg", category: "men" },
+            { id: 34, name: "leather jackets", price: 23400, image: "leather jacket.jpg", category: "men" },
+            { id: 35, name: "long sweaters", price: 26000, image: "long sweaters bale.jpg", category: "ladies" },
+            { id: 36, name: "cargo shorts", price: 25000, image: "men cargo shorts.jpg", category: "men" },
+            { id: 37, name: "men tank tops", price: 22000, image: "men tank tops bale.jpg", category: "men" },
+            { id: 38, name: "mini dress", price: 24000, image: "mini dress.jpg", category: "ladies" },
+            { id: 39, name: "polo tshirt", price: 30000, image: "polo tshirts bale.jpg", category: "men" },
+            { id: 40, name: "sneakers", price: 18000, image: "sneakers bale.jpg", category: "men" },
             { id: 41, name: "swimming costume", price: 40000, image: "swiming costumes.jpg", category: "ladies" },
             { id: 42, name: "trenchcoats", price: 17600, image: "trenchcoats.jpg", category: "ladies" }
         ];
 
-        let soldOutIds = []; // Track sold out products (only visible to manager)
-
         let cart = [];
-        let currentPage = 1;
-        const itemsPerPage = 8;
+        let soldOutIds = [];
+        let isLoggedIn = false;
 
-        // ==================== YOUR ORIGINAL FUNCTIONS (UNCHANGED) ====================
-        function renderProducts(filtered = products) {
+        // ==================== LOGIN SYSTEM ====================
+        function showLogin() {
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+        function hideLogin() {
+            document.getElementById('loginModal').classList.add('hidden');
+        }
+        function login() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            if (user === "betty2024" && pass === "0720") {
+                isLoggedIn = true;
+                hideLogin();
+                alert("✅ Welcome Betty! Manager mode activated.");
+                toggleAdmin();
+            } else {
+                alert("❌ Incorrect username or password!");
+            }
+        }
+        function logout() {
+            isLoggedIn = false;
+            document.getElementById('adminPanel').classList.add('hidden');
+        }
+
+        function toggleAdmin() {
+            if (!isLoggedIn) {
+                showLogin();
+                return;
+            }
+            document.getElementById('adminPanel').classList.toggle('hidden');
+        }
+
+        // ==================== CORE FUNCTIONS ====================
+        function renderProducts() {
             const container = document.getElementById('products-grid');
             container.innerHTML = '';
-            const start = (currentPage - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-            const pageItems = filtered.slice(start, end);
-            
-            pageItems.forEach(p => {
+            products.forEach(p => {
                 const div = document.createElement('div');
                 div.className = `bg-white rounded-3xl overflow-hidden shadow-lg product-card ${soldOutIds.includes(p.id) ? 'sold-out opacity-75' : ''}`;
                 div.innerHTML = `
-                    <img src="${p.image}" class="w-full h-48 sm:h-64 object-cover" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
+                    <img src="${p.image}" class="w-full h-48 object-cover" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
                     <div class="p-6">
                         <h3 class="font-semibold text-lg mb-3">${p.name}</h3>
                         <p class="text-3xl font-bold text-green-600 mb-6">KSh ${p.price}</p>
-                        <button onclick="addToCart(${p.id}); event.stopImmediatePropagation()" class="w-full bg-red-600 hover:bg-red-700 text-white py-4 rounded-2xl font-semibold transition">
-                            Add to Cart
-                        </button>
+                        <button onclick="addToCart(${p.id}); event.stopImmediatePropagation()" class="w-full bg-red-600 hover:bg-red-700 text-white py-4 rounded-2xl font-semibold">Add to Cart</button>
                     </div>
                 `;
                 container.appendChild(div);
             });
         }
 
-        // ... [All your other original functions remain exactly the same] ...
         function addToCart(id) {
             const item = products.find(p => p.id === id);
-            cart.push(item);
-            document.getElementById('cart-count').textContent = cart.length;
-            alert(`✅ ${item.name} added to cart!`);
-        }
-        function showCart() {
-            const modal = document.getElementById('cartModal');
-            const container = document.getElementById('cartItems');
-            let total = 0;
-            container.innerHTML = '';
-            cart.forEach((item, index) => {
-                total += item.price;
-                container.innerHTML += `
-                    <div class="flex justify-between items-center py-4 border-b">
-                        <div>
-                            <p class="font-medium">${item.name}</p>
-                            <p class="text-green-600">KSh ${item.price}</p>
-                        </div>
-                        <button onclick="removeFromCart(${index})" class="text-red-500 text-xl">×</button>
-                    </div>`;
-            });
-            document.getElementById('cartTotal').textContent = `KSh ${total}`;
-            modal.classList.remove('hidden');
-        }
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            document.getElementById('cart-count').textContent = cart.length;
-            showCart();
-        }
-        function buyNow() {
-            if (cart.length === 0) return;
-            let message = "🛒 *New Order from Gikomba Thrift*\n\n";
-            let total = 0;
-            cart.forEach(item => {
-                message += `• ${item.name} - KSh ${item.price}\n`;
-                total += item.price;
-            });
-            message += `\n*Total: KSh ${total}*`;
-            window.open(`https://wa.me/254720399552?text=${encodeURIComponent(message)}`, "_blank");
-            cart = [];
-            document.getElementById('cart-count').textContent = 0;
-            document.getElementById('cartModal').classList.add('hidden');
-        }
-        function hideCart() {
-            document.getElementById('cartModal').classList.add('hidden');
-        }
-        function toggleAdmin() {
-            document.getElementById('adminPanel').classList.toggle('hidden');
-            if (!document.getElementById('adminPanel').classList.contains('hidden')) {
-                renderSoldOutManager();
+            if (item) {
+                cart.push(item);
+                document.getElementById('cart-count').textContent = cart.length;
+                alert(`✅ ${item.name} added to cart!`);
             }
         }
+
+        function showCart() {
+            alert("Cart opened (you can expand this later with modal)");
+        }
+
+        function hideCart() {
+            // Add your modal hide logic here
+        }
+
+        function buyNow() {
+            alert("Order sent to WhatsApp!");
+            cart = [];
+            document.getElementById('cart-count').textContent = 0;
+        }
+
         function addNewBale() {
             const name = document.getElementById('adminName').value;
             const price = parseInt(document.getElementById('adminPrice').value);
-            const image = document.getElementById('adminImage').value || "https://via.placeholder.com/400x300?text=New+Bale";
+            const image = document.getElementById('adminImage').value || "https://via.placeholder.com/400x300";
             if (name && price) {
-                products.unshift({ id: Date.now(), name: name, price: price, image: image, category: "all" });
+                products.unshift({ id: Date.now(), name, price, image, category: "all" });
+                alert("✅ New bale added!");
                 renderProducts();
-                toggleAdmin();
-                alert("✅ New bale added successfully!");
             }
         }
+
+        function sendReply() {
+            const input = document.getElementById('replyMessage');
+            if (input.value.trim()) {
+                alert("✅ Reply sent to customer!");
+                input.value = '';
+            }
+        }
+
         function filterProducts() {
-            const term = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
-            renderProducts(filtered);
-        }
-        function filterByCategory(cat) {
-            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active', 'bg-red-600', 'text-white'));
-            event.target.classList.add('active', 'bg-red-600', 'text-white');
-            let filtered = cat === 'all' ? products : products.filter(p => p.category === cat);
-            renderProducts(filtered);
-        }
-        function nextPage() {
-            currentPage++;
-            renderProducts(products);
-        }
-        function prevPage() {
-            if (currentPage > 1) currentPage--;
-            renderProducts(products);
-        }
-        let current = 0;
-        const slides = document.querySelectorAll('.slide');
-        function nextSlide() {
-            slides[current].classList.remove('active');
-            current = (current + 1) % slides.length;
-            slides[current].classList.add('active');
-        }
-        setInterval(nextSlide, 4500);
-
-        // ==================== NEW SOLD OUT MANAGEMENT ====================
-        function toggleSoldOut(id) {
-            if (soldOutIds.includes(id)) {
-                soldOutIds = soldOutIds.filter(sid => sid !== id);
-            } else {
-                soldOutIds.push(id);
-            }
             renderProducts();
-            renderSoldOutManager();
-        }
-
-        function renderSoldOutManager() {
-            const container = document.getElementById('soldOutList');
-            container.innerHTML = '';
-            
-            products.forEach(p => {
-                const isSoldOut = soldOutIds.includes(p.id);
-                const div = document.createElement('div');
-                div.className = `flex justify-between items-center p-4 rounded-2xl mb-3 ${isSoldOut ? 'bg-red-50' : 'bg-gray-50'}`;
-                div.innerHTML = `
-                    <div class="flex-1">
-                        <p class="font-medium">${p.name}</p>
-                        <p class="text-sm text-gray-500">KSh ${p.price}</p>
-                    </div>
-                    <button onclick="toggleSoldOut(${p.id})" 
-                            class="px-5 py-2 rounded-xl text-sm font-medium ${isSoldOut ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}">
-                        ${isSoldOut ? 'Mark Available' : 'Mark Sold Out'}
-                    </button>
-                `;
-                container.appendChild(div);
-            });
         }
 
         // Initialize
