@@ -10,14 +10,14 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
         body { font-family: 'Inter', sans-serif; }
         .hero-title { font-family: 'Playfair Display', serif; }
-       
+      
         .slider { position: relative; height: 420px; overflow: hidden; }
         .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 2s ease-in-out; background-size: cover; background-position: center; }
         .slide.active { opacity: 1; }
-       
+      
         .product-card { transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .product-card:hover { transform: translateY(-15px); box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); }
-       
+      
         .sold-out::after {
             content: "SOLD OUT";
             position: absolute;
@@ -33,7 +33,6 @@
     </style>
 </head>
 <body class="bg-gray-50">
-
     <!-- Navbar -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
@@ -52,7 +51,6 @@
             </div>
         </div>
     </nav>
-
     <!-- Login Modal -->
     <div id="loginModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[300]">
         <div class="bg-white rounded-3xl p-12 w-full max-w-md mx-4">
@@ -63,17 +61,14 @@
             <button onclick="hideLogin()" class="w-full mt-6 text-gray-500">Cancel</button>
         </div>
     </div>
-
     <!-- Welcome Banner (smaller) -->
     <div class="bg-gradient-to-r from-red-600 to-pink-600 text-white py-8 text-center">
         <h1 class="text-4xl font-bold">Gikomba Ndogo Thrift Shop by Betty</h1>
     </div>
-
     <!-- Search -->
     <div class="max-w-7xl mx-auto px-6 py-8">
         <input type="text" id="searchInput" placeholder="Search bales..." class="w-full p-6 border-2 border-gray-300 rounded-3xl text-xl focus:border-red-500 focus:outline-none" onkeyup="filterProducts()">
     </div>
-
     <!-- Category Filters -->
     <div class="max-w-7xl mx-auto px-6 pb-6 flex gap-3 overflow-x-auto">
         <button onclick="filterByCategory('all')" class="category-btn active px-8 py-4 bg-red-600 text-white rounded-full text-sm whitespace-nowrap">All</button>
@@ -82,7 +77,6 @@
         <button onclick="filterByCategory('ladies')" class="category-btn px-8 py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Ladies</button>
         <button onclick="filterByCategory('men')" class="category-btn px-8 py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Men</button>
     </div>
-
     <!-- Slider (smaller) -->
     <section class="slider">
         <div class="slide active" style="background-image: url('IMG-20260621-WA0062.jpg')"></div>
@@ -91,12 +85,11 @@
         <div class="slide" style="background-image: url('IMG-20260621-WA0057.jpg')"></div>
         <div class="slide" style="background-image: url('IMG-20260621-WA0044.jpg')"></div>
     </section>
-
     <!-- Products -->
     <section class="max-w-7xl mx-auto px-6 py-16">
         <h2 class="text-5xl font-bold text-center mb-4">Our Latest Bales</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="products-grid"></div>
-       
+      
         <!-- Pagination -->
         <div class="flex justify-center gap-8 mt-16">
             <button onclick="prevPage()" class="px-10 py-5 bg-gray-200 hover:bg-gray-300 rounded-3xl text-xl">Previous</button>
@@ -105,7 +98,96 @@
         </div>
     </section>
 
-    <!-- Manager Panel (Full Page) -->
+    <!-- About Us -->
+    <section class="bg-white py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-5xl font-bold text-center mb-12">About Us</h2>
+            <p class="text-xl text-center max-w-4xl mx-auto">Gikomba Thrift Shop is a family business run by Betty in Nairobi. We source the best quality mitumba bales directly from Gikomba Market and Eldoret Town. Our mission is to provide affordable, high-quality second-hand clothes to families across Kenya.</p>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-5xl font-bold text-center mb-12">Why Choose Us</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="text-center">
+                    <i class="fas fa-check-circle text-7xl text-green-600 mb-6"></i>
+                    <h3 class="text-3xl font-bold mb-4">Quality Guaranteed</h3>
+                    <p class="text-gray-600">Every bale is carefully inspected before sale.</p>
+                </div>
+                <div class="text-center">
+                    <i class="fas fa-truck text-7xl text-blue-600 mb-6"></i>
+                    <h3 class="text-3xl font-bold mb-4">Countrywide Delivery</h3>
+                    <p class="text-gray-600">Fast and reliable delivery across Kenya.</p>
+                </div>
+                <div class="text-center">
+                    <i class="fas fa-heart text-7xl text-pink-600 mb-6"></i>
+                    <h3 class="text-3xl font-bold mb-4">Best Prices</h3>
+                    <p class="text-gray-600">Wholesale prices direct from the market.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Location -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-5xl font-bold text-center mb-12">Our Locations</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">Gikomba Market, Nairobi</h3>
+                    <p class="text-gray-600 mb-6">Main branch at Gikomba Market - the heart of mitumba trade.</p>
+                    <div class="bg-gray-100 p-4 rounded-2xl text-sm">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8!2d36.85!3d-1.3!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM8KwMTgnMDAuMCJTIDM2wrA1MScwMC4wIkU!5e0!3m2!1sen!2ske!4v1234567890" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">Eldoret Town</h3>
+                    <p class="text-gray-600 mb-6">Second branch in Eldoret for western Kenya customers.</p>
+                    <div class="bg-gray-100 p-4 rounded-2xl text-sm">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8!2d35.3!3d0.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMMKwMzAnMDAuMCJOIDM1wrAxOCcwMC4wIkU!5e0!3m2!1sen!2ske!4v1234567890" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Opening Hours & Delivery -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div>
+                <h3 class="text-3xl font-bold mb-6">Opening Hours</h3>
+                <p class="mb-2"><strong>Monday - Saturday:</strong> 8:00 AM - 6:00 PM</p>
+                <p><strong>Sunday:</strong> Closed</p>
+            </div>
+            <div>
+                <h3 class="text-3xl font-bold mb-6">Delivery Areas</h3>
+                <p class="mb-2">• Nairobi & Surroundings</p>
+                <p class="mb-2">• Eldoret & Western Kenya</p>
+                <p class="mb-2">• Countrywide Delivery Available</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQs -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-5xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="border rounded-3xl p-8">
+                    <h3 class="font-bold text-xl">How do I order?</h3>
+                    <p class="mt-3 text-gray-600">Add items to cart and click "Order via WhatsApp".</p>
+                </div>
+                <div class="border rounded-3xl p-8">
+                    <h3 class="font-bold text-xl">Do you deliver countrywide?</h3>
+                    <p class="mt-3 text-gray-600">Yes! We deliver to all major towns in Kenya.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manager Panel -->
     <div id="adminPanel" class="hidden fixed inset-0 bg-white z-[300] overflow-auto">
         <div class="max-w-6xl mx-auto p-12">
             <div class="flex justify-between items-center mb-12">
@@ -115,30 +197,26 @@
             <div class="flex border-b mb-10">
                 <button onclick="switchTab(0)" class="tab-btn active flex-1 py-6 text-2xl">Add Bale</button>
                 <button onclick="switchTab(1)" class="tab-btn flex-1 py-6 text-2xl">Mark Sold Out</button>
-                <button onclick="switchTab(2)" class="tab-btn flex-1 py-6 text-2xl">Customer Support</button>
             </div>
-           
+          
             <!-- Add Bale -->
             <div id="tab0" class="tab-content">
                 <input type="text" id="adminName" placeholder="Bale Name" class="w-full p-8 border-2 rounded-3xl mb-8 text-2xl">
                 <input type="number" id="adminPrice" placeholder="Price (KSh)" class="w-full p-8 border-2 rounded-3xl mb-8 text-2xl">
-                <input type="text" id="adminImage" placeholder="Image filename (copy from files)" class="w-full p-8 border-2 rounded-3xl mb-12 text-2xl">
+                <input type="text" id="adminImage" placeholder="Image filename" class="w-full p-8 border-2 rounded-3xl mb-12 text-2xl">
+                
+                <!-- Drag & Drop -->
+                <div id="dropZone" class="drop-zone border-4 border-dashed border-gray-300 rounded-3xl p-12 text-center mb-8 cursor-pointer">
+                    <p class="text-2xl text-gray-500">Drag & drop image here or click to upload</p>
+                    <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="handleFileSelect(event)">
+                </div>
+                
                 <button onclick="addNewBale()" class="w-full bg-green-600 text-white py-8 rounded-3xl text-3xl font-bold">Add New Bale to Website</button>
             </div>
-           
+          
             <!-- Sold Out -->
             <div id="tab1" class="tab-content hidden">
                 <div id="soldOutList" class="space-y-6"></div>
-            </div>
-           
-            <!-- Customer Support -->
-            <div id="tab2" class="tab-content hidden">
-                <h3 class="font-bold text-3xl mb-8">Customer Support Inbox</h3>
-                <div id="supportMessages" class="space-y-8"></div>
-                <div class="mt-12">
-                    <input type="text" id="replyMessage" placeholder="Type reply to customer..." class="w-full p-8 border-2 rounded-3xl text-xl">
-                    <button onclick="sendReply()" class="mt-6 w-full bg-blue-600 text-white py-8 rounded-3xl text-2xl font-bold">Send Reply via WhatsApp</button>
-                </div>
             </div>
         </div>
     </div>
@@ -244,7 +322,6 @@
             isLoggedIn = false;
             document.getElementById('adminPanel').classList.add('hidden');
         }
-
         function toggleAdmin() {
             if (!isLoggedIn) {
                 showLogin();
@@ -382,6 +459,34 @@
         function switchTab(n) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById('tab' + n).classList.remove('hidden');
+        }
+
+        // Drag and Drop for Image
+        const dropZone = document.getElementById('dropZone');
+        if (dropZone) {
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file) {
+                    document.getElementById('adminImage').value = file.name;
+                    alert("Image selected: " + file.name);
+                }
+            });
+            dropZone.addEventListener('click', () => document.getElementById('fileInput').click());
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('adminImage').value = file.name;
+                alert("Image selected: " + file.name);
+            }
         }
 
         // Initialize
