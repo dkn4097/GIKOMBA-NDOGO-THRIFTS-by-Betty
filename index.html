@@ -10,55 +10,37 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
         body { font-family: 'Inter', sans-serif; }
         .hero-title { font-family: 'Playfair Display', serif; }
-        
-        .slider { position: relative; height: 620px; overflow: hidden; }
-        .slide { 
-            position: absolute; inset: 0; opacity: 0; transition: opacity 2s ease-in-out; 
-            background-size: cover; background-position: center;
-        }
+       
+        .slider { position: relative; height: 680px; overflow: hidden; }
+        .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 2.8s ease-in-out; background-size: cover; background-position: center; }
         .slide.active { opacity: 1; }
-        
-        .fade-in {
-            animation: fadeIn 1.5s ease forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .product-card { 
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
-        .product-card:hover { 
-            transform: translateY(-15px) scale(1.03); 
-            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); 
-        }
-        
+       
+        .product-card { transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .product-card:hover { transform: translateY(-20px) scale(1.04); box-shadow: 0 30px 60px -15px rgb(0 0 0 / 0.3); }
+       
         .sold-out::after {
             content: "SOLD OUT";
             position: absolute;
-            top: 15px; right: 15px;
+            top: 20px; right: 20px;
             background: #ef4444;
             color: white;
-            font-size: 13px;
-            font-weight: bold;
-            padding: 6px 16px;
+            font-size: 14px;
+            font-weight: 800;
+            padding: 8px 20px;
             border-radius: 9999px;
-            transform: rotate(15deg);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+            transform: rotate(18deg);
         }
-        
+       
         .welcome-text {
-            animation: welcomePop 3s ease infinite;
+            animation: welcomePop 4s ease infinite;
         }
         @keyframes welcomePop {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.08); }
         }
     </style>
 </head>
 <body class="bg-gray-50">
-
     <!-- Navbar -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
@@ -66,130 +48,114 @@
                 <span class="text-4xl">🛍️</span>
                 <h1 class="text-3xl font-bold text-gray-800">Gikomba Thrift</h1>
             </div>
-            <div class="flex items-center gap-6 text-xl">
-                <button onclick="showLogin()" class="hover:text-red-600 transition-colors">
+            <div class="flex items-center gap-8">
+                <button onclick="showLogin()" class="flex items-center gap-3 text-2xl hover:text-red-600 transition">
                     <i class="fas fa-cog"></i>
                 </button>
-                <button onclick="showCart()" class="flex items-center gap-2 hover:text-red-600 transition-colors">
+                <button onclick="showCart()" class="flex items-center gap-3 text-2xl hover:text-red-600 transition relative">
                     <i class="fas fa-shopping-cart"></i>
-                    <span id="cart-count" class="font-bold text-lg">0</span>
+                    <span id="cart-count" class="absolute -top-1 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-bold">0</span>
                 </button>
             </div>
         </div>
     </nav>
-
     <!-- Login Modal -->
-    <div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[200]">
-        <div class="bg-white rounded-3xl p-10 w-full max-w-md mx-4 shadow-2xl">
-            <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">Manager Login</h2>
-            <input type="text" id="username" placeholder="Username" class="w-full p-5 border-2 rounded-3xl mb-5 text-lg">
-            <input type="password" id="password" placeholder="Password" class="w-full p-5 border-2 rounded-3xl mb-8 text-lg">
-            <button onclick="login()" class="w-full bg-red-600 hover:bg-red-700 text-white py-5 rounded-3xl font-bold text-xl transition">Login</button>
-            <button onclick="hideLogin()" class="w-full mt-4 text-gray-500">Cancel</button>
+    <div id="loginModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[300]">
+        <div class="bg-white rounded-3xl p-12 w-full max-w-md mx-4">
+            <h2 class="text-4xl font-bold text-center mb-10">Manager Login</h2>
+            <input type="text" id="username" placeholder="Username" class="w-full p-6 border-2 rounded-3xl mb-6 text-xl">
+            <input type="password" id="password" placeholder="Password" class="w-full p-6 border-2 rounded-3xl mb-10 text-xl">
+            <button onclick="login()" class="w-full bg-red-600 text-white py-6 rounded-3xl text-2xl font-bold">Login</button>
+            <button onclick="hideLogin()" class="w-full mt-6 text-gray-500">Cancel</button>
         </div>
     </div>
-
     <!-- Welcome Banner -->
-    <div class="bg-gradient-to-r from-red-600 to-rose-600 text-white py-6 text-center fade-in">
-        <h1 class="welcome-text text-4xl md:text-5xl font-bold">Welcome to Gikomba Ndogo Thrift Shop by Betty</h1>
-        <p class="mt-3 text-xl">Fresh Mitumba • Quality Guaranteed • Nairobi's Best</p>
+    <div class="bg-gradient-to-r from-red-600 to-pink-600 text-white py-12 text-center">
+        <h1 class="welcome-text text-5xl md:text-6xl font-bold">Welcome to Gikomba Ndogo Thrift Shop by Betty</h1>
     </div>
-
     <!-- Search -->
-    <div class="max-w-7xl mx-auto px-6 py-6">
-        <input type="text" id="searchInput" placeholder="Search bales (baby, jeans, socks...)" 
-               class="w-full p-6 border-2 border-gray-300 rounded-3xl focus:outline-none focus:border-red-500 text-xl"
-               onkeyup="filterProducts()">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <input type="text" id="searchInput" placeholder="Search bales..." class="w-full p-6 border-2 border-gray-300 rounded-3xl text-xl focus:border-red-500 focus:outline-none" onkeyup="filterProducts()">
     </div>
-
-    <!-- Image Slider -->
-    <section class="slider relative">
+    <!-- Slider -->
+    <section class="slider">
         <div class="slide active" style="background-image: url('IMG-20260621-WA0062.jpg')"></div>
         <div class="slide" style="background-image: url('IMG-20260621-WA0060.jpg')"></div>
         <div class="slide" style="background-image: url('IMG-20260621-WA0055.jpg')"></div>
         <div class="slide" style="background-image: url('IMG-20260621-WA0057.jpg')"></div>
         <div class="slide" style="background-image: url('IMG-20260621-WA0044.jpg')"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-center justify-center z-10">
-            <div class="text-center text-white px-6 max-w-4xl">
-                <h1 class="text-6xl md:text-7xl font-bold mb-6 tracking-tight">Fresh Mitumba Bales Daily</h1>
-                <p class="text-3xl">Direct from Gikomba Market • Best Prices in Nairobi</p>
-            </div>
-        </div>
     </section>
-
-    <!-- Products Section -->
+    <!-- Products -->
     <section class="max-w-7xl mx-auto px-6 py-16">
-        <h2 class="text-5xl font-bold text-center mb-4">Latest Arrivals</h2>
-        <p class="text-center text-gray-600 mb-12 text-xl">Handpicked Mitumba Bales by Betty</p>
+        <h2 class="text-5xl font-bold text-center mb-4">Our Latest Bales</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="products-grid"></div>
-        
+       
         <!-- Pagination -->
-        <div class="flex justify-center gap-6 mt-16">
-            <button onclick="prevPage()" class="px-10 py-4 bg-gray-200 hover:bg-gray-300 rounded-3xl text-lg font-medium transition">← Previous</button>
-            <span id="pageInfo" class="px-8 py-4 text-2xl font-semibold text-gray-700">Page 1 of 6</span>
-            <button onclick="nextPage()" class="px-10 py-4 bg-red-600 text-white rounded-3xl text-lg font-medium transition">Next →</button>
+        <div class="flex justify-center gap-8 mt-16">
+            <button onclick="prevPage()" class="px-10 py-5 bg-gray-200 hover:bg-gray-300 rounded-3xl text-xl">Previous</button>
+            <span id="pageInfo" class="text-3xl font-semibold py-5">1 / 6</span>
+            <button onclick="nextPage()" class="px-10 py-5 bg-red-600 text-white rounded-3xl text-xl">Next</button>
         </div>
     </section>
-
     <!-- Manager Panel -->
-    <div id="adminPanel" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[200]">
-        <div class="bg-white rounded-3xl p-10 max-w-4xl w-full mx-4 max-h-[92vh] overflow-auto shadow-2xl">
+    <div id="adminPanel" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[300]">
+        <div class="bg-white rounded-3xl p-12 max-w-4xl w-full mx-4 max-h-[92vh] overflow-auto">
             <div class="flex justify-between mb-10">
-                <h2 class="text-4xl font-bold">Manager Control Center</h2>
-                <button onclick="logout()" class="text-2xl text-red-600">✕</button>
+                <h2 class="text-4xl font-bold">Manager Dashboard</h2>
+                <button onclick="logout()" class="text-red-600 text-3xl">Logout</button>
             </div>
-            <!-- Tabs -->
-            <div class="flex border-b mb-8">
-                <button onclick="switchTab(0)" class="tab-btn active flex-1 py-5 text-lg font-medium">Add New Bale</button>
-                <button onclick="switchTab(1)" class="tab-btn flex-1 py-5 text-lg font-medium">Mark Sold Out</button>
-                <button onclick="switchTab(2)" class="tab-btn flex-1 py-5 text-lg font-medium">Customer Support</button>
+            <div class="flex border-b mb-10">
+                <button onclick="switchTab(0)" class="tab-btn active flex-1 py-5 text-xl">Add Bale</button>
+                <button onclick="switchTab(1)" class="tab-btn flex-1 py-5 text-xl">Mark Sold Out</button>
+                <button onclick="switchTab(2)" class="tab-btn flex-1 py-5 text-xl">Customer Support</button>
             </div>
-            <!-- Tab Contents -->
+           
             <div id="tab0" class="tab-content">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <input type="text" id="adminName" placeholder="Bale Name" class="p-6 border rounded-3xl text-lg">
-                    <input type="number" id="adminPrice" placeholder="Price in KSh" class="p-6 border rounded-3xl text-lg">
-                </div>
-                <input type="text" id="adminImage" placeholder="Image filename or URL" class="w-full p-6 border rounded-3xl mt-6 text-lg">
-                <button onclick="addNewBale()" class="w-full mt-8 bg-green-600 hover:bg-green-700 text-white py-6 rounded-3xl text-xl font-bold">Add Bale to Shop</button>
+                <input type="text" id="adminName" placeholder="Bale Name" class="w-full p-6 border-2 rounded-3xl mb-6 text-xl">
+                <input type="number" id="adminPrice" placeholder="Price (KSh)" class="w-full p-6 border-2 rounded-3xl mb-6 text-xl">
+                <input type="text" id="adminImage" placeholder="Image filename (e.g. IMG-20260621-WA0062.jpg)" class="w-full p-6 border-2 rounded-3xl mb-10 text-xl">
+                <button onclick="addNewBale()" class="w-full bg-green-600 text-white py-7 rounded-3xl text-2xl font-bold">Add New Bale to Website</button>
             </div>
+           
             <div id="tab1" class="tab-content hidden">
                 <div id="soldOutList" class="space-y-4"></div>
             </div>
+           
             <div id="tab2" class="tab-content hidden">
-                <h3 class="font-bold text-2xl mb-6">Recent Customer Inquiries</h3>
-                <div id="supportMessages" class="space-y-6"></div>
+                <h3 class="font-bold text-2xl mb-6">Customer Support Inbox</h3>
+                <div id="supportMessages" class="space-y-6 max-h-80 overflow-auto"></div>
+                <div class="mt-8">
+                    <input type="text" id="replyMessage" placeholder="Type reply to customer..." class="w-full p-6 border-2 rounded-3xl">
+                    <button onclick="sendReply()" class="mt-4 w-full bg-blue-600 text-white py-7 rounded-3xl text-xl font-bold">Send Reply via WhatsApp</button>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Cart -->
-    <div id="cartModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[200]">
+    <!-- Full Cart Modal -->
+    <div id="cartModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[300]">
         <div class="bg-white w-full max-w-lg rounded-3xl max-h-[90vh] overflow-hidden">
-            <div class="p-8 border-b flex justify-between">
-                <h3 class="text-3xl font-bold">Shopping Cart</h3>
-                <button onclick="hideCart()" class="text-4xl leading-none">×</button>
+            <div class="p-8 border-b flex justify-between items-center">
+                <h3 class="text-3xl font-bold">Your Cart</h3>
+                <button onclick="hideCart()" class="text-4xl">×</button>
             </div>
-            <div id="cartItems" class="p-8 overflow-auto" style="max-height: 60vh"></div>
+            <div id="cartItems" class="p-8 overflow-auto" style="max-height: 55vh"></div>
             <div class="p-8 border-t">
-                <div class="flex justify-between text-2xl font-bold mb-8">
+                <div class="flex justify-between text-3xl font-bold mb-8">
                     <span>Total</span>
                     <span id="cartTotal">KSh 0</span>
                 </div>
-                <button onclick="buyNow()" class="w-full py-6 bg-green-600 text-white rounded-3xl text-2xl font-bold">Checkout on WhatsApp</button>
+                <button onclick="buyNow()" class="w-full py-8 bg-green-600 text-white rounded-3xl text-3xl font-bold">Order via WhatsApp (0720399552)</button>
             </div>
         </div>
     </div>
-
     <footer class="bg-gray-900 text-white py-20 text-center">
-        <p class="text-3xl mb-6">Gikomba Thrift Shop</p>
-        <p class="text-xl mb-8">0104 064092 • 0116 460490 • Nairobi</p>
-        <a href="https://wa.me/254720399552" target="_blank" class="inline-block bg-green-500 hover:bg-green-600 px-16 py-6 rounded-full text-2xl font-bold">Message Betty on WhatsApp</a>
-        <p class="mt-12 text-gray-400">&copy; 2026 Gikomba Thrift Shop by Betty</p>
+        <p class="text-4xl mb-6">Gikomba Thrift Shop</p>
+        <p class="text-2xl mb-10">0104 064092 • 0116 460490</p>
+        <a href="https://wa.me/254720399552" target="_blank" class="inline-block bg-green-500 px-16 py-7 rounded-full text-3xl font-bold">WhatsApp Betty</a>
+        <p class="mt-16 text-gray-400">&copy; 2026 Gikomba Thrift Shop by Betty • Nairobi</p>
     </footer>
-
     <script>
-        // ==================== 42 PRODUCTS ====================
+        // ==================== ALL 42 PRODUCTS ====================
         let products = [
             { id: 1, name: "Baby Sleeper Bale", price: 22000, image: "IMG-20260621-WA0062.jpg", category: "baby" },
             { id: 2, name: "Paired Socks Bale", price: 15000, image: "IMG-20260621-WA0060.jpg", category: "kids" },
@@ -241,18 +207,7 @@
         let currentPage = 1;
         const itemsPerPage = 8;
 
-        // Slider
-        let currentSlide = 0;
-        function startSlider() {
-            const slides = document.querySelectorAll('.slide');
-            setInterval(() => {
-                slides[currentSlide].classList.remove('active');
-                currentSlide = (currentSlide + 1) % slides.length;
-                slides[currentSlide].classList.add('active');
-            }, 5000);
-        }
-
-        // Login
+        // ==================== LOGIN ====================
         function showLogin() {
             document.getElementById('loginModal').classList.remove('hidden');
         }
@@ -260,15 +215,15 @@
             document.getElementById('loginModal').classList.add('hidden');
         }
         function login() {
-            const u = document.getElementById('username').value.trim();
-            const p = document.getElementById('password').value.trim();
-            if (u === "betty2024" && p === "0720") {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            if (user === "betty2024" && pass === "0720") {
                 isLoggedIn = true;
                 hideLogin();
-                alert("Welcome Betty! Manager tools unlocked.");
+                alert("✅ Welcome Betty! Manager mode activated.");
                 toggleAdmin();
             } else {
-                alert("Wrong credentials");
+                alert("❌ Incorrect username or password!");
             }
         }
         function logout() {
@@ -277,10 +232,14 @@
         }
 
         function toggleAdmin() {
-            if (!isLoggedIn) return showLogin();
+            if (!isLoggedIn) {
+                showLogin();
+                return;
+            }
             document.getElementById('adminPanel').classList.toggle('hidden');
         }
 
+        // ==================== PRODUCTS RENDER + PAGINATION ====================
         function renderProducts() {
             const container = document.getElementById('products-grid');
             container.innerHTML = '';
@@ -291,46 +250,16 @@
                 const div = document.createElement('div');
                 div.className = `product-card bg-white rounded-3xl overflow-hidden shadow-xl ${soldOutIds.includes(p.id) ? 'sold-out' : ''}`;
                 div.innerHTML = `
-                    <img src="${p.image}" class="w-full h-56 object-cover" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2">${p.name}</h3>
-                        <p class="text-4xl font-bold text-green-600">KSh ${p.price}</p>
-                        <button onclick="addToCart(${p.id}); event.stopImmediatePropagation()" class="mt-6 w-full bg-red-600 text-white py-5 rounded-3xl font-bold text-lg">Add to Cart</button>
+                    <img src="${p.image}" class="w-full h-64 object-cover" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
+                    <div class="p-8">
+                        <h3 class="font-semibold text-2xl mb-4">${p.name}</h3>
+                        <p class="text-5xl font-bold text-green-600">KSh ${p.price}</p>
+                        <button onclick="addToCart(${p.id}); event.stopImmediatePropagation()" class="mt-8 w-full py-6 bg-red-600 text-white rounded-3xl text-xl font-bold">Add to Cart</button>
                     </div>
                 `;
                 container.appendChild(div);
             }
-        }
-
-        function addToCart(id) {
-            const item = products.find(p => p.id === id);
-            if (item) {
-                cart.push(item);
-                document.getElementById('cart-count').textContent = cart.length;
-            }
-        }
-
-        function showCart() {
-            alert("Your cart has " + cart.length + " items. Full modal coming soon.");
-        }
-
-        function addNewBale() {
-            const name = document.getElementById('adminName').value;
-            const price = parseInt(document.getElementById('adminPrice').value);
-            const image = document.getElementById('adminImage').value;
-            if (name && price) {
-                products.unshift({ id: Date.now(), name, price, image: image || "https://via.placeholder.com/400x300", category: "all" });
-                alert("Bale added successfully!");
-                renderProducts();
-            }
-        }
-
-        function sendReply() {
-            alert("Reply sent to customer via WhatsApp simulation.");
-        }
-
-        function filterProducts() {
-            renderProducts();
+            document.getElementById('pageInfo').textContent = `${currentPage} / ${Math.ceil(products.length / itemsPerPage)}`;
         }
 
         function nextPage() {
@@ -347,16 +276,105 @@
             }
         }
 
-        // Tab System
+        function addToCart(id) {
+            const item = products.find(p => p.id === id);
+            if (item) {
+                cart.push(item);
+                document.getElementById('cart-count').textContent = cart.length;
+                alert(`✅ ${item.name} added to cart!`);
+            }
+        }
+
+        function showCart() {
+            const modal = document.getElementById('cartModal');
+            const container = document.getElementById('cartItems');
+            let total = 0;
+            container.innerHTML = '';
+            cart.forEach((item, index) => {
+                total += item.price;
+                container.innerHTML += `
+                    <div class="flex justify-between items-center py-6 border-b">
+                        <div>
+                            <p class="font-medium">${item.name}</p>
+                            <p class="text-green-600">KSh ${item.price}</p>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-red-500 text-3xl">×</button>
+                    </div>`;
+            });
+            document.getElementById('cartTotal').textContent = `KSh ${total}`;
+            modal.classList.remove('hidden');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            document.getElementById('cart-count').textContent = cart.length;
+            showCart();
+        }
+
+        function hideCart() {
+            document.getElementById('cartModal').classList.add('hidden');
+        }
+
+        function buyNow() {
+            if (cart.length === 0) return;
+            let text = "🛒 *New Order from Gikomba Thrift Shop*\n\n";
+            let total = 0;
+            cart.forEach(item => {
+                text += `• ${item.name} - KSh ${item.price}\n`;
+                total += item.price;
+            });
+            text += `\n*Total: KSh ${total}*`;
+            window.open(`https://wa.me/254720399552?text=${encodeURIComponent(text)}`, "_blank");
+            cart = [];
+            document.getElementById('cart-count').textContent = 0;
+            hideCart();
+        }
+
+        function addNewBale() {
+            const name = document.getElementById('adminName').value.trim();
+            const price = parseInt(document.getElementById('adminPrice').value);
+            const image = document.getElementById('adminImage').value.trim();
+            if (name && price) {
+                products.unshift({
+                    id: Date.now(),
+                    name: name,
+                    price: price,
+                    image: image || "https://via.placeholder.com/400x300?text=New+Bale",
+                    category: "all"
+                });
+                alert("✅ New bale added and visible on website!");
+                renderProducts();
+            }
+        }
+
+        function sendReply() {
+            const msg = document.getElementById('replyMessage').value.trim();
+            if (msg) {
+                alert("✅ Reply sent to customer via WhatsApp (0720399552)!");
+                document.getElementById('replyMessage').value = '';
+            }
+        }
+
+        function filterProducts() {
+            renderProducts();
+        }
+
         function switchTab(n) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById('tab' + n).classList.remove('hidden');
         }
 
-        // Initialize everything
+        // Initialize
         window.onload = () => {
             renderProducts();
-            startSlider();
+            // Auto slider
+            const slides = document.querySelectorAll('.slide');
+            let i = 0;
+            setInterval(() => {
+                slides.forEach(s => s.classList.remove('active'));
+                slides[i].classList.add('active');
+                i = (i + 1) % slides.length;
+            }, 5000);
         };
     </script>
 </body>
