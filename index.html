@@ -113,7 +113,7 @@
     <section class="bg-white py-14 sm:py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <h2 class="text-3xl sm:text-5xl font-bold text-center mb-8 sm:mb-12">About Us</h2>
-            <p class="text-base sm:text-xl text-center max-w-4xl mx-auto">Gikomba Thrift Shop is a family business run by Betty in Nairobi. We source the best quality mitumba bales directly from Gikomba Market and Eldoret Town. Our mission is to provide affordable, high-quality second-hand clothes to families across Kenya.</p>
+            <p class="text-base sm:text-xl text-center max-w-4xl mx-auto">Gikomba Thrift Shop is a family business run by Betty Kabugi in Nairobi and Eldoret. We import directly from various countries high quality second hand clothes to businesses and families across Kenya.</p>
         </div>
     </section>
 
@@ -223,13 +223,12 @@
                     <option value="men">Men</option>
                 </select>
                 <textarea id="adminDescription" placeholder="Description (optional)" rows="3" class="w-full p-5 sm:p-8 border-2 rounded-3xl mb-6 sm:mb-8 text-lg sm:text-2xl"></textarea>
-                <input type="text" id="adminImage" placeholder="Image filename" class="w-full p-5 sm:p-8 border-2 rounded-3xl mb-8 sm:mb-12 text-lg sm:text-2xl">
-
-                <!-- Drag & Drop -->
+                <!-- Drag & Drop (this uploads the real photo) -->
                 <div id="dropZone" class="drop-zone border-4 border-dashed border-gray-300 rounded-3xl p-8 sm:p-12 text-center mb-6 sm:mb-8 cursor-pointer">
-                    <p class="text-lg sm:text-2xl text-gray-500">Drag & drop image here or click to upload</p>
+                    <p class="text-lg sm:text-2xl text-gray-500">Drag & drop photo here or click to upload</p>
                     <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="handleFileSelect(event)">
                 </div>
+                <input type="text" id="adminImage" placeholder="(Optional) paste an image URL instead of uploading a photo" class="w-full p-5 sm:p-8 border-2 rounded-3xl mb-8 sm:mb-12 text-lg sm:text-2xl">
 
                 <button onclick="addNewBale()" class="w-full bg-green-600 text-white py-5 sm:py-8 rounded-3xl text-xl sm:text-3xl font-bold">Add New Bale to Website</button>
             </div>
@@ -283,8 +282,41 @@
         <p class="mt-10 sm:mt-16 text-gray-400">&copy; 2026 Gikomba Thrift Shop by Betty • Nairobi</p>
     </footer>
 
+    <!-- Firebase (product data storage) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <script>
-        // ==================== ALL 42 PRODUCTS (DEFAULT DATA) ====================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDkd0c7a4p_62s0XWABkpfBEkO4Ckgq-NU",
+            authDomain: "gikomba-thrift-shop-by-betty.firebaseapp.com",
+            projectId: "gikomba-thrift-shop-by-betty",
+            storageBucket: "gikomba-thrift-shop-by-betty.firebasestorage.app",
+            messagingSenderId: "643578846447",
+            appId: "1:643578846447:web:29f6a5993b381e5b718f1a"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const productsCollection = db.collection('products');
+
+        // Cloudinary (image uploads)
+        const CLOUDINARY_CLOUD_NAME = "tnslc2mo";
+        const CLOUDINARY_UPLOAD_PRESET = "u30uffsa";
+
+        async function uploadImageToCloudinary(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+                method: 'POST',
+                body: formData
+            });
+            if (!res.ok) throw new Error('Image upload failed');
+            const data = await res.json();
+            return data.secure_url;
+        }
+    </script>
+    <script>
+        // ==================== ALL 42 PRODUCTS (DEFAULT DATA, used only to seed Firestore the first time) ====================
         const defaultProducts = [
             { id: 1, name: "Baby Sleeper Bale", price: 22000, image: "IMG-20260621-WA0062.jpg", category: "baby", description: "" },
             { id: 2, name: "Paired Socks Bale", price: 15000, image: "IMG-20260621-WA0060.jpg", category: "kids", description: "" },
@@ -330,10 +362,11 @@
             { id: 42, name: "trenchcoats", price: 17600, image: "trenchcoats.jpg", category: "ladies", description: "" }
         ];
 
-        // ==================== PERSISTED STATE ====================
-        let products = loadFromStorage('gikomba_products', defaultProducts);
+        // ==================== STATE ====================
+        // Product catalog now lives in Firestore, shared by every visitor.
+        // Cart stays in localStorage since it's personal to each shopper's device/session.
+        let products = [];
         let cart = loadFromStorage('gikomba_cart', []);
-        let soldOutIds = loadFromStorage('gikomba_soldout', []);
         let isLoggedIn = false;
         let currentPage = 1;
         let activeCategory = 'all';
@@ -354,10 +387,36 @@
                 console.error('Storage save failed', e);
             }
         }
-        function saveProducts() { saveToStorage('gikomba_products', products); }
         function saveCart() { saveToStorage('gikomba_cart', cart); }
-        function saveSoldOut() { saveToStorage('gikomba_soldout', soldOutIds); }
         function formatPrice(n) { return 'KSh ' + Number(n).toLocaleString(); }
+
+        // Load products from Firestore. If the collection is empty (first ever run),
+        // seed it once with the default catalog so the site isn't blank.
+        async function loadProducts() {
+            const snapshot = await productsCollection.get();
+            if (snapshot.empty) {
+                const batch = db.batch();
+                defaultProducts.forEach(p => {
+                    const ref = productsCollection.doc();
+                    batch.set(ref, {
+                        name: p.name,
+                        price: p.price,
+                        image: p.image,
+                        category: p.category,
+                        description: p.description || '',
+                        soldOut: false
+                    });
+                });
+                await batch.commit();
+                const seeded = await productsCollection.get();
+                products = seeded.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } else {
+                products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            }
+            renderProducts();
+            renderSoldOutList();
+            renderEditList();
+        }
 
         // Login
         function showLogin() {
@@ -425,7 +484,7 @@
             const end = Math.min(start + itemsPerPage, filtered.length);
             for (let i = start; i < end; i++) {
                 const p = filtered[i];
-                const soldOut = soldOutIds.includes(p.id);
+                const soldOut = !!p.soldOut;
                 const div = document.createElement('div');
                 div.className = `product-card bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-md sm:shadow-xl ${soldOut ? 'sold-out' : ''}`;
                 div.innerHTML = `
@@ -458,8 +517,8 @@
         }
 
         function addToCart(id) {
-            if (soldOutIds.includes(id)) return;
             const item = products.find(p => p.id === id);
+            if (item && item.soldOut) return;
             if (item) {
                 cart.push(item);
                 saveCart();
@@ -471,7 +530,7 @@
         function showDetail(id) {
             const p = products.find(x => x.id === id);
             if (!p) return;
-            const soldOut = soldOutIds.includes(id);
+            const soldOut = !!p.soldOut;
             document.getElementById('detailBody').innerHTML = `
                 <img src="${p.image}" alt="${p.name}" class="w-full h-56 sm:h-72 object-cover rounded-2xl mb-6" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
                 <h4 class="text-2xl font-bold mb-2">${p.name}</h4>
@@ -535,33 +594,58 @@
             hideCart();
         }
 
-        function addNewBale() {
+        let selectedImageFile = null; // actual File object chosen via drag-drop or file picker
+
+        async function addNewBale() {
             const name = document.getElementById('adminName').value.trim();
             const price = parseInt(document.getElementById('adminPrice').value);
-            const image = document.getElementById('adminImage').value.trim();
             const category = document.getElementById('adminCategory').value;
             const description = document.getElementById('adminDescription').value.trim();
-            if (name && price) {
-                products.unshift({
-                    id: Date.now(),
+            const typedImage = document.getElementById('adminImage').value.trim();
+
+            if (!name || !price) {
+                alert("Please enter a bale name and price.");
+                return;
+            }
+
+            const addBtn = event.target;
+            const originalText = addBtn.textContent;
+            addBtn.textContent = "Uploading...";
+            addBtn.disabled = true;
+
+            try {
+                let imageUrl = typedImage || "https://via.placeholder.com/400x300?text=New+Bale";
+                if (selectedImageFile) {
+                    imageUrl = await uploadImageToCloudinary(selectedImageFile);
+                }
+
+                const newProduct = {
                     name: name,
                     price: price,
-                    image: image || "https://via.placeholder.com/400x300?text=New+Bale",
+                    image: imageUrl,
                     category: category || "all",
-                    description: description || ""
-                });
-                saveProducts();
+                    description: description || "",
+                    soldOut: false
+                };
+                const docRef = await productsCollection.add(newProduct);
+                products.unshift({ id: docRef.id, ...newProduct });
+
                 document.getElementById('adminName').value = '';
                 document.getElementById('adminPrice').value = '';
                 document.getElementById('adminImage').value = '';
                 document.getElementById('adminDescription').value = '';
+                selectedImageFile = null;
                 currentPage = 1;
                 renderProducts();
                 renderSoldOutList();
                 renderEditList();
-                alert("✅ New bale added and visible on website!");
-            } else {
-                alert("Please enter a bale name and price.");
+                alert("✅ New bale added and visible on website for everyone!");
+            } catch (err) {
+                console.error(err);
+                alert("❌ Something went wrong uploading the photo or saving the bale. Please try again.");
+            } finally {
+                addBtn.textContent = originalText;
+                addBtn.disabled = false;
             }
         }
 
@@ -596,7 +680,7 @@
             });
         }
 
-        function saveEdit(id) {
+        async function saveEdit(id) {
             const product = products.find(p => p.id === id);
             if (!product) return;
             const nameInput = document.getElementById(`edit-name-${id}`);
@@ -609,12 +693,21 @@
                 alert("Name and price cannot be empty.");
                 return;
             }
-            product.name = newName;
-            product.price = newPrice;
-            product.description = newDesc;
-            saveProducts();
-            renderProducts();
-            alert("✅ Bale updated!");
+            try {
+                await productsCollection.doc(id).update({
+                    name: newName,
+                    price: newPrice,
+                    description: newDesc
+                });
+                product.name = newName;
+                product.price = newPrice;
+                product.description = newDesc;
+                renderProducts();
+                alert("✅ Bale updated for everyone!");
+            } catch (err) {
+                console.error(err);
+                alert("❌ Could not save changes. Please try again.");
+            }
         }
 
         // Sold Out management
@@ -623,7 +716,7 @@
             if (!list) return;
             list.innerHTML = '';
             products.forEach(p => {
-                const isSold = soldOutIds.includes(p.id);
+                const isSold = !!p.soldOut;
                 const row = document.createElement('div');
                 row.className = 'flex items-center justify-between border rounded-2xl p-4 sm:p-6';
                 row.innerHTML = `
@@ -639,15 +732,19 @@
             });
         }
 
-        function toggleSoldOut(id) {
-            if (soldOutIds.includes(id)) {
-                soldOutIds = soldOutIds.filter(x => x !== id);
-            } else {
-                soldOutIds.push(id);
+        async function toggleSoldOut(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            const newValue = !product.soldOut;
+            try {
+                await productsCollection.doc(id).update({ soldOut: newValue });
+                product.soldOut = newValue;
+                renderSoldOutList();
+                renderProducts();
+            } catch (err) {
+                console.error(err);
+                alert("❌ Could not update status. Please try again.");
             }
-            saveSoldOut();
-            renderSoldOutList();
-            renderProducts();
         }
 
         function filterProducts() {
@@ -687,7 +784,8 @@
                 dropZone.classList.remove('dragover');
                 const file = e.dataTransfer.files[0];
                 if (file) {
-                    document.getElementById('adminImage').value = file.name;
+                    selectedImageFile = file;
+                    document.getElementById('adminImage').value = file.name + ' (ready to upload)';
                 }
             });
             dropZone.addEventListener('click', () => document.getElementById('fileInput').click());
@@ -696,14 +794,15 @@
         function handleFileSelect(e) {
             const file = e.target.files[0];
             if (file) {
-                document.getElementById('adminImage').value = file.name;
+                selectedImageFile = file;
+                document.getElementById('adminImage').value = file.name + ' (ready to upload)';
             }
         }
 
         // Initialize
         window.onload = () => {
             document.getElementById('cart-count').textContent = cart.length;
-            renderProducts();
+            loadProducts(); // pulls the shared catalog from Firestore
             // Slider
             const slides = document.querySelectorAll('.slide');
             let i = 0;
