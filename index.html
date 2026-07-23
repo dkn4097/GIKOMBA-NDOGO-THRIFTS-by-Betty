@@ -10,14 +10,14 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
         body { font-family: 'Inter', sans-serif; }
         .hero-title { font-family: 'Playfair Display', serif; }
-      
+
         .slider { position: relative; height: 420px; overflow: hidden; }
         .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 2s ease-in-out; background-size: cover; background-position: center; }
         .slide.active { opacity: 1; }
-      
+
         .product-card { transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .product-card:hover { transform: translateY(-15px); box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); }
-      
+
         .sold-out::after {
             content: "SOLD OUT";
             position: absolute;
@@ -30,21 +30,30 @@
             border-radius: 9999px;
             transform: rotate(12deg);
         }
+        .sold-out { position: relative; opacity: 0.6; }
+        .sold-out button { pointer-events: none; opacity: 0.5; }
+
+        /* Mobile-friendly slider */
+        @media (max-width: 640px) {
+            .slider { height: 220px; }
+        }
+
+        .drop-zone.dragover { border-color: #ef4444; background: #fef2f2; }
     </style>
 </head>
 <body class="bg-gray-50">
     <!-- Navbar -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <span class="text-4xl">🛍️</span>
-                <h1 class="text-3xl font-bold text-gray-800">Gikomba Thrift</h1>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <span class="text-2xl sm:text-4xl">🛍️</span>
+                <h1 class="text-xl sm:text-3xl font-bold text-gray-800">Gikomba Thrift</h1>
             </div>
-            <div class="flex items-center gap-8">
-                <button onclick="showLogin()" class="flex items-center gap-3 text-2xl hover:text-red-600 transition">
+            <div class="flex items-center gap-4 sm:gap-8">
+                <button onclick="showLogin()" class="flex items-center gap-3 text-xl sm:text-2xl hover:text-red-600 transition">
                     <i class="fas fa-cog"></i>
                 </button>
-                <button onclick="showCart()" class="flex items-center gap-3 text-2xl hover:text-red-600 transition relative">
+                <button onclick="showCart()" class="flex items-center gap-3 text-xl sm:text-2xl hover:text-red-600 transition relative">
                     <i class="fas fa-shopping-cart"></i>
                     <span id="cart-count" class="absolute -top-1 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-bold">0</span>
                 </button>
@@ -52,32 +61,32 @@
         </div>
     </nav>
     <!-- Login Modal -->
-    <div id="loginModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[300]">
-        <div class="bg-white rounded-3xl p-12 w-full max-w-md mx-4">
-            <h2 class="text-4xl font-bold text-center mb-10">Manager Login</h2>
-            <input type="text" id="username" placeholder="Username" class="w-full p-6 border-2 rounded-3xl mb-6 text-xl">
-            <input type="password" id="password" placeholder="Password" class="w-full p-6 border-2 rounded-3xl mb-10 text-xl">
-            <button onclick="login()" class="w-full bg-red-600 text-white py-6 rounded-3xl text-2xl font-bold">Login</button>
-            <button onclick="hideLogin()" class="w-full mt-6 text-gray-500">Cancel</button>
+    <div id="loginModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[300] px-4">
+        <div class="bg-white rounded-3xl p-8 sm:p-12 w-full max-w-md">
+            <h2 class="text-2xl sm:text-4xl font-bold text-center mb-8 sm:mb-10">Manager Login</h2>
+            <input type="text" id="username" placeholder="Username" class="w-full p-4 sm:p-6 border-2 rounded-3xl mb-6 text-lg sm:text-xl">
+            <input type="password" id="password" placeholder="Password" class="w-full p-4 sm:p-6 border-2 rounded-3xl mb-8 sm:mb-10 text-lg sm:text-xl">
+            <button onclick="login()" class="w-full bg-red-600 text-white py-4 sm:py-6 rounded-3xl text-xl sm:text-2xl font-bold">Login</button>
+            <button onclick="hideLogin()" class="w-full mt-4 sm:mt-6 text-gray-500">Cancel</button>
         </div>
     </div>
     <!-- Welcome Banner (smaller) -->
-    <div class="bg-gradient-to-r from-red-600 to-pink-600 text-white py-8 text-center">
-        <h1 class="text-4xl font-bold">Gikomba Ndogo Thrift Shop by Betty</h1>
+    <div class="bg-gradient-to-r from-red-600 to-pink-600 text-white py-6 sm:py-8 text-center px-4">
+        <h1 class="text-2xl sm:text-4xl font-bold">Gikomba Ndogo Thrift Shop by Betty</h1>
     </div>
     <!-- Search -->
-    <div class="max-w-7xl mx-auto px-6 py-8">
-        <input type="text" id="searchInput" placeholder="Search bales..." class="w-full p-6 border-2 border-gray-300 rounded-3xl text-xl focus:border-red-500 focus:outline-none" onkeyup="filterProducts()">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <input type="text" id="searchInput" placeholder="Search bales..." class="w-full p-4 sm:p-6 border-2 border-gray-300 rounded-3xl text-lg sm:text-xl focus:border-red-500 focus:outline-none" onkeyup="filterProducts()">
     </div>
     <!-- Category Filters -->
-    <div class="max-w-7xl mx-auto px-6 pb-6 flex gap-3 overflow-x-auto">
-        <button onclick="filterByCategory('all')" class="category-btn active px-8 py-4 bg-red-600 text-white rounded-full text-sm whitespace-nowrap">All</button>
-        <button onclick="filterByCategory('baby')" class="category-btn px-8 py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Baby</button>
-        <button onclick="filterByCategory('kids')" class="category-btn px-8 py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Kids</button>
-        <button onclick="filterByCategory('ladies')" class="category-btn px-8 py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Ladies</button>
-        <button onclick="filterByCategory('men')" class="category-btn px-8 py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Men</button>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-6 flex gap-2 sm:gap-3 overflow-x-auto">
+        <button onclick="filterByCategory('all', event)" class="category-btn active px-5 sm:px-8 py-3 sm:py-4 bg-red-600 text-white rounded-full text-sm whitespace-nowrap">All</button>
+        <button onclick="filterByCategory('baby', event)" class="category-btn px-5 sm:px-8 py-3 sm:py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Baby</button>
+        <button onclick="filterByCategory('kids', event)" class="category-btn px-5 sm:px-8 py-3 sm:py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Kids</button>
+        <button onclick="filterByCategory('ladies', event)" class="category-btn px-5 sm:px-8 py-3 sm:py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Ladies</button>
+        <button onclick="filterByCategory('men', event)" class="category-btn px-5 sm:px-8 py-3 sm:py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Men</button>
     </div>
-    <!-- Slider (smaller) -->
+    <!-- Slider (smaller, mobile-friendly) -->
     <section class="slider">
         <div class="slide active" style="background-image: url('IMG-20260621-WA0062.jpg')"></div>
         <div class="slide" style="background-image: url('IMG-20260621-WA0060.jpg')"></div>
@@ -86,44 +95,46 @@
         <div class="slide" style="background-image: url('IMG-20260621-WA0044.jpg')"></div>
     </section>
     <!-- Products -->
-    <section class="max-w-7xl mx-auto px-6 py-16">
-        <h2 class="text-5xl font-bold text-center mb-4">Our Latest Bales</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="products-grid"></div>
-      
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+        <h2 class="text-3xl sm:text-5xl font-bold text-center mb-4">Our Latest Bales</h2>
+        <p id="resultsInfo" class="text-center text-gray-500 mb-6"></p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-6" id="products-grid"></div>
+        <p id="noResults" class="hidden text-center text-xl text-gray-500 py-16">No bales match your search.</p>
+
         <!-- Pagination -->
-        <div class="flex justify-center gap-8 mt-16">
-            <button onclick="prevPage()" class="px-10 py-5 bg-gray-200 hover:bg-gray-300 rounded-3xl text-xl">Previous</button>
-            <span id="pageInfo" class="text-3xl font-semibold py-5">1 / 6</span>
-            <button onclick="nextPage()" class="px-10 py-5 bg-red-600 text-white rounded-3xl text-xl">Next</button>
+        <div class="flex justify-center items-center gap-4 sm:gap-8 mt-10 sm:mt-16">
+            <button onclick="prevPage()" class="px-6 sm:px-10 py-3 sm:py-5 bg-gray-200 hover:bg-gray-300 rounded-3xl text-base sm:text-xl">Previous</button>
+            <span id="pageInfo" class="text-xl sm:text-3xl font-semibold py-3 sm:py-5">1 / 6</span>
+            <button onclick="nextPage()" class="px-6 sm:px-10 py-3 sm:py-5 bg-red-600 text-white rounded-3xl text-base sm:text-xl">Next</button>
         </div>
     </section>
 
     <!-- About Us -->
-    <section class="bg-white py-20">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl font-bold text-center mb-12">About Us</h2>
-            <p class="text-xl text-center max-w-4xl mx-auto">Gikomba Thrift Shop is a family business run by Betty in Nairobi. We source the best quality mitumba bales directly from Gikomba Market and Eldoret Town. Our mission is to provide affordable, high-quality second-hand clothes to families across Kenya.</p>
+    <section class="bg-white py-14 sm:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <h2 class="text-3xl sm:text-5xl font-bold text-center mb-8 sm:mb-12">About Us</h2>
+            <p class="text-base sm:text-xl text-center max-w-4xl mx-auto">Gikomba Thrift Shop is a family business run by Betty in Nairobi. We source the best quality mitumba bales directly from Gikomba Market and Eldoret Town. Our mission is to provide affordable, high-quality second-hand clothes to families across Kenya.</p>
         </div>
     </section>
 
     <!-- Why Choose Us -->
-    <section class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl font-bold text-center mb-12">Why Choose Us</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+    <section class="py-14 sm:py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <h2 class="text-3xl sm:text-5xl font-bold text-center mb-8 sm:mb-12">Why Choose Us</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
                 <div class="text-center">
-                    <i class="fas fa-check-circle text-7xl text-green-600 mb-6"></i>
-                    <h3 class="text-3xl font-bold mb-4">Quality Guaranteed</h3>
+                    <i class="fas fa-check-circle text-5xl sm:text-7xl text-green-600 mb-4 sm:mb-6"></i>
+                    <h3 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Quality Guaranteed</h3>
                     <p class="text-gray-600">Every bale is carefully inspected before sale.</p>
                 </div>
                 <div class="text-center">
-                    <i class="fas fa-truck text-7xl text-blue-600 mb-6"></i>
-                    <h3 class="text-3xl font-bold mb-4">Countrywide Delivery</h3>
+                    <i class="fas fa-truck text-5xl sm:text-7xl text-blue-600 mb-4 sm:mb-6"></i>
+                    <h3 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Countrywide Delivery</h3>
                     <p class="text-gray-600">Fast and reliable delivery across Kenya.</p>
                 </div>
                 <div class="text-center">
-                    <i class="fas fa-heart text-7xl text-pink-600 mb-6"></i>
-                    <h3 class="text-3xl font-bold mb-4">Best Prices</h3>
+                    <i class="fas fa-heart text-5xl sm:text-7xl text-pink-600 mb-4 sm:mb-6"></i>
+                    <h3 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Best Prices</h3>
                     <p class="text-gray-600">Wholesale prices direct from the market.</p>
                 </div>
             </div>
@@ -131,22 +142,22 @@
     </section>
 
     <!-- Business Location -->
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl font-bold text-center mb-12">Our Locations</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <section class="py-14 sm:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <h2 class="text-3xl sm:text-5xl font-bold text-center mb-8 sm:mb-12">Our Locations</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
                 <div>
-                    <h3 class="text-2xl font-bold mb-4">Gikomba Market, Nairobi</h3>
-                    <p class="text-gray-600 mb-6">Main branch at Gikomba Market - the heart of mitumba trade.</p>
-                    <div class="bg-gray-100 p-4 rounded-2xl text-sm">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8!2d36.85!3d-1.3!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM8KwMTgnMDAuMCJTIDM2wrA1MScwMC4wIkU!5e0!3m2!1sen!2ske!4v1234567890" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Gikomba Market, Nairobi</h3>
+                    <p class="text-gray-600 mb-4 sm:mb-6">Main branch at Gikomba Market - the heart of mitumba trade.</p>
+                    <div class="bg-gray-100 p-3 sm:p-4 rounded-2xl text-sm">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8!2d36.85!3d-1.3!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM8KwMTgnMDAuMCJTIDM2wrA1MScwMC4wIkU!5e0!3m2!1sen!2ske!4v1234567890" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-2xl font-bold mb-4">Eldoret Town</h3>
-                    <p class="text-gray-600 mb-6">Second branch in Eldoret for western Kenya customers.</p>
-                    <div class="bg-gray-100 p-4 rounded-2xl text-sm">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8!2d35.3!3d0.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMMKwMzAnMDAuMCJOIDM1wrAxOCcwMC4wIkU!5e0!3m2!1sen!2ske!4v1234567890" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Eldoret Town</h3>
+                    <p class="text-gray-600 mb-4 sm:mb-6">Second branch in Eldoret for western Kenya customers.</p>
+                    <div class="bg-gray-100 p-3 sm:p-4 rounded-2xl text-sm">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8!2d35.3!3d0.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMMKwMzAnMDAuMCJOIDM1wrAxOCcwMC4wIkU!5e0!3m2!1sen!2ske!4v1234567890" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
             </div>
@@ -154,15 +165,15 @@
     </section>
 
     <!-- Opening Hours & Delivery -->
-    <section class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12">
+    <section class="py-14 sm:py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
             <div>
-                <h3 class="text-3xl font-bold mb-6">Opening Hours</h3>
+                <h3 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Opening Hours</h3>
                 <p class="mb-2"><strong>Monday - Saturday:</strong> 8:00 AM - 6:00 PM</p>
                 <p><strong>Sunday:</strong> Closed</p>
             </div>
             <div>
-                <h3 class="text-3xl font-bold mb-6">Delivery Areas</h3>
+                <h3 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Delivery Areas</h3>
                 <p class="mb-2">• Nairobi & Surroundings</p>
                 <p class="mb-2">• Eldoret & Western Kenya</p>
                 <p class="mb-2">• Countrywide Delivery Available</p>
@@ -171,16 +182,16 @@
     </section>
 
     <!-- FAQs -->
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl font-bold text-center mb-12">Frequently Asked Questions</h2>
-            <div class="max-w-3xl mx-auto space-y-6">
-                <div class="border rounded-3xl p-8">
-                    <h3 class="font-bold text-xl">How do I order?</h3>
+    <section class="py-14 sm:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <h2 class="text-3xl sm:text-5xl font-bold text-center mb-8 sm:mb-12">Frequently Asked Questions</h2>
+            <div class="max-w-3xl mx-auto space-y-4 sm:space-y-6">
+                <div class="border rounded-3xl p-6 sm:p-8">
+                    <h3 class="font-bold text-lg sm:text-xl">How do I order?</h3>
                     <p class="mt-3 text-gray-600">Add items to cart and click "Order via WhatsApp".</p>
                 </div>
-                <div class="border rounded-3xl p-8">
-                    <h3 class="font-bold text-xl">Do you deliver countrywide?</h3>
+                <div class="border rounded-3xl p-6 sm:p-8">
+                    <h3 class="font-bold text-lg sm:text-xl">Do you deliver countrywide?</h3>
                     <p class="mt-3 text-gray-600">Yes! We deliver to all major towns in Kenya.</p>
                 </div>
             </div>
@@ -189,66 +200,73 @@
 
     <!-- Manager Panel -->
     <div id="adminPanel" class="hidden fixed inset-0 bg-white z-[300] overflow-auto">
-        <div class="max-w-6xl mx-auto p-12">
-            <div class="flex justify-between items-center mb-12">
-                <h2 class="text-5xl font-bold">Manager Dashboard - Betty</h2>
-                <button onclick="logout()" class="text-red-600 text-4xl">Logout</button>
+        <div class="max-w-6xl mx-auto p-6 sm:p-12">
+            <div class="flex justify-between items-center mb-8 sm:mb-12">
+                <h2 class="text-2xl sm:text-5xl font-bold">Manager Dashboard - Betty</h2>
+                <button onclick="logout()" class="text-red-600 text-2xl sm:text-4xl">Logout</button>
             </div>
-            <div class="flex border-b mb-10">
-                <button onclick="switchTab(0)" class="tab-btn active flex-1 py-6 text-2xl">Add Bale</button>
-                <button onclick="switchTab(1)" class="tab-btn flex-1 py-6 text-2xl">Mark Sold Out</button>
+            <div class="flex border-b mb-8 sm:mb-10">
+                <button onclick="switchTab(0)" class="tab-btn active flex-1 py-4 sm:py-6 text-lg sm:text-2xl">Add Bale</button>
+                <button onclick="switchTab(1)" class="tab-btn flex-1 py-4 sm:py-6 text-lg sm:text-2xl">Mark Sold Out</button>
             </div>
-          
+
             <!-- Add Bale -->
             <div id="tab0" class="tab-content">
-                <input type="text" id="adminName" placeholder="Bale Name" class="w-full p-8 border-2 rounded-3xl mb-8 text-2xl">
-                <input type="number" id="adminPrice" placeholder="Price (KSh)" class="w-full p-8 border-2 rounded-3xl mb-8 text-2xl">
-                <input type="text" id="adminImage" placeholder="Image filename" class="w-full p-8 border-2 rounded-3xl mb-12 text-2xl">
-                
+                <input type="text" id="adminName" placeholder="Bale Name" class="w-full p-5 sm:p-8 border-2 rounded-3xl mb-6 sm:mb-8 text-lg sm:text-2xl">
+                <input type="number" id="adminPrice" placeholder="Price (KSh)" class="w-full p-5 sm:p-8 border-2 rounded-3xl mb-6 sm:mb-8 text-lg sm:text-2xl">
+                <select id="adminCategory" class="w-full p-5 sm:p-8 border-2 rounded-3xl mb-6 sm:mb-8 text-lg sm:text-2xl">
+                    <option value="all">All / Other</option>
+                    <option value="baby">Baby</option>
+                    <option value="kids">Kids</option>
+                    <option value="ladies">Ladies</option>
+                    <option value="men">Men</option>
+                </select>
+                <input type="text" id="adminImage" placeholder="Image filename" class="w-full p-5 sm:p-8 border-2 rounded-3xl mb-8 sm:mb-12 text-lg sm:text-2xl">
+
                 <!-- Drag & Drop -->
-                <div id="dropZone" class="drop-zone border-4 border-dashed border-gray-300 rounded-3xl p-12 text-center mb-8 cursor-pointer">
-                    <p class="text-2xl text-gray-500">Drag & drop image here or click to upload</p>
+                <div id="dropZone" class="drop-zone border-4 border-dashed border-gray-300 rounded-3xl p-8 sm:p-12 text-center mb-6 sm:mb-8 cursor-pointer">
+                    <p class="text-lg sm:text-2xl text-gray-500">Drag & drop image here or click to upload</p>
                     <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="handleFileSelect(event)">
                 </div>
-                
-                <button onclick="addNewBale()" class="w-full bg-green-600 text-white py-8 rounded-3xl text-3xl font-bold">Add New Bale to Website</button>
+
+                <button onclick="addNewBale()" class="w-full bg-green-600 text-white py-5 sm:py-8 rounded-3xl text-xl sm:text-3xl font-bold">Add New Bale to Website</button>
             </div>
-          
+
             <!-- Sold Out -->
             <div id="tab1" class="tab-content hidden">
-                <div id="soldOutList" class="space-y-6"></div>
+                <div id="soldOutList" class="space-y-4 sm:space-y-6"></div>
             </div>
         </div>
     </div>
 
     <!-- Full Cart Modal -->
-    <div id="cartModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[300]">
+    <div id="cartModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[300] px-4">
         <div class="bg-white w-full max-w-lg rounded-3xl max-h-[90vh] overflow-hidden">
-            <div class="p-8 border-b flex justify-between items-center">
-                <h3 class="text-3xl font-bold">Your Cart</h3>
-                <button onclick="hideCart()" class="text-4xl">×</button>
+            <div class="p-6 sm:p-8 border-b flex justify-between items-center">
+                <h3 class="text-2xl sm:text-3xl font-bold">Your Cart</h3>
+                <button onclick="hideCart()" class="text-3xl sm:text-4xl">×</button>
             </div>
-            <div id="cartItems" class="p-8 overflow-auto" style="max-height: 55vh"></div>
-            <div class="p-8 border-t">
-                <div class="flex justify-between text-3xl font-bold mb-8">
+            <div id="cartItems" class="p-6 sm:p-8 overflow-auto" style="max-height: 55vh"></div>
+            <div class="p-6 sm:p-8 border-t">
+                <div class="flex justify-between text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">
                     <span>Total</span>
                     <span id="cartTotal">KSh 0</span>
                 </div>
-                <button onclick="buyNow()" class="w-full py-8 bg-green-600 text-white rounded-3xl text-3xl font-bold">Order via WhatsApp (0720399552)</button>
+                <button onclick="buyNow()" class="w-full py-5 sm:py-8 bg-green-600 text-white rounded-3xl text-xl sm:text-3xl font-bold">Order via WhatsApp (0720399552)</button>
             </div>
         </div>
     </div>
 
-    <footer class="bg-gray-900 text-white py-20 text-center">
-        <p class="text-4xl mb-6">Gikomba Thrift Shop</p>
-        <p class="text-2xl mb-10">0104 064092 • 0116 460490</p>
-        <a href="https://wa.me/254720399552" target="_blank" class="inline-block bg-green-500 px-16 py-7 rounded-full text-3xl font-bold">WhatsApp Betty</a>
-        <p class="mt-16 text-gray-400">&copy; 2026 Gikomba Thrift Shop by Betty • Nairobi</p>
+    <footer class="bg-gray-900 text-white py-14 sm:py-20 text-center px-4">
+        <p class="text-2xl sm:text-4xl mb-4 sm:mb-6">Gikomba Thrift Shop</p>
+        <p class="text-lg sm:text-2xl mb-8 sm:mb-10">0104 064092 • 0116 460490</p>
+        <a href="https://wa.me/254720399552" target="_blank" class="inline-block bg-green-500 px-10 sm:px-16 py-5 sm:py-7 rounded-full text-xl sm:text-3xl font-bold">WhatsApp Betty</a>
+        <p class="mt-10 sm:mt-16 text-gray-400">&copy; 2026 Gikomba Thrift Shop by Betty • Nairobi</p>
     </footer>
 
     <script>
-        // ==================== ALL 42 PRODUCTS ====================
-        let products = [
+        // ==================== ALL 42 PRODUCTS (DEFAULT DATA) ====================
+        const defaultProducts = [
             { id: 1, name: "Baby Sleeper Bale", price: 22000, image: "IMG-20260621-WA0062.jpg", category: "baby" },
             { id: 2, name: "Paired Socks Bale", price: 15000, image: "IMG-20260621-WA0060.jpg", category: "kids" },
             { id: 3, name: "Cargo Shorts", price: 25000, image: "cargo shorts.jpg", category: "men" },
@@ -293,11 +311,34 @@
             { id: 42, name: "trenchcoats", price: 17600, image: "trenchcoats.jpg", category: "ladies" }
         ];
 
-        let cart = [];
-        let soldOutIds = [];
+        // ==================== PERSISTED STATE ====================
+        let products = loadFromStorage('gikomba_products', defaultProducts);
+        let cart = loadFromStorage('gikomba_cart', []);
+        let soldOutIds = loadFromStorage('gikomba_soldout', []);
         let isLoggedIn = false;
         let currentPage = 1;
-        const itemsPerPage = 8;
+        let activeCategory = 'all';
+        const itemsPerPage = 12;
+
+        function loadFromStorage(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch (e) {
+                return fallback;
+            }
+        }
+        function saveToStorage(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch (e) {
+                console.error('Storage save failed', e);
+            }
+        }
+        function saveProducts() { saveToStorage('gikomba_products', products); }
+        function saveCart() { saveToStorage('gikomba_cart', cart); }
+        function saveSoldOut() { saveToStorage('gikomba_soldout', soldOutIds); }
+        function formatPrice(n) { return 'KSh ' + Number(n).toLocaleString(); }
 
         // Login
         function showLogin() {
@@ -312,7 +353,7 @@
             if (user === "betty2024" && pass === "0720") {
                 isLoggedIn = true;
                 hideLogin();
-                alert("✅ Welcome Betty! Full Manager Dashboard opened.");
+                renderSoldOutList();
                 toggleAdmin();
             } else {
                 alert("❌ Incorrect username or password!");
@@ -330,31 +371,60 @@
             document.getElementById('adminPanel').classList.toggle('hidden');
         }
 
+        // Get filtered list based on search + category
+        function getFilteredProducts() {
+            const query = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+            return products.filter(p => {
+                const matchesCategory = activeCategory === 'all' || p.category === activeCategory;
+                const matchesSearch = !query || p.name.toLowerCase().includes(query);
+                return matchesCategory && matchesSearch;
+            });
+        }
+
         // Render Products
         function renderProducts() {
             const container = document.getElementById('products-grid');
+            const noResults = document.getElementById('noResults');
+            const resultsInfo = document.getElementById('resultsInfo');
             container.innerHTML = '';
+
+            const filtered = getFilteredProducts();
+            const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            resultsInfo.textContent = filtered.length + ' bale' + (filtered.length === 1 ? '' : 's') + ' found';
+
+            if (filtered.length === 0) {
+                noResults.classList.remove('hidden');
+                document.getElementById('pageInfo').textContent = '0 / 0';
+                return;
+            }
+            noResults.classList.add('hidden');
+
             const start = (currentPage - 1) * itemsPerPage;
-            const end = Math.min(start + itemsPerPage, products.length);
+            const end = Math.min(start + itemsPerPage, filtered.length);
             for (let i = start; i < end; i++) {
-                const p = products[i];
+                const p = filtered[i];
+                const soldOut = soldOutIds.includes(p.id);
                 const div = document.createElement('div');
-                div.className = `product-card bg-white rounded-3xl overflow-hidden shadow-xl ${soldOutIds.includes(p.id) ? 'sold-out' : ''}`;
+                div.className = `product-card bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-md sm:shadow-xl ${soldOut ? 'sold-out' : ''}`;
                 div.innerHTML = `
-                    <img src="${p.image}" class="w-full h-64 object-cover" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
-                    <div class="p-8">
-                        <h3 class="font-semibold text-2xl mb-4">${p.name}</h3>
-                        <p class="text-5xl font-bold text-green-600">KSh ${p.price}</p>
-                        <button onclick="addToCart(${p.id}); event.stopImmediatePropagation()" class="mt-8 w-full py-6 bg-red-600 text-white rounded-3xl text-xl font-bold">Add to Cart</button>
+                    <img src="${p.image}" alt="${p.name}" class="w-full h-28 sm:h-44 md:h-52 object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
+                    <div class="p-3 sm:p-6">
+                        <h3 class="font-semibold text-sm sm:text-xl mb-1 sm:mb-3 leading-snug">${p.name}</h3>
+                        <p class="text-lg sm:text-3xl font-bold text-green-600">${formatPrice(p.price)}</p>
+                        <button onclick="addToCart(${p.id}); event.stopImmediatePropagation()" class="mt-3 sm:mt-6 w-full py-2.5 sm:py-4 bg-red-600 text-white rounded-xl sm:rounded-2xl text-xs sm:text-lg font-bold" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Cart'}</button>
                     </div>
                 `;
                 container.appendChild(div);
             }
-            document.getElementById('pageInfo').textContent = `${currentPage} / ${Math.ceil(products.length / itemsPerPage)}`;
+            document.getElementById('pageInfo').textContent = `${currentPage} / ${totalPages}`;
         }
 
         function nextPage() {
-            if (currentPage * itemsPerPage < products.length) {
+            const filtered = getFilteredProducts();
+            const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+            if (currentPage < totalPages) {
                 currentPage++;
                 renderProducts();
             }
@@ -368,11 +438,12 @@
         }
 
         function addToCart(id) {
+            if (soldOutIds.includes(id)) return;
             const item = products.find(p => p.id === id);
             if (item) {
                 cart.push(item);
+                saveCart();
                 document.getElementById('cart-count').textContent = cart.length;
-                alert(`✅ ${item.name} added to cart!`);
             }
         }
 
@@ -381,23 +452,27 @@
             const container = document.getElementById('cartItems');
             let total = 0;
             container.innerHTML = '';
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-8">Your cart is empty.</p>';
+            }
             cart.forEach((item, index) => {
                 total += item.price;
                 container.innerHTML += `
                     <div class="flex justify-between py-6 border-b">
                         <div>
                             <p class="font-medium">${item.name}</p>
-                            <p class="text-green-600">KSh ${item.price}</p>
+                            <p class="text-green-600">${formatPrice(item.price)}</p>
                         </div>
                         <button onclick="removeFromCart(${index})" class="text-red-500 text-3xl">×</button>
                     </div>`;
             });
-            document.getElementById('cartTotal').textContent = `KSh ${total}`;
+            document.getElementById('cartTotal').textContent = formatPrice(total);
             modal.classList.remove('hidden');
         }
 
         function removeFromCart(index) {
             cart.splice(index, 1);
+            saveCart();
             document.getElementById('cart-count').textContent = cart.length;
             showCart();
         }
@@ -411,12 +486,13 @@
             let text = "🛒 *New Order from Gikomba Thrift Shop*\n\n";
             let total = 0;
             cart.forEach(item => {
-                text += `• ${item.name} - KSh ${item.price}\n`;
+                text += `• ${item.name} - ${formatPrice(item.price)}\n`;
                 total += item.price;
             });
-            text += `\n*Total: KSh ${total}*`;
+            text += `\n*Total: ${formatPrice(total)}*`;
             window.open(`https://wa.me/254720399552?text=${encodeURIComponent(text)}`, "_blank");
             cart = [];
+            saveCart();
             document.getElementById('cart-count').textContent = 0;
             hideCart();
         }
@@ -425,40 +501,82 @@
             const name = document.getElementById('adminName').value.trim();
             const price = parseInt(document.getElementById('adminPrice').value);
             const image = document.getElementById('adminImage').value.trim();
+            const category = document.getElementById('adminCategory').value;
             if (name && price) {
                 products.unshift({
                     id: Date.now(),
                     name: name,
                     price: price,
                     image: image || "https://via.placeholder.com/400x300?text=New+Bale",
-                    category: "all"
+                    category: category || "all"
                 });
-                alert("✅ New bale added and visible on website!");
+                saveProducts();
+                document.getElementById('adminName').value = '';
+                document.getElementById('adminPrice').value = '';
+                document.getElementById('adminImage').value = '';
+                currentPage = 1;
                 renderProducts();
+                renderSoldOutList();
+                alert("✅ New bale added and visible on website!");
+            } else {
+                alert("Please enter a bale name and price.");
             }
         }
 
-        function sendReply() {
-            const msg = document.getElementById('replyMessage').value.trim();
-            if (msg) {
-                alert("✅ Reply sent to customer via WhatsApp (0720399552)!");
-                document.getElementById('replyMessage').value = '';
-            }
+        // Sold Out management
+        function renderSoldOutList() {
+            const list = document.getElementById('soldOutList');
+            if (!list) return;
+            list.innerHTML = '';
+            products.forEach(p => {
+                const isSold = soldOutIds.includes(p.id);
+                const row = document.createElement('div');
+                row.className = 'flex items-center justify-between border rounded-2xl p-4 sm:p-6';
+                row.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <img src="${p.image}" class="w-14 h-14 object-cover rounded-xl" onerror="this.src='https://via.placeholder.com/60?text=No+Image'">
+                        <span class="font-medium">${p.name}</span>
+                    </div>
+                    <button onclick="toggleSoldOut(${p.id})" class="px-5 py-2 rounded-full text-sm font-bold ${isSold ? 'bg-gray-200 text-gray-700' : 'bg-red-600 text-white'}">
+                        ${isSold ? 'Mark Available' : 'Mark Sold Out'}
+                    </button>
+                `;
+                list.appendChild(row);
+            });
         }
 
-        function filterProducts() {
+        function toggleSoldOut(id) {
+            if (soldOutIds.includes(id)) {
+                soldOutIds = soldOutIds.filter(x => x !== id);
+            } else {
+                soldOutIds.push(id);
+            }
+            saveSoldOut();
+            renderSoldOutList();
             renderProducts();
         }
 
-        function filterByCategory(cat) {
+        function filterProducts() {
+            currentPage = 1;
+            renderProducts();
+        }
+
+        function filterByCategory(cat, evt) {
+            activeCategory = cat;
+            currentPage = 1;
             document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active', 'bg-red-600', 'text-white'));
-            event.target.classList.add('active', 'bg-red-600', 'text-white');
+            const target = (evt && evt.target) ? evt.target : document.querySelector(`.category-btn[onclick*="'${cat}'"]`);
+            if (target) target.classList.add('active', 'bg-red-600', 'text-white');
             renderProducts();
         }
 
         function switchTab(n) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById('tab' + n).classList.remove('hidden');
+            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === n);
+            });
+            if (n === 1) renderSoldOutList();
         }
 
         // Drag and Drop for Image
@@ -475,7 +593,6 @@
                 const file = e.dataTransfer.files[0];
                 if (file) {
                     document.getElementById('adminImage').value = file.name;
-                    alert("Image selected: " + file.name);
                 }
             });
             dropZone.addEventListener('click', () => document.getElementById('fileInput').click());
@@ -485,12 +602,12 @@
             const file = e.target.files[0];
             if (file) {
                 document.getElementById('adminImage').value = file.name;
-                alert("Image selected: " + file.name);
             }
         }
 
         // Initialize
         window.onload = () => {
+            document.getElementById('cart-count').textContent = cart.length;
             renderProducts();
             // Slider
             const slides = document.querySelectorAll('.slide');
