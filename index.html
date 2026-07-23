@@ -488,11 +488,11 @@
                 const div = document.createElement('div');
                 div.className = `product-card bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-md sm:shadow-xl ${soldOut ? 'sold-out' : ''}`;
                 div.innerHTML = `
-                    <img src="${p.image}" alt="${p.name}" class="w-full h-28 sm:h-44 md:h-52 object-cover cursor-pointer" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'" onclick="showDetail(${p.id})">
+                    <img src="${p.image}" alt="${p.name}" class="w-full h-28 sm:h-44 md:h-52 object-cover cursor-pointer" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'" onclick="showDetail('${p.id}')">
                     <div class="p-3 sm:p-6">
-                        <h3 class="font-semibold text-sm sm:text-xl mb-1 sm:mb-3 leading-snug cursor-pointer" onclick="showDetail(${p.id})">${p.name}</h3>
+                        <h3 class="font-semibold text-sm sm:text-xl mb-1 sm:mb-3 leading-snug cursor-pointer" onclick="showDetail('${p.id}')">${p.name}</h3>
                         <p class="text-lg sm:text-3xl font-bold text-green-600">${formatPrice(p.price)}</p>
-                        <button onclick="addToCart(${p.id}); event.stopImmediatePropagation()" class="mt-3 sm:mt-6 w-full py-2.5 sm:py-4 bg-red-600 text-white rounded-xl sm:rounded-2xl text-xs sm:text-lg font-bold" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Cart'}</button>
+                        <button onclick="addToCart('${p.id}'); event.stopImmediatePropagation()" class="mt-3 sm:mt-6 w-full py-2.5 sm:py-4 bg-red-600 text-white rounded-xl sm:rounded-2xl text-xs sm:text-lg font-bold" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Cart'}</button>
                     </div>
                 `;
                 container.appendChild(div);
@@ -529,38 +529,6 @@
             alert(`✅ ${item.name} added to cart!`);
         }
 
-        function showCart() {
-            if (cart.length === 0) {
-                alert("🛒 Your cart is empty!");
-                return;
-            }
-            let msg = "🛒 Your Cart:\n\n";
-            let total = 0;
-            cart.forEach((item, i) => {
-                msg += `${i+1}. ${item.name} - KSh ${item.price}\n`;
-                total += item.price;
-            });
-            msg += `\nTotal Items: ${cart.length}\nTotal: KSh ${total}`;
-            if (confirm(msg + "\n\nClear cart?")) {
-                cart = [];
-                saveCart();
-                document.getElementById('cart-count').textContent = 0;
-            }
-        }
-
-        function saveCart() {
-            localStorage.setItem('cart', JSON.stringify(cart));
-        }
-
-        function loadCart() {
-            const saved = localStorage.getItem('cart');
-            if (saved) {
-                cart = JSON.parse(saved);
-                document.getElementById('cart-count').textContent = cart.length;
-            }
-        }
-
-
         // Product Detail Modal
         function showDetail(id) {
             const p = products.find(x => x.id === id);
@@ -571,7 +539,7 @@
                 <h4 class="text-2xl font-bold mb-2">${p.name}</h4>
                 <p class="text-2xl font-bold text-green-600 mb-4">${formatPrice(p.price)}</p>
                 <p class="text-gray-600 mb-6">${p.description ? p.description : 'No description available for this bale yet.'}</p>
-                <button onclick="addToCart(${p.id}); hideDetail();" class="w-full py-4 bg-red-600 text-white rounded-2xl text-lg font-bold" ${soldOut ? 'disabled style="opacity:0.5"' : ''}>${soldOut ? 'Sold Out' : 'Add to Cart'}</button>
+                <button onclick="addToCart('${p.id}'); hideDetail();" class="w-full py-4 bg-red-600 text-white rounded-2xl text-lg font-bold" ${soldOut ? 'disabled style="opacity:0.5"' : ''}>${soldOut ? 'Sold Out' : 'Add to Cart'}</button>
             `;
             document.getElementById('detailModal').classList.remove('hidden');
         }
@@ -709,7 +677,7 @@
                     <input type="number" value="${p.price}" id="edit-price-${p.id}" class="w-full p-3 sm:p-4 border-2 rounded-2xl mb-3 mt-1 text-base sm:text-lg">
                     <label class="text-sm font-semibold text-gray-500">Description</label>
                     <textarea rows="2" id="edit-desc-${p.id}" class="w-full p-3 sm:p-4 border-2 rounded-2xl mb-4 mt-1 text-base sm:text-lg">${p.description || ''}</textarea>
-                    <button onclick="saveEdit(${p.id})" class="w-full py-3 sm:py-4 bg-blue-600 text-white rounded-2xl font-bold">Save Changes</button>
+                    <button onclick="saveEdit('${p.id}')" class="w-full py-3 sm:py-4 bg-blue-600 text-white rounded-2xl font-bold">Save Changes</button>
                 `;
                 list.appendChild(row);
             });
@@ -759,7 +727,7 @@
                         <img src="${p.image}" class="w-14 h-14 object-cover rounded-xl" onerror="this.src='https://via.placeholder.com/60?text=No+Image'">
                         <span class="font-medium">${p.name}</span>
                     </div>
-                    <button onclick="toggleSoldOut(${p.id})" class="px-5 py-2 rounded-full text-sm font-bold ${isSold ? 'bg-gray-200 text-gray-700' : 'bg-red-600 text-white'}">
+                    <button onclick="toggleSoldOut('${p.id}')" class="px-5 py-2 rounded-full text-sm font-bold ${isSold ? 'bg-gray-200 text-gray-700' : 'bg-red-600 text-white'}">
                         ${isSold ? 'Mark Available' : 'Mark Sold Out'}
                     </button>
                 `;
