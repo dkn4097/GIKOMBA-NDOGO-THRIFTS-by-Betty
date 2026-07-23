@@ -518,13 +518,48 @@
 
         function addToCart(id) {
             const item = products.find(p => p.id === id);
-            if (item && item.soldOut) return;
-            if (item) {
-                cart.push(item);
+            if (!item) return;
+            if (item.soldOut) {
+                alert("❌ This item is sold out!");
+                return;
+            }
+            cart.push(item);
+            saveCart();
+            document.getElementById('cart-count').textContent = cart.length;
+            alert(`✅ ${item.name} added to cart!`);
+        }
+
+        function showCart() {
+            if (cart.length === 0) {
+                alert("🛒 Your cart is empty!");
+                return;
+            }
+            let msg = "🛒 Your Cart:\n\n";
+            let total = 0;
+            cart.forEach((item, i) => {
+                msg += `${i+1}. ${item.name} - KSh ${item.price}\n`;
+                total += item.price;
+            });
+            msg += `\nTotal Items: ${cart.length}\nTotal: KSh ${total}`;
+            if (confirm(msg + "\n\nClear cart?")) {
+                cart = [];
                 saveCart();
+                document.getElementById('cart-count').textContent = 0;
+            }
+        }
+
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function loadCart() {
+            const saved = localStorage.getItem('cart');
+            if (saved) {
+                cart = JSON.parse(saved);
                 document.getElementById('cart-count').textContent = cart.length;
             }
         }
+
 
         // Product Detail Modal
         function showDetail(id) {
