@@ -7,134 +7,223 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .hero-title { font-family: 'Playfair Display', serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
-        .slider { position: relative; height: 420px; overflow: hidden; }
-        .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 2s ease-in-out; background-size: cover; background-position: center; }
-        .slide.active { opacity: 1; }
+        :root{
+            --ink:#20242b;
+            --cream:#F5F6F0;
+            --indigo:#1F2A44;
+            --indigo-light:#2E3B5E;
+            --marigold:#F2A93B;
+            --marigold-dark:#D98F1F;
+            --teal:#147A6C;
+            --coral:#E85D4C;
+            --pink:#C2477B;
+        }
+        body { font-family: 'Inter', sans-serif; background:var(--cream); color:var(--ink); }
+        .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
 
-        .product-card { transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .product-card:hover { transform: translateY(-15px); box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); }
+        /* ---------- Header ---------- */
+        .brand-underline{ position:relative; display:inline-block; }
+        .brand-underline svg{ position:absolute; left:0; bottom:-6px; width:100%; height:8px; }
+        nav.shrink-nav{ padding-top:0.6rem; padding-bottom:0.6rem; }
+
+        /* ---------- Hero slider ---------- */
+        .slider { position: relative; height: 440px; overflow: hidden; border-radius: 0 0 28px 28px; }
+        .slide { position: absolute; inset: 0; opacity: 0; transform:scale(1.08); transition: opacity 1.6s ease, transform 6s ease; background-size: cover; background-position: center; }
+        .slide.active { opacity: 1; transform:scale(1); }
+        .hero-scrim{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(31,42,68,0.15) 0%, rgba(31,42,68,0.75) 100%); }
+        .hero-content{ position:relative; z-index:10; }
+        .dot{ width:9px; height:9px; border-radius:9999px; background:rgba(255,255,255,0.45); transition:all .3s ease; cursor:pointer; }
+        .dot.active{ background:#fff; width:26px; border-radius:9999px; }
+        @media (max-width: 640px) { .slider { height: 300px; border-radius:0 0 20px 20px; } }
+
+        /* ---------- Kitenge stripe divider ---------- */
+        .stripe-divider{ height:8px; background:repeating-linear-gradient(90deg, var(--marigold) 0 26px, var(--teal) 26px 52px, var(--pink) 52px 78px); }
+
+        /* ---------- Product cards ---------- */
+        .product-card { transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .45s ease; opacity:0; transform:translateY(18px); }
+        .product-card.card-in{ opacity:1; transform:translateY(0); }
+        .product-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.22); }
+        .card-img-wrap{ position:relative; overflow:hidden; }
+        .card-img-wrap img{ transition: transform .6s ease; }
+        .product-card:hover .card-img-wrap img{ transform:scale(1.08); }
+        .price-tag{ display:inline-flex; align-items:center; gap:6px; background:var(--indigo); color:#fff; padding:4px 12px 4px 10px; border-radius:6px 12px 12px 6px; font-weight:700; position:relative; }
+        .price-tag::before{ content:''; width:8px; height:8px; border-radius:50%; background:var(--cream); border:2px solid var(--indigo); }
+        .wishlist-btn{ position:absolute; top:10px; right:10px; z-index:5; background:rgba(255,255,255,0.9); width:34px; height:34px; border-radius:9999px; display:flex; align-items:center; justify-content:center; transition: all .25s ease; }
+        .wishlist-btn:hover{ transform:scale(1.15); }
+        .wishlist-btn.active i{ color:var(--coral); }
+        .new-badge{ position:absolute; top:10px; left:10px; z-index:5; background:var(--teal); color:#fff; font-size:11px; font-weight:700; padding:4px 10px; border-radius:9999px; letter-spacing:.03em; }
 
         .sold-out::after {
             content: "SOLD OUT";
             position: absolute;
             top: 15px; right: 15px;
-            background: #ef4444;
+            background: var(--coral);
             color: white;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
-            padding: 6px 16px;
+            padding: 6px 14px;
             border-radius: 9999px;
-            transform: rotate(12deg);
+            transform: rotate(10deg);
+            z-index:6;
         }
-        .sold-out { position: relative; opacity: 0.6; }
+        .sold-out { position: relative; opacity: 0.65; }
         .sold-out button { pointer-events: none; opacity: 0.5; }
 
-        /* Mobile-friendly slider */
-        @media (max-width: 640px) {
-            .slider { height: 220px; }
-        }
+        /* ---------- Skeleton loaders ---------- */
+        .skeleton{ background: linear-gradient(100deg, #e9e9e4 30%, #f4f4ef 50%, #e9e9e4 70%); background-size:200% 100%; animation: shimmer 1.4s infinite; }
+        @keyframes shimmer{ 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
 
-        .drop-zone.dragover { border-color: #ef4444; background: #fef2f2; }
+        /* ---------- Scroll reveal ---------- */
+        .reveal{ opacity:0; transform:translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+        .reveal.revealed{ opacity:1; transform:translateY(0); }
+
+        /* ---------- Modals ---------- */
+        .modal-panel{ transform:scale(0.92); opacity:0; transition: all .3s cubic-bezier(0.34,1.56,0.64,1); }
+        .modal-panel.show{ transform:scale(1); opacity:1; }
+
+        /* ---------- Toasts ---------- */
+        .toast{ opacity:0; transform:translateX(120%); transition: all .4s cubic-bezier(0.34,1.56,0.64,1); }
+        .toast.toast-in{ opacity:1; transform:translateX(0); }
+        .toast.toast-out{ opacity:0; transform:translateX(120%); }
+
+        /* ---------- Cart badge bounce ---------- */
+        @keyframes bounce-badge{ 0%{transform:scale(1);} 35%{transform:scale(1.5);} 60%{transform:scale(0.9);} 100%{transform:scale(1);} }
+        .bounce{ animation: bounce-badge .5s ease; }
+
+        /* ---------- Category pills ---------- */
+        .category-btn{ transition: all .3s ease; }
+        .category-btn.active{ background:var(--indigo); color:#fff; box-shadow:0 8px 18px -6px rgba(31,42,68,0.5); }
+
+        /* ---------- Floating WhatsApp ---------- */
+        .float-wa{ position:fixed; bottom:22px; right:22px; z-index:200; width:58px; height:58px; border-radius:9999px; background:#25D366; display:flex; align-items:center; justify-content:center; color:#fff; font-size:26px; box-shadow:0 12px 30px -8px rgba(0,0,0,0.4); }
+        .float-wa::before{ content:''; position:absolute; inset:0; border-radius:9999px; background:#25D366; opacity:.6; animation: pulse-ring 2.2s infinite; }
+        @keyframes pulse-ring{ 0%{ transform:scale(1); opacity:.55;} 100%{ transform:scale(1.9); opacity:0;} }
+
+        .drop-zone.dragover { border-color: var(--marigold); background: #FFF7E8; }
+
+        ::-webkit-scrollbar{ width:10px; }
+        ::-webkit-scrollbar-thumb{ background:#d8d6cd; border-radius:9999px; }
     </style>
 </head>
-<body class="bg-gray-50">
+<body>
+    <!-- Toast container -->
+    <div id="toastContainer" class="fixed top-4 right-4 z-[500] flex flex-col gap-3 items-end pointer-events-none"></div>
+
     <!-- Navbar -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
+    <nav class="bg-white/90 backdrop-blur shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center">
             <div class="flex items-center gap-2 sm:gap-3">
                 <span class="text-2xl sm:text-4xl">🛍️</span>
-                <h1 class="text-xl sm:text-3xl font-bold text-gray-800">Gikomba Thrift</h1>
+                <h1 class="font-display text-xl sm:text-3xl font-extrabold text-[var(--indigo)]">
+                    Gikomba <span class="brand-underline">Thrift
+                        <svg viewBox="0 0 100 8" preserveAspectRatio="none"><path d="M0,5 Q25,0 50,5 T100,5" stroke="var(--marigold)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+                    </span>
+                </h1>
             </div>
             <div class="flex items-center gap-4 sm:gap-8">
-                <button onclick="showLogin()" class="flex items-center gap-3 text-xl sm:text-2xl hover:text-red-600 transition">
+                <button onclick="showLogin()" class="flex items-center gap-3 text-xl sm:text-2xl text-[var(--indigo)] hover:text-[var(--marigold-dark)] transition">
                     <i class="fas fa-cog"></i>
                 </button>
-                <button onclick="showCart()" class="flex items-center gap-3 text-xl sm:text-2xl hover:text-red-600 transition relative">
+                <button onclick="showCart()" class="flex items-center gap-3 text-xl sm:text-2xl text-[var(--indigo)] hover:text-[var(--marigold-dark)] transition relative">
                     <i class="fas fa-shopping-cart"></i>
-                    <span id="cart-count" class="absolute -top-1 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-bold">0</span>
+                    <span id="cart-count" class="absolute -top-2 -right-3 bg-[var(--coral)] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-bold">0</span>
                 </button>
             </div>
         </div>
     </nav>
+
     <!-- Login Modal -->
     <div id="loginModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[300] px-4">
-        <div class="bg-white rounded-3xl p-8 sm:p-12 w-full max-w-md">
-            <h2 class="text-2xl sm:text-4xl font-bold text-center mb-8 sm:mb-10">Login</h2>
-            <input type="text" id="username" placeholder="Username" class="w-full p-4 sm:p-6 border-2 rounded-3xl mb-6 text-lg sm:text-xl">
-            <input type="password" id="password" placeholder="Password" class="w-full p-4 sm:p-6 border-2 rounded-3xl mb-8 sm:mb-10 text-lg sm:text-xl">
-            <button onclick="login()" class="w-full bg-red-600 text-white py-4 sm:py-6 rounded-3xl text-xl sm:text-2xl font-bold">Login</button>
+        <div class="modal-panel bg-white rounded-3xl p-8 sm:p-12 w-full max-w-md">
+            <h2 class="font-display text-2xl sm:text-4xl font-bold text-center mb-8 sm:mb-10">Login</h2>
+            <input type="text" id="username" placeholder="Username" class="w-full p-4 sm:p-6 border-2 rounded-3xl mb-6 text-lg sm:text-xl focus:border-[var(--marigold)] focus:outline-none">
+            <input type="password" id="password" placeholder="Password" class="w-full p-4 sm:p-6 border-2 rounded-3xl mb-8 sm:mb-10 text-lg sm:text-xl focus:border-[var(--marigold)] focus:outline-none">
+            <button onclick="login()" class="w-full bg-[var(--indigo)] text-white py-4 sm:py-6 rounded-3xl text-xl sm:text-2xl font-bold hover:bg-[var(--indigo-light)] transition">Login</button>
             <button onclick="hideLogin()" class="w-full mt-4 sm:mt-6 text-gray-500">Cancel</button>
         </div>
     </div>
-    <!-- Welcome Banner (smaller) -->
-    <div class="bg-gradient-to-r from-red-600 to-pink-600 text-white py-6 sm:py-8 text-center px-4">
-        <h1 class="text-2xl sm:text-4xl font-bold">Gikomba Ndogo Thrift Shop by Betty</h1>
-    </div>
-    <!-- Search -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        <input type="text" id="searchInput" placeholder="Search bales..." class="w-full p-4 sm:p-6 border-2 border-gray-300 rounded-3xl text-lg sm:text-xl focus:border-red-500 focus:outline-none" onkeyup="filterProducts()">
-    </div>
-    <!-- Category Filters -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-6 flex gap-2 sm:gap-3 overflow-x-auto">
-        <button onclick="filterByCategory('all', event)" class="category-btn active px-5 sm:px-8 py-3 sm:py-4 bg-red-600 text-white rounded-full text-sm whitespace-nowrap">All</button>
-        <button onclick="filterByCategory('baby', event)" class="category-btn px-5 sm:px-8 py-3 sm:py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Baby</button>
-        <button onclick="filterByCategory('kids', event)" class="category-btn px-5 sm:px-8 py-3 sm:py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Kids</button>
-        <button onclick="filterByCategory('ladies', event)" class="category-btn px-5 sm:px-8 py-3 sm:py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Ladies</button>
-        <button onclick="filterByCategory('men', event)" class="category-btn px-5 sm:px-8 py-3 sm:py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap">Men</button>
-    </div>
-    <!-- Slider (smaller, mobile-friendly) -->
+
+    <!-- Hero -->
     <section class="slider">
         <div class="slide active" style="background-image: url('IMG-20260621-WA0062.jpg')"></div>
         <div class="slide" style="background-image: url('IMG-20260621-WA0060.jpg')"></div>
         <div class="slide" style="background-image: url('IMG-20260621-WA0055.jpg')"></div>
         <div class="slide" style="background-image: url('IMG-20260621-WA0057.jpg')"></div>
         <div class="slide" style="background-image: url('IMG-20260621-WA0044.jpg')"></div>
+        <div class="hero-scrim"></div>
+        <div class="hero-content h-full flex flex-col items-center justify-center text-center px-4">
+            <h2 class="font-display text-3xl sm:text-6xl font-extrabold text-white mb-3 sm:mb-5 drop-shadow-lg">Fresh Bales. Fair Prices.</h2>
+            <p class="text-white/90 text-base sm:text-2xl max-w-xl">Quality mitumba from Gikomba Market, Nairobi &mdash; delivered countrywide.</p>
+        </div>
+        <div id="dotNav" class="absolute bottom-5 left-0 right-0 flex justify-center gap-2 z-10"></div>
     </section>
+
+    <div class="stripe-divider"></div>
+
+    <!-- Search + filters -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div class="relative">
+            <i class="fas fa-search absolute left-5 sm:left-7 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input type="text" id="searchInput" placeholder="Search bales..." class="w-full pl-12 sm:pl-16 p-4 sm:p-6 border-2 border-gray-200 rounded-3xl text-lg sm:text-xl focus:border-[var(--marigold)] focus:outline-none bg-white" onkeyup="filterProducts()">
+        </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-4 flex flex-wrap gap-2 sm:gap-3 items-center">
+        <button onclick="filterByCategory('all', event)" class="category-btn active px-5 sm:px-8 py-3 sm:py-4 bg-white rounded-full text-sm whitespace-nowrap shadow-sm">All</button>
+        <button onclick="filterByCategory('baby', event)" class="category-btn px-5 sm:px-8 py-3 sm:py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap shadow-sm">Baby</button>
+        <button onclick="filterByCategory('kids', event)" class="category-btn px-5 sm:px-8 py-3 sm:py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap shadow-sm">Kids</button>
+        <button onclick="filterByCategory('ladies', event)" class="category-btn px-5 sm:px-8 py-3 sm:py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap shadow-sm">Ladies</button>
+        <button onclick="filterByCategory('men', event)" class="category-btn px-5 sm:px-8 py-3 sm:py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap shadow-sm">Men</button>
+        <button id="favBtn" onclick="toggleFavoritesOnly()" class="px-5 sm:px-8 py-3 sm:py-4 bg-white hover:bg-gray-100 rounded-full text-sm whitespace-nowrap shadow-sm flex items-center gap-2"><i class="fa-regular fa-heart"></i> Favorites</button>
+        <select id="sortSelect" onchange="currentPage=1; renderProducts();" class="ml-auto px-4 sm:px-6 py-3 sm:py-4 bg-white rounded-full text-sm shadow-sm border-0 focus:outline-none">
+            <option value="default">Sort: Featured</option>
+            <option value="priceAsc">Price: Low to High</option>
+            <option value="priceDesc">Price: High to Low</option>
+            <option value="newest">Newest First</option>
+        </select>
+    </div>
+
     <!-- Products -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
-        <h2 class="text-3xl sm:text-5xl font-bold text-center mb-4">Our Latest Bales</h2>
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+        <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-center mb-4 text-[var(--indigo)]">Our Latest Bales</h2>
         <p id="resultsInfo" class="text-center text-gray-500 mb-6"></p>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-6" id="products-grid"></div>
         <p id="noResults" class="hidden text-center text-xl text-gray-500 py-16">No bales match your search.</p>
 
-        <!-- Pagination -->
         <div class="flex justify-center items-center gap-4 sm:gap-8 mt-10 sm:mt-16">
-            <button onclick="prevPage()" class="px-6 sm:px-10 py-3 sm:py-5 bg-gray-200 hover:bg-gray-300 rounded-3xl text-base sm:text-xl">Previous</button>
-            <span id="pageInfo" class="text-xl sm:text-3xl font-semibold py-3 sm:py-5">1 / 6</span>
-            <button onclick="nextPage()" class="px-6 sm:px-10 py-3 sm:py-5 bg-red-600 text-white rounded-3xl text-base sm:text-xl">Next</button>
+            <button onclick="prevPage()" class="px-6 sm:px-10 py-3 sm:py-5 bg-gray-200 hover:bg-gray-300 rounded-3xl text-base sm:text-xl transition">Previous</button>
+            <span id="pageInfo" class="text-xl sm:text-3xl font-semibold py-3 sm:py-5 font-display">1 / 6</span>
+            <button onclick="nextPage()" class="px-6 sm:px-10 py-3 sm:py-5 bg-[var(--indigo)] text-white rounded-3xl text-base sm:text-xl hover:bg-[var(--indigo-light)] transition">Next</button>
         </div>
     </section>
 
     <!-- About Us -->
-    <section class="bg-white py-14 sm:py-20">
+    <section class="reveal bg-white py-14 sm:py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
-            <h2 class="text-3xl sm:text-5xl font-bold text-center mb-8 sm:mb-12">About Us</h2>
+            <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-center mb-8 sm:mb-12 text-[var(--indigo)]">About Us</h2>
             <p class="text-base sm:text-xl text-center max-w-4xl mx-auto">Gikomba Thrift Shop is a family business run by Betty Kabugi in Nairobi and Eldoret. We import directly from various countries high quality second hand clothes to businesses and families across Kenya.</p>
         </div>
     </section>
 
     <!-- Why Choose Us -->
-    <section class="py-14 sm:py-20 bg-gray-50">
+    <section class="reveal py-14 sm:py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
-            <h2 class="text-3xl sm:text-5xl font-bold text-center mb-8 sm:mb-12">Why Choose Us</h2>
+            <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-center mb-8 sm:mb-12 text-[var(--indigo)]">Why Choose Us</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
-                <div class="text-center">
-                    <i class="fas fa-check-circle text-5xl sm:text-7xl text-green-600 mb-4 sm:mb-6"></i>
-                    <h3 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Quality Guaranteed</h3>
+                <div class="text-center bg-white rounded-3xl p-8 shadow-sm hover:shadow-xl transition">
+                    <i class="fas fa-check-circle text-5xl sm:text-6xl text-[var(--teal)] mb-4 sm:mb-6"></i>
+                    <h3 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 font-display">Quality Guaranteed</h3>
                     <p class="text-gray-600">Every bale is carefully inspected before sale.</p>
                 </div>
-                <div class="text-center">
-                    <i class="fas fa-truck text-5xl sm:text-7xl text-blue-600 mb-4 sm:mb-6"></i>
-                    <h3 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Countrywide Delivery</h3>
+                <div class="text-center bg-white rounded-3xl p-8 shadow-sm hover:shadow-xl transition">
+                    <i class="fas fa-truck text-5xl sm:text-6xl text-[var(--indigo)] mb-4 sm:mb-6"></i>
+                    <h3 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 font-display">Countrywide Delivery</h3>
                     <p class="text-gray-600">Fast and reliable delivery across Kenya.</p>
                 </div>
-                <div class="text-center">
-                    <i class="fas fa-heart text-5xl sm:text-7xl text-pink-600 mb-4 sm:mb-6"></i>
-                    <h3 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Best Prices</h3>
+                <div class="text-center bg-white rounded-3xl p-8 shadow-sm hover:shadow-xl transition">
+                    <i class="fas fa-tags text-5xl sm:text-6xl text-[var(--marigold-dark)] mb-4 sm:mb-6"></i>
+                    <h3 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 font-display">Best Prices</h3>
                     <p class="text-gray-600">Wholesale prices direct from the market.</p>
                 </div>
             </div>
@@ -142,22 +231,22 @@
     </section>
 
     <!-- Business Location -->
-    <section class="py-14 sm:py-20 bg-white">
+    <section class="reveal py-14 sm:py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
-            <h2 class="text-3xl sm:text-5xl font-bold text-center mb-8 sm:mb-12">Our Locations</h2>
+            <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-center mb-8 sm:mb-12 text-[var(--indigo)]">Our Locations</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
                 <div>
-                    <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Gikomba Market, Nairobi</h3>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 font-display">Gikomba Market, Nairobi</h3>
                     <p class="text-gray-600 mb-4 sm:mb-6">Main branch at Gikomba Market - the heart of mitumba trade.</p>
-                    <div class="bg-gray-100 p-3 sm:p-4 rounded-2xl text-sm">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8!2d36.85!3d-1.3!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM8KwMTgnMDAuMCJTIDM2wrA1MScwMC4wIkU!5e0!3m2!1sen!2ske!4v1234567890" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    <div class="bg-gray-100 p-3 sm:p-4 rounded-2xl text-sm overflow-hidden">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8!2d36.85!3d-1.3!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM8KwMTgnMDAuMCJTIDM2wrA1MScwMC4wIkU!5e0!3m2!1sen!2ske!4v1234567890" width="100%" height="250" style="border:0; border-radius:14px;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Eldoret Town</h3>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 font-display">Eldoret Town</h3>
                     <p class="text-gray-600 mb-4 sm:mb-6">Second branch in Eldoret for western Kenya customers.</p>
-                    <div class="bg-gray-100 p-3 sm:p-4 rounded-2xl text-sm">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8!2d35.3!3d0.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMMKwMzAnMDAuMCJOIDM1wrAxOCcwMC4wIkU!5e0!3m2!1sen!2ske!4v1234567890" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    <div class="bg-gray-100 p-3 sm:p-4 rounded-2xl text-sm overflow-hidden">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8!2d35.3!3d0.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMMKwMzAnMDAuMCJOIDM1wrAxOCcwMC4wIkU!5e0!3m2!1sen!2ske!4v1234567890" width="100%" height="250" style="border:0; border-radius:14px;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
             </div>
@@ -165,32 +254,32 @@
     </section>
 
     <!-- Opening Hours & Delivery -->
-    <section class="py-14 sm:py-20 bg-gray-50">
+    <section class="reveal py-14 sm:py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
-            <div>
-                <h3 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Opening Hours</h3>
+            <div class="bg-white rounded-3xl p-8 shadow-sm">
+                <h3 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 font-display text-[var(--indigo)]">Opening Hours</h3>
                 <p class="mb-2"><strong>Monday - Saturday:</strong> 8:00 AM - 6:00 PM</p>
                 <p><strong>Sunday:</strong> Closed</p>
             </div>
-            <div>
-                <h3 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Delivery Areas</h3>
-                <p class="mb-2">• Nairobi & Surroundings</p>
-                <p class="mb-2">• Eldoret & Western Kenya</p>
+            <div class="bg-white rounded-3xl p-8 shadow-sm">
+                <h3 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 font-display text-[var(--indigo)]">Delivery Areas</h3>
+                <p class="mb-2">• Nairobi &amp; Surroundings</p>
+                <p class="mb-2">• Eldoret &amp; Western Kenya</p>
                 <p class="mb-2">• Countrywide Delivery Available</p>
             </div>
         </div>
     </section>
 
     <!-- FAQs -->
-    <section class="py-14 sm:py-20 bg-white">
+    <section class="reveal py-14 sm:py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
-            <h2 class="text-3xl sm:text-5xl font-bold text-center mb-8 sm:mb-12">Frequently Asked Questions</h2>
+            <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-center mb-8 sm:mb-12 text-[var(--indigo)]">Frequently Asked Questions</h2>
             <div class="max-w-3xl mx-auto space-y-4 sm:space-y-6">
-                <div class="border rounded-3xl p-6 sm:p-8">
+                <div class="border rounded-3xl p-6 sm:p-8 hover:border-[var(--marigold)] transition">
                     <h3 class="font-bold text-lg sm:text-xl">How do I order?</h3>
                     <p class="mt-3 text-gray-600">Add items to cart and click "Order via WhatsApp".</p>
                 </div>
-                <div class="border rounded-3xl p-6 sm:p-8">
+                <div class="border rounded-3xl p-6 sm:p-8 hover:border-[var(--marigold)] transition">
                     <h3 class="font-bold text-lg sm:text-xl">Do you deliver countrywide?</h3>
                     <p class="mt-3 text-gray-600">Yes! We deliver to all major towns in Kenya.</p>
                 </div>
@@ -198,17 +287,17 @@
         </div>
     </section>
 
-    <!-- log in Panel -->
+    <!-- Admin Panel -->
     <div id="adminPanel" class="hidden fixed inset-0 bg-white z-[300] overflow-auto">
         <div class="max-w-6xl mx-auto p-6 sm:p-12">
             <div class="flex justify-between items-center mb-8 sm:mb-12">
-                <h2 class="text-2xl sm:text-5xl font-bold">Dashboard - Betty</h2>
-                <button onclick="logout()" class="text-red-600 text-2xl sm:text-4xl">Logout</button>
+                <h2 class="font-display text-2xl sm:text-5xl font-bold text-[var(--indigo)]">Dashboard - Betty</h2>
+                <button onclick="logout()" class="text-[var(--coral)] text-2xl sm:text-4xl">Logout</button>
             </div>
-            <div class="flex border-b mb-8 sm:mb-10">
-                <button onclick="switchTab(0)" class="tab-btn active flex-1 py-4 sm:py-6 text-lg sm:text-2xl">Add Bale</button>
-                <button onclick="switchTab(1)" class="tab-btn flex-1 py-4 sm:py-6 text-lg sm:text-2xl">Edit Bales</button>
-                <button onclick="switchTab(2)" class="tab-btn flex-1 py-4 sm:py-6 text-lg sm:text-2xl">Mark Sold Out</button>
+            <div class="flex border-b mb-8 sm:mb-10 overflow-x-auto">
+                <button onclick="switchTab(0)" class="tab-btn active flex-1 py-4 sm:py-6 text-lg sm:text-2xl whitespace-nowrap">Add Bale</button>
+                <button onclick="switchTab(1)" class="tab-btn flex-1 py-4 sm:py-6 text-lg sm:text-2xl whitespace-nowrap">Edit / Delete Bales</button>
+                <button onclick="switchTab(2)" class="tab-btn flex-1 py-4 sm:py-6 text-lg sm:text-2xl whitespace-nowrap">Mark Sold Out</button>
             </div>
 
             <!-- Add Bale -->
@@ -223,17 +312,17 @@
                     <option value="men">Men</option>
                 </select>
                 <textarea id="adminDescription" placeholder="Description (optional)" rows="3" class="w-full p-5 sm:p-8 border-2 rounded-3xl mb-6 sm:mb-8 text-lg sm:text-2xl"></textarea>
-                <!-- Drag & Drop (this uploads the real photo) -->
-                <div id="dropZone" class="drop-zone border-4 border-dashed border-gray-300 rounded-3xl p-8 sm:p-12 text-center mb-6 sm:mb-8 cursor-pointer">
-                    <p class="text-lg sm:text-2xl text-gray-500">Drag & drop photo here or click to upload</p>
+                <div id="dropZone" class="drop-zone border-4 border-dashed border-gray-300 rounded-3xl p-8 sm:p-12 text-center mb-6 sm:mb-8 cursor-pointer transition">
+                    <p class="text-lg sm:text-2xl text-gray-500">Drag &amp; drop photo here or click to upload</p>
+                    <p id="fileChosenLabel" class="text-sm text-[var(--teal)] font-semibold mt-2"></p>
                     <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="handleFileSelect(event)">
                 </div>
                 <input type="text" id="adminImage" placeholder="(Optional) paste an image URL instead of uploading a photo" class="w-full p-5 sm:p-8 border-2 rounded-3xl mb-8 sm:mb-12 text-lg sm:text-2xl">
 
-                <button onclick="addNewBale()" class="w-full bg-green-600 text-white py-5 sm:py-8 rounded-3xl text-xl sm:text-3xl font-bold">Add New Bale to Website</button>
+                <button onclick="addNewBale()" class="w-full bg-[var(--teal)] text-white py-5 sm:py-8 rounded-3xl text-xl sm:text-3xl font-bold hover:opacity-90 transition">Add New Bale to Website</button>
             </div>
 
-            <!-- Edit Bales -->
+            <!-- Edit / Delete Bales -->
             <div id="tab1" class="tab-content hidden">
                 <input type="text" id="editSearch" placeholder="Search bale to edit..." class="w-full p-4 sm:p-6 border-2 rounded-3xl mb-6 sm:mb-8 text-lg sm:text-xl" onkeyup="renderEditList()">
                 <div id="editList" class="space-y-4 sm:space-y-6"></div>
@@ -248,9 +337,9 @@
 
     <!-- Product Detail Modal -->
     <div id="detailModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[300] px-4">
-        <div class="bg-white w-full max-w-lg rounded-3xl max-h-[90vh] overflow-auto">
+        <div class="modal-panel bg-white w-full max-w-lg rounded-3xl max-h-[90vh] overflow-auto">
             <div class="p-6 sm:p-8 border-b flex justify-between items-center">
-                <h3 class="text-2xl sm:text-3xl font-bold">Bale Details</h3>
+                <h3 class="text-2xl sm:text-3xl font-bold font-display">Bale Details</h3>
                 <button onclick="hideDetail()" class="text-3xl sm:text-4xl">×</button>
             </div>
             <div id="detailBody" class="p-6 sm:p-8"></div>
@@ -259,27 +348,42 @@
 
     <!-- Full Cart Modal -->
     <div id="cartModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[300] px-4">
-        <div class="bg-white w-full max-w-lg rounded-3xl max-h-[90vh] overflow-hidden">
+        <div class="modal-panel bg-white w-full max-w-lg rounded-3xl max-h-[90vh] overflow-hidden">
             <div class="p-6 sm:p-8 border-b flex justify-between items-center">
-                <h3 class="text-2xl sm:text-3xl font-bold">Your Cart</h3>
+                <h3 class="text-2xl sm:text-3xl font-bold font-display">Your Cart</h3>
                 <button onclick="hideCart()" class="text-3xl sm:text-4xl">×</button>
             </div>
             <div id="cartItems" class="p-6 sm:p-8 overflow-auto" style="max-height: 55vh"></div>
             <div class="p-6 sm:p-8 border-t">
-                <div class="flex justify-between text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">
+                <div class="flex justify-between text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 font-display">
                     <span>Total</span>
                     <span id="cartTotal">KSh 0</span>
                 </div>
-                <button onclick="buyNow()" class="w-full py-5 sm:py-8 bg-green-600 text-white rounded-3xl text-xl sm:text-3xl font-bold">Order via WhatsApp (0720399552)</button>
+                <button onclick="buyNow()" class="w-full py-5 sm:py-8 bg-[var(--teal)] text-white rounded-3xl text-xl sm:text-3xl font-bold hover:opacity-90 transition">Order via WhatsApp (0720399552)</button>
             </div>
         </div>
     </div>
 
-    <footer class="bg-gray-900 text-white py-14 sm:py-20 text-center px-4">
-        <p class="text-2xl sm:text-4xl mb-4 sm:mb-6">Gikomba Thrift Shop</p>
-        <p class="text-lg sm:text-2xl mb-8 sm:mb-10">0104 064092 • 0116 460490</p>
-        <a href="https://wa.me/254720399552" target="_blank" class="inline-block bg-green-500 px-10 sm:px-16 py-5 sm:py-7 rounded-full text-xl sm:text-3xl font-bold">WhatsApp Betty</a>
-        <p class="mt-10 sm:mt-16 text-gray-400">&copy; 2026 Gikomba Thrift Shop by Betty • Nairobi</p>
+    <!-- Confirm Modal (used for delete) -->
+    <div id="confirmModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[400] px-4">
+        <div class="modal-panel bg-white rounded-3xl p-8 w-full max-w-sm text-center">
+            <i class="fas fa-triangle-exclamation text-4xl text-[var(--coral)] mb-4"></i>
+            <p id="confirmMessage" class="text-lg mb-8"></p>
+            <div class="flex gap-4">
+                <button onclick="cancelConfirm()" class="flex-1 py-4 rounded-2xl bg-gray-100 font-semibold hover:bg-gray-200 transition">Cancel</button>
+                <button onclick="acceptConfirm()" class="flex-1 py-4 rounded-2xl bg-[var(--coral)] text-white font-bold hover:opacity-90 transition">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/254720399552" target="_blank" class="float-wa"><i class="fab fa-whatsapp"></i></a>
+
+    <footer class="bg-[var(--indigo)] text-white py-14 sm:py-20 text-center px-4">
+        <p class="font-display text-2xl sm:text-4xl mb-4 sm:mb-6">Gikomba Thrift Shop</p>
+        <p class="text-lg sm:text-2xl mb-8 sm:mb-10 text-white/80">0104 064092 • 0116 460490</p>
+        <a href="https://wa.me/254720399552" target="_blank" class="inline-block bg-[var(--teal)] px-10 sm:px-16 py-5 sm:py-7 rounded-full text-xl sm:text-3xl font-bold hover:opacity-90 transition">WhatsApp Betty</a>
+        <p class="mt-10 sm:mt-16 text-white/50">&copy; 2026 Gikomba Thrift Shop by Betty • Nairobi</p>
     </footer>
 
     <!-- Firebase (product data storage) -->
@@ -363,13 +467,15 @@
         ];
 
         // ==================== STATE ====================
-        // Product catalog now lives in Firestore, shared by every visitor.
-        // Cart stays in localStorage since it's personal to each shopper's device/session.
         let products = [];
         let cart = loadFromStorage('gikomba_cart', []);
+        let wishlist = loadFromStorage('gikomba_wishlist', []);
         let isLoggedIn = false;
         let currentPage = 1;
         let activeCategory = 'all';
+        let favoritesOnly = false;
+        let selectedImageFile = null;
+        let pendingConfirmCallback = null;
         const itemsPerPage = 12;
 
         function loadFromStorage(key, fallback) {
@@ -388,11 +494,78 @@
             }
         }
         function saveCart() { saveToStorage('gikomba_cart', cart); }
+        function saveWishlist() { saveToStorage('gikomba_wishlist', wishlist); }
         function formatPrice(n) { return 'KSh ' + Number(n).toLocaleString(); }
 
-        // Load products from Firestore. If the collection is empty (first ever run),
-        // seed it once with the default catalog so the site isn't blank.
+        // ---------- Toasts ----------
+        function toast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const bg = type === 'error' ? 'background:var(--coral)' : type === 'info' ? 'background:var(--indigo)' : 'background:var(--teal)';
+            const el = document.createElement('div');
+            el.className = 'toast text-white px-5 py-4 rounded-2xl shadow-xl font-medium max-w-xs pointer-events-auto';
+            el.style.cssText = bg;
+            el.textContent = message;
+            container.appendChild(el);
+            requestAnimationFrame(() => el.classList.add('toast-in'));
+            setTimeout(() => {
+                el.classList.remove('toast-in');
+                el.classList.add('toast-out');
+                setTimeout(() => el.remove(), 400);
+            }, 3000);
+        }
+
+        // ---------- Confirm modal (used for destructive actions like delete) ----------
+        function showConfirm(message, onAccept) {
+            document.getElementById('confirmMessage').textContent = message;
+            pendingConfirmCallback = onAccept;
+            const modal = document.getElementById('confirmModal');
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => modal.querySelector('.modal-panel').classList.add('show'));
+        }
+        function cancelConfirm() {
+            pendingConfirmCallback = null;
+            closeModal('confirmModal');
+        }
+        function acceptConfirm() {
+            const cb = pendingConfirmCallback;
+            pendingConfirmCallback = null;
+            closeModal('confirmModal');
+            if (cb) cb();
+        }
+
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => modal.querySelector('.modal-panel').classList.add('show'));
+        }
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            const panel = modal.querySelector('.modal-panel');
+            panel.classList.remove('show');
+            setTimeout(() => modal.classList.add('hidden'), 250);
+        }
+
+        // ---------- Distinct fallback image per bale (fixes repeated/identical placeholder photos) ----------
+        function categoryColor(cat) {
+            return { baby: '#F2A93B', kids: '#147A6C', ladies: '#C2477B', men: '#1F2A44', all: '#6B7280' }[cat] || '#6B7280';
+        }
+        function svgPlaceholder(name, category) {
+            const color = categoryColor(category);
+            const initials = (name || '?').split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '?';
+            const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='${color}'/><text x='50%' y='50%' font-family='Inter, sans-serif' font-size='72' font-weight='700' fill='white' text-anchor='middle' dominant-baseline='central' opacity='0.9'>${initials}</text></svg>`;
+            return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+        }
+
+        function isNew(p) {
+            if (!p.createdAt) return false;
+            const date = p.createdAt.toDate ? p.createdAt.toDate() : new Date(p.createdAt);
+            const days = (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24);
+            return days <= 7 && days >= 0;
+        }
+
+        // Load products from Firestore. If empty (first ever run), seed once with default catalog.
         async function loadProducts() {
+            showSkeletons();
             const snapshot = await productsCollection.get();
             if (snapshot.empty) {
                 const batch = db.batch();
@@ -416,15 +589,23 @@
             renderProducts();
             renderSoldOutList();
             renderEditList();
+            initScrollReveal();
+        }
+
+        function showSkeletons() {
+            const container = document.getElementById('products-grid');
+            container.innerHTML = '';
+            for (let i = 0; i < 8; i++) {
+                const div = document.createElement('div');
+                div.className = 'rounded-2xl sm:rounded-3xl overflow-hidden bg-white shadow-md';
+                div.innerHTML = `<div class="skeleton w-full h-28 sm:h-44 md:h-52"></div><div class="p-3 sm:p-6"><div class="skeleton h-4 w-3/4 rounded mb-3"></div><div class="skeleton h-6 w-1/2 rounded"></div></div>`;
+                container.appendChild(div);
+            }
         }
 
         // Login
-        function showLogin() {
-            document.getElementById('loginModal').classList.remove('hidden');
-        }
-        function hideLogin() {
-            document.getElementById('loginModal').classList.add('hidden');
-        }
+        function showLogin() { openModal('loginModal'); }
+        function hideLogin() { closeModal('loginModal'); }
         function login() {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
@@ -434,8 +615,9 @@
                 renderSoldOutList();
                 renderEditList();
                 toggleAdmin();
+                toast('Welcome back, Betty!', 'success');
             } else {
-                alert("❌ Incorrect username or password!");
+                toast('Incorrect username or password', 'error');
             }
         }
         function logout() {
@@ -443,21 +625,54 @@
             document.getElementById('adminPanel').classList.add('hidden');
         }
         function toggleAdmin() {
-            if (!isLoggedIn) {
-                showLogin();
-                return;
-            }
+            if (!isLoggedIn) { showLogin(); return; }
             document.getElementById('adminPanel').classList.toggle('hidden');
         }
 
-        // Get filtered list based on search + category
+        function toggleFavoritesOnly() {
+            favoritesOnly = !favoritesOnly;
+            const btn = document.getElementById('favBtn');
+            btn.classList.toggle('active');
+            if (favoritesOnly) {
+                btn.style.background = 'var(--indigo)';
+                btn.style.color = '#fff';
+                btn.innerHTML = '<i class="fa-solid fa-heart"></i> Favorites';
+            } else {
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.innerHTML = '<i class="fa-regular fa-heart"></i> Favorites';
+            }
+            currentPage = 1;
+            renderProducts();
+        }
+
+        function toggleWishlist(id, evt) {
+            if (evt) evt.stopImmediatePropagation();
+            const idx = wishlist.indexOf(id);
+            if (idx >= 0) { wishlist.splice(idx, 1); toast('Removed from favorites', 'info'); }
+            else { wishlist.push(id); toast('Added to favorites', 'success'); }
+            saveWishlist();
+            renderProducts();
+        }
+
+        // Get filtered + sorted list based on search + category + favorites
         function getFilteredProducts() {
             const query = (document.getElementById('searchInput').value || '').trim().toLowerCase();
-            return products.filter(p => {
+            let list = products.filter(p => {
                 const matchesCategory = activeCategory === 'all' || p.category === activeCategory;
                 const matchesSearch = !query || p.name.toLowerCase().includes(query);
-                return matchesCategory && matchesSearch;
+                const matchesFav = !favoritesOnly || wishlist.includes(p.id);
+                return matchesCategory && matchesSearch && matchesFav;
             });
+            const sortMode = document.getElementById('sortSelect') ? document.getElementById('sortSelect').value : 'default';
+            if (sortMode === 'priceAsc') list = [...list].sort((a, b) => a.price - b.price);
+            else if (sortMode === 'priceDesc') list = [...list].sort((a, b) => b.price - a.price);
+            else if (sortMode === 'newest') list = [...list].sort((a, b) => {
+                const da = a.createdAt ? (a.createdAt.toDate ? a.createdAt.toDate() : new Date(a.createdAt)) : new Date(0);
+                const db_ = b.createdAt ? (b.createdAt.toDate ? b.createdAt.toDate() : new Date(b.createdAt)) : new Date(0);
+                return db_ - da;
+            });
+            return list;
         }
 
         // Render Products
@@ -485,48 +700,52 @@
             for (let i = start; i < end; i++) {
                 const p = filtered[i];
                 const soldOut = !!p.soldOut;
+                const loved = wishlist.includes(p.id);
+                const fallback = svgPlaceholder(p.name, p.category);
                 const div = document.createElement('div');
                 div.className = `product-card bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-md sm:shadow-xl ${soldOut ? 'sold-out' : ''}`;
+                div.style.transitionDelay = ((i - start) * 45) + 'ms';
                 div.innerHTML = `
-                    <img src="${p.image}" alt="${p.name}" class="w-full h-28 sm:h-44 md:h-52 object-cover cursor-pointer" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'" onclick="showDetail('${p.id}')">
+                    <div class="card-img-wrap">
+                        ${isNew(p) ? '<span class="new-badge">NEW</span>' : ''}
+                        <button class="wishlist-btn ${loved ? 'active' : ''}" onclick="toggleWishlist('${p.id}', event)"><i class="${loved ? 'fa-solid' : 'fa-regular'} fa-heart"></i></button>
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-28 sm:h-44 md:h-52 object-cover cursor-pointer" loading="lazy" onerror="this.onerror=null;this.src='${fallback}'" onclick="showDetail('${p.id}')">
+                    </div>
                     <div class="p-3 sm:p-6">
                         <h3 class="font-semibold text-sm sm:text-xl mb-1 sm:mb-3 leading-snug cursor-pointer" onclick="showDetail('${p.id}')">${p.name}</h3>
-                        <p class="text-lg sm:text-3xl font-bold text-green-600">${formatPrice(p.price)}</p>
-                        <button onclick="addToCart('${p.id}'); event.stopImmediatePropagation()" class="mt-3 sm:mt-6 w-full py-2.5 sm:py-4 bg-red-600 text-white rounded-xl sm:rounded-2xl text-xs sm:text-lg font-bold" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Cart'}</button>
+                        <span class="price-tag text-sm sm:text-xl">${formatPrice(p.price)}</span>
+                        <button onclick="addToCart('${p.id}'); event.stopImmediatePropagation()" class="mt-3 sm:mt-6 w-full py-2.5 sm:py-4 bg-[var(--indigo)] hover:bg-[var(--indigo-light)] text-white rounded-xl sm:rounded-2xl text-xs sm:text-lg font-bold transition" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Cart'}</button>
                     </div>
                 `;
                 container.appendChild(div);
             }
             document.getElementById('pageInfo').textContent = `${currentPage} / ${totalPages}`;
+            requestAnimationFrame(() => {
+                document.querySelectorAll('.product-card').forEach(c => c.classList.add('card-in'));
+            });
         }
 
         function nextPage() {
             const filtered = getFilteredProducts();
             const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderProducts();
-            }
+            if (currentPage < totalPages) { currentPage++; renderProducts(); window.scrollTo({ top: document.getElementById('products-grid').offsetTop - 120, behavior: 'smooth' }); }
         }
-
         function prevPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                renderProducts();
-            }
+            if (currentPage > 1) { currentPage--; renderProducts(); window.scrollTo({ top: document.getElementById('products-grid').offsetTop - 120, behavior: 'smooth' }); }
         }
 
         function addToCart(id) {
             const item = products.find(p => p.id === id);
             if (!item) return;
-            if (item.soldOut) {
-                alert("❌ This item is sold out!");
-                return;
-            }
+            if (item.soldOut) { toast('This item is sold out', 'error'); return; }
             cart.push(item);
             saveCart();
-            document.getElementById('cart-count').textContent = cart.length;
-            alert(`✅ ${item.name} added to cart!`);
+            const badge = document.getElementById('cart-count');
+            badge.textContent = cart.length;
+            badge.classList.remove('bounce');
+            void badge.offsetWidth;
+            badge.classList.add('bounce');
+            toast(`${item.name} added to cart`, 'success');
         }
 
         // Product Detail Modal
@@ -534,21 +753,19 @@
             const p = products.find(x => x.id === id);
             if (!p) return;
             const soldOut = !!p.soldOut;
+            const fallback = svgPlaceholder(p.name, p.category);
             document.getElementById('detailBody').innerHTML = `
-                <img src="${p.image}" alt="${p.name}" class="w-full h-56 sm:h-72 object-cover rounded-2xl mb-6" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
-                <h4 class="text-2xl font-bold mb-2">${p.name}</h4>
-                <p class="text-2xl font-bold text-green-600 mb-4">${formatPrice(p.price)}</p>
-                <p class="text-gray-600 mb-6">${p.description ? p.description : 'No description available for this bale yet.'}</p>
-                <button onclick="addToCart('${p.id}'); hideDetail();" class="w-full py-4 bg-red-600 text-white rounded-2xl text-lg font-bold" ${soldOut ? 'disabled style="opacity:0.5"' : ''}>${soldOut ? 'Sold Out' : 'Add to Cart'}</button>
+                <img src="${p.image}" alt="${p.name}" class="w-full h-56 sm:h-72 object-cover rounded-2xl mb-6" onerror="this.onerror=null;this.src='${fallback}'">
+                <h4 class="text-2xl font-bold mb-2 font-display">${p.name}</h4>
+                <span class="price-tag text-xl mb-4">${formatPrice(p.price)}</span>
+                <p class="text-gray-600 my-6">${p.description ? p.description : 'No description available for this bale yet.'}</p>
+                <button onclick="addToCart('${p.id}'); hideDetail();" class="w-full py-4 bg-[var(--indigo)] text-white rounded-2xl text-lg font-bold" ${soldOut ? 'disabled style="opacity:0.5"' : ''}>${soldOut ? 'Sold Out' : 'Add to Cart'}</button>
             `;
-            document.getElementById('detailModal').classList.remove('hidden');
+            openModal('detailModal');
         }
-        function hideDetail() {
-            document.getElementById('detailModal').classList.add('hidden');
-        }
+        function hideDetail() { closeModal('detailModal'); }
 
         function showCart() {
-            const modal = document.getElementById('cartModal');
             const container = document.getElementById('cartItems');
             let total = 0;
             container.innerHTML = '';
@@ -561,25 +778,21 @@
                     <div class="flex justify-between py-6 border-b">
                         <div>
                             <p class="font-medium">${item.name}</p>
-                            <p class="text-green-600">${formatPrice(item.price)}</p>
+                            <p class="text-[var(--teal)] font-semibold">${formatPrice(item.price)}</p>
                         </div>
-                        <button onclick="removeFromCart(${index})" class="text-red-500 text-3xl">×</button>
+                        <button onclick="removeFromCart(${index})" class="text-[var(--coral)] text-3xl">×</button>
                     </div>`;
             });
             document.getElementById('cartTotal').textContent = formatPrice(total);
-            modal.classList.remove('hidden');
+            openModal('cartModal');
         }
-
         function removeFromCart(index) {
             cart.splice(index, 1);
             saveCart();
             document.getElementById('cart-count').textContent = cart.length;
             showCart();
         }
-
-        function hideCart() {
-            document.getElementById('cartModal').classList.add('hidden');
-        }
+        function hideCart() { closeModal('cartModal'); }
 
         function buyNow() {
             if (cart.length === 0) return;
@@ -597,8 +810,6 @@
             hideCart();
         }
 
-        let selectedImageFile = null; // actual File object chosen via drag-drop or file picker
-
         async function addNewBale() {
             const name = document.getElementById('adminName').value.trim();
             const price = parseInt(document.getElementById('adminPrice').value);
@@ -606,10 +817,7 @@
             const description = document.getElementById('adminDescription').value.trim();
             const typedImage = document.getElementById('adminImage').value.trim();
 
-            if (!name || !price) {
-                alert("Please enter a bale name and price.");
-                return;
-            }
+            if (!name || !price) { toast('Please enter a bale name and price', 'error'); return; }
 
             const addBtn = event.target;
             const originalText = addBtn.textContent;
@@ -617,10 +825,8 @@
             addBtn.disabled = true;
 
             try {
-                let imageUrl = typedImage || "https://via.placeholder.com/400x300?text=New+Bale";
-                if (selectedImageFile) {
-                    imageUrl = await uploadImageToCloudinary(selectedImageFile);
-                }
+                let imageUrl = typedImage || svgPlaceholder(name, category || 'all');
+                if (selectedImageFile) imageUrl = await uploadImageToCloudinary(selectedImageFile);
 
                 const newProduct = {
                     name: name,
@@ -628,31 +834,33 @@
                     image: imageUrl,
                     category: category || "all",
                     description: description || "",
-                    soldOut: false
+                    soldOut: false,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
                 const docRef = await productsCollection.add(newProduct);
-                products.unshift({ id: docRef.id, ...newProduct });
+                products.unshift({ id: docRef.id, ...newProduct, createdAt: new Date() });
 
                 document.getElementById('adminName').value = '';
                 document.getElementById('adminPrice').value = '';
                 document.getElementById('adminImage').value = '';
                 document.getElementById('adminDescription').value = '';
+                document.getElementById('fileChosenLabel').textContent = '';
                 selectedImageFile = null;
                 currentPage = 1;
                 renderProducts();
                 renderSoldOutList();
                 renderEditList();
-                alert("✅ New bale added and visible on website for everyone!");
+                toast('New bale added and visible on website for everyone!', 'success');
             } catch (err) {
                 console.error(err);
-                alert("❌ Something went wrong uploading the photo or saving the bale. Please try again.");
+                toast('Something went wrong uploading the photo or saving the bale', 'error');
             } finally {
                 addBtn.textContent = originalText;
                 addBtn.disabled = false;
             }
         }
 
-        // Edit Bales management
+        // Edit / Delete Bales management
         function renderEditList() {
             const list = document.getElementById('editList');
             if (!list) return;
@@ -663,13 +871,20 @@
                 list.innerHTML = '<p class="text-center text-gray-500 py-8">No bales match your search.</p>';
                 return;
             }
+            const fragment = document.createDocumentFragment();
             items.forEach(p => {
+                const fallback = svgPlaceholder(p.name, p.category);
                 const row = document.createElement('div');
                 row.className = 'border rounded-2xl p-4 sm:p-6';
                 row.innerHTML = `
-                    <div class="flex items-center gap-4 mb-4">
-                        <img src="${p.image}" class="w-14 h-14 object-cover rounded-xl" onerror="this.src='https://via.placeholder.com/60?text=No+Image'">
-                        <span class="font-medium text-gray-500 text-sm">ID: ${p.id}</span>
+                    <div class="flex items-center justify-between gap-4 mb-4">
+                        <div class="flex items-center gap-4">
+                            <img src="${p.image}" class="w-14 h-14 object-cover rounded-xl" onerror="this.onerror=null;this.src='${fallback}'">
+                            <span class="font-medium text-gray-500 text-sm">ID: ${p.id}</span>
+                        </div>
+                        <button onclick="deleteBale('${p.id}')" class="text-[var(--coral)] hover:text-red-800 transition flex items-center gap-2 text-sm font-semibold">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
                     </div>
                     <label class="text-sm font-semibold text-gray-500">Name</label>
                     <input type="text" value="${p.name.replace(/"/g, '&quot;')}" id="edit-name-${p.id}" class="w-full p-3 sm:p-4 border-2 rounded-2xl mb-3 mt-1 text-base sm:text-lg">
@@ -677,10 +892,11 @@
                     <input type="number" value="${p.price}" id="edit-price-${p.id}" class="w-full p-3 sm:p-4 border-2 rounded-2xl mb-3 mt-1 text-base sm:text-lg">
                     <label class="text-sm font-semibold text-gray-500">Description</label>
                     <textarea rows="2" id="edit-desc-${p.id}" class="w-full p-3 sm:p-4 border-2 rounded-2xl mb-4 mt-1 text-base sm:text-lg">${p.description || ''}</textarea>
-                    <button onclick="saveEdit('${p.id}')" class="w-full py-3 sm:py-4 bg-blue-600 text-white rounded-2xl font-bold">Save Changes</button>
+                    <button onclick="saveEdit('${p.id}')" class="w-full py-3 sm:py-4 bg-[var(--indigo)] text-white rounded-2xl font-bold hover:bg-[var(--indigo-light)] transition">Save Changes</button>
                 `;
-                list.appendChild(row);
+                fragment.appendChild(row);
             });
+            list.appendChild(fragment);
         }
 
         async function saveEdit(id) {
@@ -692,25 +908,38 @@
             const newName = nameInput.value.trim();
             const newPrice = parseInt(priceInput.value);
             const newDesc = descInput.value.trim();
-            if (!newName || !newPrice) {
-                alert("Name and price cannot be empty.");
-                return;
-            }
+            if (!newName || !newPrice) { toast('Name and price cannot be empty', 'error'); return; }
             try {
-                await productsCollection.doc(id).update({
-                    name: newName,
-                    price: newPrice,
-                    description: newDesc
-                });
+                await productsCollection.doc(id).update({ name: newName, price: newPrice, description: newDesc });
                 product.name = newName;
                 product.price = newPrice;
                 product.description = newDesc;
                 renderProducts();
-                alert("✅ Bale updated for everyone!");
+                toast('Bale updated for everyone!', 'success');
             } catch (err) {
                 console.error(err);
-                alert("❌ Could not save changes. Please try again.");
+                toast('Could not save changes. Please try again.', 'error');
             }
+        }
+
+        function deleteBale(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            showConfirm(`Delete "${product.name}"? This cannot be undone.`, async () => {
+                try {
+                    await productsCollection.doc(id).delete();
+                    products = products.filter(p => p.id !== id);
+                    const wIdx = wishlist.indexOf(id);
+                    if (wIdx >= 0) { wishlist.splice(wIdx, 1); saveWishlist(); }
+                    renderProducts();
+                    renderEditList();
+                    renderSoldOutList();
+                    toast('Bale deleted', 'success');
+                } catch (err) {
+                    console.error(err);
+                    toast('Could not delete bale. Please try again.', 'error');
+                }
+            });
         }
 
         // Sold Out management
@@ -720,14 +949,15 @@
             list.innerHTML = '';
             products.forEach(p => {
                 const isSold = !!p.soldOut;
+                const fallback = svgPlaceholder(p.name, p.category);
                 const row = document.createElement('div');
                 row.className = 'flex items-center justify-between border rounded-2xl p-4 sm:p-6';
                 row.innerHTML = `
                     <div class="flex items-center gap-4">
-                        <img src="${p.image}" class="w-14 h-14 object-cover rounded-xl" onerror="this.src='https://via.placeholder.com/60?text=No+Image'">
+                        <img src="${p.image}" class="w-14 h-14 object-cover rounded-xl" onerror="this.onerror=null;this.src='${fallback}'">
                         <span class="font-medium">${p.name}</span>
                     </div>
-                    <button onclick="toggleSoldOut('${p.id}')" class="px-5 py-2 rounded-full text-sm font-bold ${isSold ? 'bg-gray-200 text-gray-700' : 'bg-red-600 text-white'}">
+                    <button onclick="toggleSoldOut('${p.id}')" class="px-5 py-2 rounded-full text-sm font-bold transition ${isSold ? 'bg-gray-200 text-gray-700' : 'bg-[var(--coral)] text-white'}">
                         ${isSold ? 'Mark Available' : 'Mark Sold Out'}
                     </button>
                 `;
@@ -746,30 +976,25 @@
                 renderProducts();
             } catch (err) {
                 console.error(err);
-                alert("❌ Could not update status. Please try again.");
+                toast('Could not update status. Please try again.', 'error');
             }
         }
 
-        function filterProducts() {
-            currentPage = 1;
-            renderProducts();
-        }
+        function filterProducts() { currentPage = 1; renderProducts(); }
 
         function filterByCategory(cat, evt) {
             activeCategory = cat;
             currentPage = 1;
-            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active', 'bg-red-600', 'text-white'));
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
             const target = (evt && evt.target) ? evt.target : document.querySelector(`.category-btn[onclick*="'${cat}'"]`);
-            if (target) target.classList.add('active', 'bg-red-600', 'text-white');
+            if (target) target.classList.add('active');
             renderProducts();
         }
 
         function switchTab(n) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById('tab' + n).classList.remove('hidden');
-            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-                btn.classList.toggle('active', i === n);
-            });
+            document.querySelectorAll('.tab-btn').forEach((btn, i) => btn.classList.toggle('active', i === n));
             if (n === 1) renderEditList();
             if (n === 2) renderSoldOutList();
         }
@@ -777,10 +1002,7 @@
         // Drag and Drop for Image
         const dropZone = document.getElementById('dropZone');
         if (dropZone) {
-            dropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropZone.classList.add('dragover');
-            });
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
             dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
             dropZone.addEventListener('drop', (e) => {
                 e.preventDefault();
@@ -788,32 +1010,55 @@
                 const file = e.dataTransfer.files[0];
                 if (file) {
                     selectedImageFile = file;
-                    document.getElementById('adminImage').value = file.name + ' (ready to upload)';
+                    document.getElementById('fileChosenLabel').textContent = '✓ ' + file.name + ' ready to upload';
                 }
             });
             dropZone.addEventListener('click', () => document.getElementById('fileInput').click());
         }
-
         function handleFileSelect(e) {
             const file = e.target.files[0];
             if (file) {
                 selectedImageFile = file;
-                document.getElementById('adminImage').value = file.name + ' (ready to upload)';
+                document.getElementById('fileChosenLabel').textContent = '✓ ' + file.name + ' ready to upload';
             }
+        }
+
+        // ---------- Scroll reveal ----------
+        function initScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); }
+                });
+            }, { threshold: 0.15 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // ---------- Hero slider with dot navigation ----------
+        function initSlider() {
+            const slides = document.querySelectorAll('.slide');
+            const dotNav = document.getElementById('dotNav');
+            let i = 0;
+            slides.forEach((s, idx) => {
+                const dot = document.createElement('span');
+                dot.className = 'dot' + (idx === 0 ? ' active' : '');
+                dot.onclick = () => goToSlide(idx);
+                dotNav.appendChild(dot);
+            });
+            function goToSlide(idx) {
+                slides.forEach(s => s.classList.remove('active'));
+                dotNav.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
+                slides[idx].classList.add('active');
+                dotNav.children[idx].classList.add('active');
+                i = idx;
+            }
+            setInterval(() => { goToSlide((i + 1) % slides.length); }, 5000);
         }
 
         // Initialize
         window.onload = () => {
             document.getElementById('cart-count').textContent = cart.length;
-            loadProducts(); // pulls the shared catalog from Firestore
-            // Slider
-            const slides = document.querySelectorAll('.slide');
-            let i = 0;
-            setInterval(() => {
-                slides.forEach(s => s.classList.remove('active'));
-                slides[i].classList.add('active');
-                i = (i + 1) % slides.length;
-            }, 5000);
+            loadProducts();
+            initSlider();
         };
     </script>
 </body>
