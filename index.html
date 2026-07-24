@@ -418,53 +418,6 @@
             const data = await res.json();
             return data.secure_url;
         }
-    </script>
-    <script>
-        // ==================== ALL 42 PRODUCTS (DEFAULT DATA, used only to seed Firestore the first time) ====================
-        const defaultProducts = [
-            { id: 1, name: "Baby Sleeper Bale", price: 22000, image: "IMG-20260621-WA0062.jpg", category: "baby", description: "" },
-            { id: 2, name: "Paired Socks Bale", price: 15000, image: "IMG-20260621-WA0060.jpg", category: "kids", description: "" },
-            { id: 3, name: "Cargo Shorts", price: 25000, image: "cargo shorts.jpg", category: "men", description: "" },
-            { id: 4, name: "Towel Bale", price: 12800, image: "IMG-20260621-WA0055.jpg", category: "all", description: "" },
-            { id: 5, name: "Socks Bale", price: 18000, image: "IMG-20260621-WA0059.jpg", category: "kids", description: "" },
-            { id: 6, name: "Ladies Underwear Bale", price: 12000, image: "IMG-20260621-WA0058.jpg", category: "ladies", description: "" },
-            { id: 7, name: "Kids Sneakers Bale", price: 18000, image: "IMG-20260621-WA0057.jpg", category: "kids", description: "" },
-            { id: 8, name: "Baby Blanket Bale", price: 20000, image: "IMG-20260621-WA0056.jpg", category: "baby", description: "" },
-            { id: 9, name: "Kids Jogging Pant Bale", price: 15000, image: "IMG-20260621-WA0054.jpg", category: "kids", description: "" },
-            { id: 10, name: "Adult Sneakers Bale", price: 20000, image: "IMG-20260621-WA0051.jpg", category: "men", description: "" },
-            { id: 11, name: "Curtain Bale", price: 17000, image: "IMG-20260621-WA0050.jpg", category: "all", description: "" },
-            { id: 12, name: "Ex-UK Children Zipper Bale", price: 27000, image: "IMG-20260621-WA0047.jpg", category: "kids", description: "" },
-            { id: 13, name: "Sandals Bale", price: 14000, image: "IMG-20260621-WA0045.jpg", category: "all", description: "" },
-            { id: 14, name: "Children Jacket Bale", price: 22000, image: "IMG-20260621-WA0044.jpg", category: "kids", description: "" },
-            { id: 15, name: "Adult Raincoats Bale", price: 16000, image: "IMG-20260621-WA0042.jpg", category: "men", description: "" },
-            { id: 16, name: "Adult Bathrobes", price: 27000, image: "Adult-Bathrobe.webp", category: "ladies", description: "" },
-            { id: 17, name: "Heavy Baby Rompers", price: 32000, image: "heavy-Baby-Rompers-Blue-915x1024.webp", category: "baby", description: "" },
-            { id: 18, name: "Ladies Heavy Tight", price: 27000, image: "Heavy-Tight-Pants-for-Ladies-Floral-768x1024.webp", category: "ladies", description: "" },
-            { id: 19, name: "Ladies Rugged Jeans", price: 25000, image: "Rugged-Jeans-for-Ladies.webp", category: "ladies", description: "" },
-            { id: 20, name: "Adult Hoods", price: 18000, image: "adult hoods.jpg", category: "men", description: "" },
-            { id: 21, name: "Baby Jackets", price: 17500, image: "baby jackets.webp", category: "baby", description: "" },
-            { id: 22, name: "Body Suits Bale", price: 26000, image: "body suits bale.jpg", category: "baby", description: "" },
-            { id: 23, name: "Children Bathrobes", price: 22000, image: "children bathrobes.webp", category: "kids", description: "" },
-            { id: 24, name: "children denim jeans", price: 25000, image: "children denim jeans.jpg", category: "kids", description: "" },
-            { id: 25, name: "children polo t shirts", price: 31500, image: "children polo shirts.jpg", category: "kids", description: "" },
-            { id: 26, name: "children trank pants", price: 17000, image: "children trank pants.jpg", category: "kids", description: "" },
-            { id: 27, name: "creme carpet", price: 29000, image: "creame carpet bales.webp", category: "all", description: "" },
-            { id: 28, name: "creme handbags", price: 34000, image: "creme handbags.jpg", category: "ladies", description: "" },
-            { id: 29, name: "football boots", price: 45000, image: "football boots.jpg", category: "kids", description: "" },
-            { id: 30, name: "grade 1 rompers", price: 32000, image: "grade 1 rompers.jpg", category: "baby", description: "" },
-            { id: 31, name: "ladies gym tights", price: 34200, image: "ladies gym tights.webp", category: "ladies", description: "" },
-            { id: 32, name: "ladies jeans", price: 22000, image: "ladies jeans.jpg", category: "ladies", description: "" },
-            { id: 33, name: "ladies official pants", price: 30000, image: "ladies pants official.webp", category: "ladies", description: "" },
-            { id: 34, name: "leather jackets", price: 23400, image: "leather jacket.jpg", category: "men", description: "" },
-            { id: 35, name: "long sweaters", price: 26000, image: "long sweaters bale.jpg", category: "ladies", description: "" },
-            { id: 36, name: "cargo shorts", price: 25000, image: "men cargo shorts.jpg", category: "men", description: "" },
-            { id: 37, name: "men tank tops", price: 22000, image: "men tank tops bale.jpg", category: "men", description: "" },
-            { id: 38, name: "mini dress", price: 24000, image: "mini dress.jpg", category: "ladies", description: "" },
-            { id: 39, name: "polo tshirt", price: 30000, image: "polo tshirts bale.jpg", category: "men", description: "" },
-            { id: 40, name: "sneakers", price: 18000, image: "sneakers bale.jpg", category: "men", description: "" },
-            { id: 41, name: "swimming costume", price: 40000, image: "swiming costumes.jpg", category: "ladies", description: "" },
-            { id: 42, name: "trenchcoats", price: 17600, image: "trenchcoats.jpg", category: "ladies", description: "" }
-        ];
 
         // ==================== STATE ====================
         let products = [];
